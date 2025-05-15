@@ -1,0 +1,254 @@
+openapi: 3.0.0
+info:
+  title: Authentication API
+  version: 1.0.0
+  description: API xác thực người dùng
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Đăng ký tài khoản người dùng
+      description: Cho phép người dùng đăng ký tài khoản bằng cách cung cấp email hợp lệ và mật khẩu.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Địa chỉ email hợp lệ để đăng ký
+                  example: anhnguyen2k373@gmail.com
+                password:
+                  type: string
+                  format: password
+                  description: Mật khẩu dùng để đăng ký tài khoản
+                  example: 12345678
+      responses:
+        '201':
+          description: Đăng ký thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Register successful
+        '400':
+          description: Yêu cầu không hợp lệ (email đã tồn tại hoặc thiếu trường)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email already exists
+        '500':
+          description: Lỗi máy chủ nội bộ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Đăng nhập người dùng bằng email và mật khẩu
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  example: anhnguyen2k373@gmail.com
+                  description: Địa chỉ email đã đăng ký
+                password:
+                  type: string
+                  example: Ducanh12@#
+                  description: Mật khẩu tương ứng với email
+      responses:
+        '200':
+          description: Đăng nhập thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login successful
+        '401':
+          description: Sai email hoặc mật khẩu
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Incorrect password
+        '500':
+          description: Lỗi server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Đăng xuất người dùng
+      description: Hủy phiên làm việc hiện tại của người dùng và xóa cookie phiên.
+      responses:
+        '200':
+          description: Đăng xuất thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logout successful
+        '500':
+          description: Lỗi máy chủ khi đăng xuất
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logout failed
+
+  /auth/reset-password:
+    post:
+      tags:
+        - Authentication
+      summary: Gửi link đặt lại mật khẩu qua email
+      description: Người dùng nhập email để nhận link đặt lại mật khẩu.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  description: Email đã đăng ký tài khoản
+                  example: anhnguyen2k373@gmail.com
+      responses:
+        '200':
+          description: Link đặt lại mật khẩu đã được gửi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Link đặt lại mật khẩu đã được gửi qua email
+        '404':
+          description: Email không tồn tại
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email không tồn tại
+        '500':
+          description: Lỗi máy chủ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+  /auth/reset-password/confirm:
+    post:
+      tags:
+        - Authentication
+      summary: Xác nhận và cập nhật mật khẩu mới
+      description: Người dùng nhập token và mật khẩu mới để hoàn tất quá trình đặt lại.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - newPassword
+              properties:
+                token:
+                  type: string
+                  description: Token được gửi qua email
+                  example: abc123xyz
+                newPassword:
+                  type: string
+                  description: Mật khẩu mới
+                  example: NewSecurePassword123
+      responses:
+        '200':
+          description: Đặt lại mật khẩu thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Mật khẩu đã được đặt lại thành công
+        '400':
+          description: Token không hợp lệ hoặc đã hết hạn
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Token không hợp lệ hoặc đã hết hạn
+        '500':
+          description: Lỗi máy chủ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error

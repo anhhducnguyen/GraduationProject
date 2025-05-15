@@ -1,0 +1,14 @@
+{
+  "users": {
+    "fields": {
+      "id": "ID",
+      "first_name": "Vorname",
+      "last_name": "Nachname",
+      "age": "Alter",
+      "gender": "Geschlecht"
+    }
+  },
+  "table": {
+    "actions": "Aktionen"
+  }
+}

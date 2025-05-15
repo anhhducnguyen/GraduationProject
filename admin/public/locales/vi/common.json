@@ -1,0 +1,14 @@
+{
+  "users": {
+    "fields": {
+      "id": "ID",
+      "first_name": "Tên",
+      "last_name": "Họ",
+      "age": "Tuổi",
+      "gender": "Giới tính"
+    }
+  },
+  "table": {
+    "actions": "Hành động"
+  }
+}
