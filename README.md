@@ -61,11 +61,11 @@
 ## 🛠️ Điều kiện tiên quyết
 Trước khi bắt đầu, hãy đảm bảo rằng bạn đã cài đặt các điều kiện tiên quyết sau trên hệ thống của mình:
 
-- [NodeJS](https://nodejs.org/en/download) _(version 20.18.0 or higher)
-- [MySQL](https://www.mysql.com/downloads/) (or any other supported database system)
-- [Python](https://www.python.org/) (version 3.12.0 or higher)
+- [NodeJS](https://nodejs.org/en/download) _(version 20.18.0 or higher)_
+- [MySQL](https://www.mysql.com/downloads/) _(or any other supported database system)_
+- [Python](https://www.python.org/) _(version 3.12.0 or higher)_
 - [OpenCV](https://opencv.org/)
-- [dlib](https://github.com/davisking/dlib) (tại đây tôi gặp lỗi khi thử `pip install dlib`, nếu bạn gặp lỗi truy cập [dlib github](https://github.com/z-mahmud22/Dlib_Windows_Python3.x) để cài đặt thủ công theo hướng dẫn)
+- [dlib](https://github.com/davisking/dlib) _(tại đây tôi gặp lỗi khi thử `pip install dlib`, nếu bạn gặp lỗi truy cập [dlib github](https://github.com/z-mahmud22/Dlib_Windows_Python3.x) để cài đặt thủ công theo hướng dẫn)_
 
 ## 🔧 Cài đặt từng bước
 #### **Step 1**: 🚀 Cài đặt NodeJS
