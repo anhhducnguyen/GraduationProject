@@ -53,7 +53,7 @@
         <a href="https://expressjs.com/" target="_blank">Express - NodeJS</a>
     </td>
     <td>
-      <a href="https://github.com/lethunguyen" target="_blank">Refine</a>
+      <a href="https://refine.dev/" target="_blank">Refine</a>
     </td>
     <td>
       <a href="https://vite.dev/guide/" target="_blank">React + TypeScript + Vite</a>
