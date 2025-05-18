@@ -63,6 +63,9 @@ Trước khi bắt đầu, hãy đảm bảo rằng bạn đã cài đặt các 
 
 - [NodeJS](https://nodejs.org/en/download) (version 20.18.0 or higher)
 - [MySQL](https://www.mysql.com/downloads/) (or any other supported database system)
+- [Python](https://www.python.org/) (version 3.12.0 or higher)
+- Library: OpenCV, dlib   
+- Cài đặt dlib (Tôi gặp lỗi khi thử `pip install dlib`, nếu bạn gặp lỗi, tôi khuyên bạn nên truy cập [dlib github](https://github.com/z-mahmud22/Dlib_Windows_Python3.x) để bạn có thể cài đặt thủ công theo hướng dẫn)
 
 ## 🔧 Cài đặt từng bước
 #### **Step 1**: 🚀 Cài đặt NodeJS
