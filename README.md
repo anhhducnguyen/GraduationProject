@@ -112,16 +112,19 @@ cd Face-Auth-Exam-System-v2
 
 ```bash
 cd server
+npm install
 npm run dev 
 ```
 
 ```bash
 cd admin
+npm install
 npm run dev 
 ```
 
 ```bash
 cd client
+npm install
 npm run dev 
 ```
 
