@@ -1,5 +1,3 @@
-# Overview
-
 ## 🚀 Topic: **Xây dựng hệ thống xác thực danh tính sinh viên bằng nhận diện khuôn mặt trong khảo thí**
 
 ## 🌟 Giới thiệu
