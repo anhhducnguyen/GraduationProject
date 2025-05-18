@@ -41,6 +41,24 @@
 - [Refine](https://refine.dev/)
 
 
+<table>
+  <tr>
+    <td><img src="https://caodang.fpt.edu.vn/wp-content/uploads/a-9.png" alt="a"  height="110" /></td>
+    <td><img src="https://avatars.githubusercontent.com/u/104967037?s=280&v=4" alt="b"  height="110" /></td>
+    <td><img src="https://miro.medium.com/v2/resize:fit:1400/1*poaGV4iICp06Q-yTlA2g_g.png" alt="c"  height="110" /></td>
+  </tr>
+
+  <tr>
+    <td>
+        <a href="https://github.com/anhhducnguyen" target="_blank">Nguyen Duc Anh</a>
+    </td>
+    <td>Giảng viên hướng dẫn: 
+      <a href="https://github.com/lethunguyen" target="_blank">TS. Nguyen Le Thu</a>
+    </td>
+  </tr>
+</table>
+
+
 ## 🛠️ Điều kiện tiên quyết
 Trước khi bắt đầu, hãy đảm bảo rằng bạn đã cài đặt các điều kiện tiên quyết sau trên hệ thống của mình:
 
