@@ -25,8 +25,8 @@
   </tr>
 
   <tr>
-    <td>Nguyen Duc Anh</td>
-    <td>TS. Nguyen Le Thu</td>
+    <td>Thực hiện bởi: Nguyen Duc Anh</td>
+    <td>Giảng viên hướng dẫn: TS. Nguyen Le Thu</td>
   </tr>
 </table>
 
