@@ -25,7 +25,7 @@
 
   <tr>
     <td>Nguyen Duc Anh</td>
-    <td>Project: Cosmetics e-commerce website (March 01, 2025 - now)</td>
+    <td>Project: Building a system to authenticate student identity using facial recognition in testing (March 01, 2025 - now)</td>
   </tr>
 </table>
 
