@@ -36,11 +36,6 @@
 
 ## Framework
 
-- [Express - NodeJS](https://expressjs.com/)
-- [React + TypeScript + Vite](https://vite.dev/guide/)
-- [Refine](https://refine.dev/)
-
-
 <table>
   <tr>
     <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5tzpUX3l9HzU3Mky3pyyEOvfvELBsmn3PlQ&s" alt="a"  height="110" /></td>
