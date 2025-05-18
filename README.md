@@ -4,13 +4,13 @@
 
 ### Bản demo, Báo cáo và Slide: 
 
-- Demo [Travel Easy Demo]()
+- [Demo]()
 
-- Report [Report]()
+- [Report]()
 
-- Video demo app [Video demo]()
+- [Video demo]()
 
-- Video demo RestfulAPI [Video demo RestfulAPT]()
+- [Video demo RestfulAPT]()
 
 
 ## Điều kiện tiên quyết
