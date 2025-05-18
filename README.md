@@ -26,7 +26,9 @@
 
   <tr>
     <td>Nguyen Duc Anh</td>
-    <td>Giảng viên hướng dẫn: TS. Nguyen Le Thu</td>
+    <td>Giảng viên hướng dẫn: 
+      <a href="https://github.com/lethunguyen" target="_blank">TS. Nguyen Le Thu</a>
+    </td>
   </tr>
 </table>
 
