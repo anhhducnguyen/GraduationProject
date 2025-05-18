@@ -2,7 +2,7 @@
 
 ## 🚀 Topic: **Xây dựng hệ thống xác thực danh tính sinh viên bằng nhận diện khuôn mặt trong khảo thí**
 
-### 🌟 Giới thiệu
+## 🌟 Giới thiệu
 
 Đề tài thực hiện xây dụng một hệ thống xác thực danh tính sinh viên dựa trên công nghệ nhận diện khuôn mặt cho công tác khảo thí (tại đại học Phenikaa) nhằm đảm bảo tính chính xác, minh bạch và an toàn trong các kỳ thi
 
