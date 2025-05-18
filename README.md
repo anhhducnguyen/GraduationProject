@@ -25,7 +25,7 @@
   </tr>
 
   <tr>
-    <td>Thực hiện bởi: Nguyen Duc Anh</td>
+    <td>Nguyen Duc Anh</td>
     <td>Giảng viên hướng dẫn: TS. Nguyen Le Thu</td>
   </tr>
 </table>
