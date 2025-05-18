@@ -43,7 +43,7 @@
 
 <table>
   <tr>
-    <td><img src="https://caodang.fpt.edu.vn/wp-content/uploads/a-9.png" alt="a"  height="110" /></td>
+    <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5tzpUX3l9HzU3Mky3pyyEOvfvELBsmn3PlQ&s" alt="a"  height="110" /></td>
     <td><img src="https://avatars.githubusercontent.com/u/104967037?s=280&v=4" alt="b"  height="110" /></td>
     <td><img src="https://miro.medium.com/v2/resize:fit:1400/1*poaGV4iICp06Q-yTlA2g_g.png" alt="c"  height="110" /></td>
   </tr>
@@ -52,8 +52,8 @@
     <td>
         <a href="https://github.com/anhhducnguyen" target="_blank">Nguyen Duc Anh</a>
     </td>
-    <td>Giảng viên hướng dẫn: 
-      <a href="https://github.com/lethunguyen" target="_blank">TS. Nguyen Le Thu</a>
+    <td>
+      <a href="https://github.com/lethunguyen" target="_blank">Refine</a>
     </td>
   </tr>
 </table>
