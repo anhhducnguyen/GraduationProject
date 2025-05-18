@@ -25,7 +25,7 @@
 
   <tr>
     <td>Nguyen Duc Anh</td>
-    <td>Project: Building a system to authenticate student identity using facial recognition in testing (March 01, 2025 - now)</td>
+    <td>Xây dựng hệ thống xác thực danh tính sinh viên bằng nhận diện khuôn mặt trong khảo thí</td>
   </tr>
 </table>
 
