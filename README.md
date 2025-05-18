@@ -131,6 +131,12 @@ npm install
 npm run dev 
 ```
 
+```bash
+cd Silent-Face-Anti-Spoofing
+pip install -r requirements.txt
+python main.py
+```
+
 See details at our [Wiki]()
 
 
