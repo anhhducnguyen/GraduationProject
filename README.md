@@ -20,12 +20,13 @@
 <table>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/f50ae9b1-d56b-4ab6-b8d5-577bffdc9f15" alt="Thành viên 1"  height="110" /></td>
-  <td><img src="https://i.ytimg.com/vi/g5Vki3T8clw/maxresdefault.jpg" alt="Product"  height="110" /></td>
+    <td><img src="https://avatars.githubusercontent.com/u/165644902?v=4" alt="Thành viên 2"  height="110" /></td>
+  <!-- <td><img src="https://i.ytimg.com/vi/g5Vki3T8clw/maxresdefault.jpg" alt="Product"  height="110" /></td> -->
   </tr>
 
   <tr>
     <td>Nguyen Duc Anh</td>
-    <td>Xây dựng hệ thống xác thực danh tính sinh viên bằng nhận diện khuôn mặt trong khảo thí</td>
+    <td>TS. Nguyen Le Thu</td>
   </tr>
 </table>
 
