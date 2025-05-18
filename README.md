@@ -36,7 +36,7 @@ Trước khi bắt đầu, hãy đảm bảo rằng bạn đã cài đặt các 
 - [NodeJS](https://nodejs.org/en/download) (version 20.18.0 or higher)
 - [MySQL](https://www.mysql.com/downloads/) (or any other supported database system)
 
-## Cài đặt từng bước
+## 🔧 Cài đặt từng bước
 #### **Step 1**: 🚀 Cài đặt NodeJS
 
 - Đảm bảo `NodeJS` đã được cài đặt. Bạn có thể kiểm tra phiên bản của chúng bằng các lệnh sau:
