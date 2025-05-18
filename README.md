@@ -63,6 +63,10 @@ git clone https://github.com/anhhducnguyen/Face-Auth-Exam-System-v2.git
 #### **Step 5**: Sau khi dự án đã được tạo
 
 ```bash
+cd Face-Auth-Exam-System-v2
+```
+
+```bash
 cd server
 npm run dev 
 ```
