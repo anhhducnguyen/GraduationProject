@@ -137,7 +137,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-See details at our [Wiki]()
+See details at our [Issue](https://github.com/anhhducnguyen/Face-Auth-Exam-System-v2/issues/1)
 
 
 
