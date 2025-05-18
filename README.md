@@ -34,6 +34,12 @@
   </tr>
 </table>
 
+## Framework
+
+- [Express - NodeJS](https://expressjs.com/)
+- [React + TypeScript + Vite](https://vite.dev/guide/)
+- [Refine](https://refine.dev/)
+
 
 ## 🛠️ Điều kiện tiên quyết
 Trước khi bắt đầu, hãy đảm bảo rằng bạn đã cài đặt các điều kiện tiên quyết sau trên hệ thống của mình:
