@@ -16,7 +16,7 @@
 ## Điều kiện tiên quyết
 Trước khi bắt đầu, hãy đảm bảo rằng bạn đã cài đặt các điều kiện tiên quyết sau trên hệ thống của mình:
 
-- [NodeJS](https://nodejs.org/en/download) (version v20.18.0 or higher)
+- [NodeJS](https://nodejs.org/en/download) (version 20.18.0 or higher)
 - [MySQL](https://www.mysql.com/downloads/) (or any other supported database system)
 
 ## Cài đặt từng bước
