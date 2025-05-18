@@ -7,10 +7,6 @@ const {
     authenticate, 
     authorize 
 } = require("../utils/auth/index");
-// const {
-//     checkEmailExist,
-//     checkUserExistById
-// } = require("../middlewares/user.validator");
 
 router.get(
     '/', 
@@ -25,8 +21,9 @@ router.get(
     // checkUserExistById, 
     Controller.getUser
 );
+
 router.post(
-    '/new', 
+    '/', 
     // authenticate,
     // authorize([ROLES.ADMIN, ROLES.TEACHER]),
     // validateRequest(createUserSchema), 
@@ -34,7 +31,6 @@ router.post(
     // checkEmailExist, 
     Controller.createUser
 );
-
 router.put(
     '/:id', 
     authenticate,
@@ -45,10 +41,11 @@ router.put(
 );
 router.delete(
     '/:id', 
-    authenticate,
-    authorize([ROLES.ADMIN, ROLES.TEACHER]),
+    // authenticate,
+    // authorize([ROLES.ADMIN, ROLES.TEACHER]),
     // checkUserExistById, 
     Controller.deleteUser
 );
+
 
 module.exports = router;

@@ -20,47 +20,46 @@ class UserService {
             .limit(limit)
             .offset(offset);
     }
-
+    
     static async queryUsers(filter, options) {
-    const {
-        sortBy = 'id:asc',
-        limit = 10,
-        offset = 0,
-        fields,
-        search
-    } = options;
+        const {
+            sortBy = 'id:asc',
+            limit = 10,
+            offset = 0,
+            fields,
+            search
+        } = options;
 
-    const [sortField, sortOrder] = sortBy.split(':');
-    const query = db('users');
+        const [sortField, sortOrder] = sortBy.split(':');
+        const query = db('users');
 
-    // Global search
-    if (search) {
-        query.where(builder => {
-            builder
-                .where('name', 'like', `%${search}%`)
-                .orWhere('email', 'like', `%${search}%`); // thêm trường khác nếu có
-        });
+        // Global search
+        if (search) {
+            query.where(builder => {
+                builder
+                    .where('name', 'like', `%${search}%`)
+                    .orWhere('email', 'like', `%${search}%`); // thêm trường khác nếu có
+            });
+        }
+
+        // Lọc theo filter
+        if (filter.name) {
+            query.where('name', 'like', `%${filter.name}%`);
+        }
+        if (filter.age) {
+            query.where('age', filter.age);
+        }
+
+        // Chọn trường
+        if (fields) {
+            const selectedFields = fields.split(','); // vd: name,email
+            query.select(selectedFields);
+        }
+
+        const data = await query.orderBy(sortField, sortOrder).limit(limit).offset(offset);
+
+        return data;
     }
-
-    // Lọc theo filter
-    if (filter.name) {
-        query.where('name', 'like', `%${filter.name}%`);
-    }
-    if (filter.age) {
-        query.where('age', filter.age);
-    }
-
-    // Chọn trường
-    if (fields) {
-        const selectedFields = fields.split(','); // vd: name,email
-        query.select(selectedFields);
-    }
-
-    const data = await query.orderBy(sortField, sortOrder).limit(limit).offset(offset);
-
-    return data;
-}
-
 
     static async getCount() {
         return db("users")
@@ -74,7 +73,8 @@ class UserService {
     }
 
     static async create({
-        name,
+        first_name,
+        last_name,
         age,
         gender,
         // role, 
@@ -88,7 +88,8 @@ class UserService {
             // email,
             // password: hashedPassword, 
             avatar,
-            name,
+            first_name,
+            last_name,
             age,
             gender,
             // role,

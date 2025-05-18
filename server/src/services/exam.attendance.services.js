@@ -1,4 +1,6 @@
 const db = require('../../config/database');
+const dayjs = require('dayjs');
+
 
 const getAllExamAttendances = async () => {
     try {
@@ -62,7 +64,6 @@ const checkAttendance = async (student_id, schedule_id) => {
         throw new Error('Error fetching exam_attendance: ' + error.message);
     }
 };
-
 
 const createExamAttendance = async ({
     schedule_id, 
@@ -156,6 +157,40 @@ const updateExamAttendance = async (student_id, schedule_id, updates) => {
         .update(updates);
 };
 
+const getCurrentExamSchedule = async () => {
+    try {
+        const now = new Date();
+        const fifteenMinutesBefore = new Date(now.getTime() - 15 * 60 * 1000);  // 15 phút trước
+        console.log('15 minutes before:', fifteenMinutesBefore);
+
+        // Format lại thời gian sang dạng mà MySQL hiểu
+        const formattedTime = dayjs(fifteenMinutesBefore).format('YYYY-MM-DD HH:mm:ss');
+        console.log('Formatted time for SQL:', formattedTime);
+
+        const query = db('examschedules')
+            // .where('start_time', '>=', formattedTime);
+            // .andWhere('start_time', '<=', now)
+            // .andWhere('end_time', '>=', now);
+
+        console.log('Generated SQL:', query.toSQL());
+        console.log('Full SQL with values:', query.toString());
+
+        const schedules = await query.first();
+        console.log('Query result:', schedules);
+
+        return schedules ? schedules.schedule_id : null;
+    } catch (error) {
+        console.log('Error fetching current exam schedule:', error.message);
+        throw new Error('Error fetching current exam schedule: ' + error.message);
+    }
+};
+
+const checkStudentExists = async (id) => {
+        return db("auth")
+            .where("id", id)
+            .first();
+}
+
 module.exports = {
     getAllExamAttendances,
     getExamAttendanceById,
@@ -165,4 +200,6 @@ module.exports = {
     queryExamAttendance,
     checkAttendance,    
     getExamAttendanceByScheduleId,
+    getCurrentExamSchedule,
+    checkStudentExists
 };

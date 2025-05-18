@@ -1,6 +1,6 @@
 
 import { CalendarEvent } from "@schedule-x/calendar";
-import "./style.css";
+import "../App.css";
 
 type Props = {
   calendarEvent: CalendarEvent;
@@ -44,9 +44,11 @@ export default function CustomEventModal({ calendarEvent }: Props) {
   return (
     // <div className="fixed top-0 left-0 w-full h-full sm:top-1/2 sm:left-1/2 sm:w-3/5 sm:h-auto transform sm:-translate-x-1/2 sm:-translate-y-1/2 bg-white p-6 rounded-lg shadow-lg z-50">
 
-    <div className="fixed top-0 right-0 w-full h-full sm:w-4/5 sm:h-full bg-white p-6 rounded-l-lg shadow-lg z-50 overflow-y-auto">
+    // <div className="mt-10 fixed top-0 right-0 w-full h-full sm:w-4/5 sm:h-full bg-white p-6 rounded-l-lg shadow-lg z-50 overflow-y-auto">
 
-      <div className="max-h-full sm:max-h-[90vh] overflow-y-auto p-4 scrollbar-hidden">
+    //   <div className="max-h-full sm:max-h-[90vh] overflow-y-auto p-4 scrollbar-hidden">
+    <div className="mt-10 fixed top-0 right-0 w-full h-full sm:w-4/5 sm:h-full bg-white p-6 rounded-l-lg shadow-lg z-50 overflow-y-auto"> {/* Thanh cuộn của div cha */}
+      <div className="max-h-full sm:max-h-[90vh] overflow-y-auto p-4 scrollbar-hide">
         <p className="font-semibold">{calendarEvent.title}</p>
         <p className="mt-1">
           <span className="font-semibold">Thời gian:</span> {calendarEvent.start} - {calendarEvent.end}

@@ -69,10 +69,6 @@ class UserController extends BaseController {
             res.status(err.statusCode || 500).send({ message: err.message });
         }
     }
-
-
-
-
     static async getUser(req, res) {
         try {
             const data = await Service.getById(req.params.id);
@@ -96,13 +92,11 @@ class UserController extends BaseController {
             return BaseController.errorResponse(res, error);
         }
     }
-
-
-
     static async createUser(req, res) {
         try {
             const {
-                name,
+                first_name,
+                last_name,
                 age,
                 gender,
                 // role, 
@@ -115,7 +109,8 @@ class UserController extends BaseController {
             let avatar = req.fileName;
 
             const data = await Service.create({
-                name,
+                first_name,
+                last_name,
                 age,
                 gender,
                 // role, 
@@ -130,7 +125,6 @@ class UserController extends BaseController {
             return BaseController.errorResponse(res, error);
         }
     };
-
     static async updateUser(req, res) {
         try {
             let id = req.params.id;
@@ -162,7 +156,6 @@ class UserController extends BaseController {
             return BaseController.errorResponse(res, error);
         }
     };
-
     static async deleteUser(req, res) {
         try {
             let id = req.params.id;

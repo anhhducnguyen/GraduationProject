@@ -142,25 +142,60 @@
 
 
 
+// import './App.css';
+// import './index.css';
+// import HomePage from './home/HomePage.tsx';
+// import NewsPage from './news/NewsPage.tsx';
+// import Sidebar from './components/side-bar';
+// import SchedulePage from './schedule/SchedulePage.tsx';
+// import Footer from './footer/Footer.tsx';
+
+
+// import { Route, Routes } from "react-router-dom";
+
+// function App() {
+//   return ( 
+//     <div className="app">
+//       <Sidebar />
+//       <Routes>
+//         <Route path="/" element={<HomePage />} />
+//         <Route path="/news" element={<NewsPage />} />
+//         <Route path="/schedules" element={<SchedulePage />} />
+//       </Routes>      
+//     </div>
+//     <Footer />
+//   );
+// }
+
+// export default App;
+
 import './App.css';
 import './index.css';
 import HomePage from './home/HomePage.tsx';
 import NewsPage from './news/NewsPage.tsx';
 import Sidebar from './components/side-bar';
 import SchedulePage from './schedule/SchedulePage.tsx';
-
+import Footer from './footer/Footer.tsx';
 
 import { Route, Routes } from "react-router-dom";
 
 function App() {
-  return (  // Bạn đã thiếu return ở đây
-    <div className="app">
-      <Sidebar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/news" element={<NewsPage />} />
-        <Route path="/schedules" element={<SchedulePage />} />
-      </Routes>      
+  return ( 
+    <div className="min-h-screen flex flex-col">
+      {/* Phần chính có Sidebar + Content */}
+      {/* <div className="flex flex-1"> */}
+        <Sidebar />
+        <main className="flex-1 p-4">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/news" element={<NewsPage />} />
+            <Route path="/schedules" element={<SchedulePage />} />
+          </Routes>
+        </main>
+      {/* </div> */}
+
+      {/* Footer luôn nằm cuối */}
+      <Footer />
     </div>
   );
 }

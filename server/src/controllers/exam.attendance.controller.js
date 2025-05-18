@@ -6,7 +6,9 @@ const {
     deleteExamAttendance,
     queryExamAttendance,
     checkAttendance,
-    getExamAttendanceByScheduleId
+    getExamAttendanceByScheduleId,
+    getCurrentExamSchedule,
+    checkStudentExists
 } = require('../services/exam.attendance.services');
 const pick = require('../utils/pick');
 const { activeConnections } = require('../../config/ws');
@@ -59,27 +61,28 @@ const create = async (req, res) => {
             return res.status(400).json({ message: "Thiếu dữ liệu" });
         }
 
-        const schedule_id = await getCurrentExamSchedule(); 
-        if (!schedule_id) {
-            console.log(`Không có ca thi nào đang diễn ra`);
-            return res.status(400).json({ message: "Hiện tại không có ca thi đang diễn ra" });
-        }
+        // // Kiểm tra xem có ca thi nào đang diễn ra không
+        const schedule_id = await getCurrentExamSchedule();
+        // if (!schedule_id) {
+        //     console.log(`Không có ca thi nào đang diễn ra`);
+        //     return res.status(400).json({ message: "Hiện tại không có ca thi đang diễn ra" });
+        // }
 
-        // Kiểm tra sinh viên và điểm danh
-        const [studentExists, attendanceExists] = await Promise.all([
-            checkStudentExists(name),
-            checkAttendance(name, schedule_id)
-        ]);
+        // // Kiểm tra sinh viên và điểm danh
+        // const [studentExists, attendanceExists] = await Promise.all([
+        //     checkStudentExists(name),
+        //     checkAttendance(name, schedule_id)
+        // ]);
 
-        if (!studentExists) {
-            console.log(`Sinh viên với ID ${name} không tồn tại trong hệ thống`);
-            return res.status(404).json({ message: "Sinh viên không tồn tại" });
-        }
+        // if (!studentExists) {
+        //     console.log(`Sinh viên với ID ${name} không tồn tại trong hệ thống`);
+        //     return res.status(404).json({ message: "Sinh viên không tồn tại" });
+        // }
 
-        if (attendanceExists) {
-            console.log(`Sinh viên với ID ${name} đã điểm danh trong ca thi này`);
-            return res.status(409).json({ message: "Sinh viên đã điểm danh trong ca thi này" });
-        }
+        // if (attendanceExists) {
+        //     console.log(`Sinh viên với ID ${name} đã điểm danh trong ca thi này`);
+        //     return res.status(409).json({ message: "Sinh viên đã điểm danh trong ca thi này" });
+        // }
 
         // Tạo bản ghi điểm danh mới
         const attendanceData = await createExamAttendance({
@@ -87,7 +90,7 @@ const create = async (req, res) => {
             student_id: name,   // Tạm thời dùng 'name' làm ID sinh viên
             is_present: real_face ? 1 : 0,
             violation_id: null, // Có thể cập nhật nếu có vi phạm
-            reported_by: 1001,  // Hoặc truyền thông tin nhận diện
+            reported_by: 1,  // Hoặc truyền thông tin nhận diện
         });
 
         // Gửi dữ liệu real-time qua WebSocket
@@ -107,6 +110,50 @@ const create = async (req, res) => {
     }
 };
 
+const assignStudentToExam = async (req, res) => {
+    try {
+        console.log("req.body:", req.body);
+        const { student_id, schedule_id } = req.body;
+        console.log(`Gán sinh viên ${student_id} vào ca thi ${schedule_id}`);
+
+        if (!student_id || !schedule_id) {
+            return res.status(400).json({ message: "Thiếu student_id hoặc schedule_id" });
+        }
+
+        // Kiểm tra sinh viên & ca thi có tồn tại không
+        const [studentExists, alreadyAssigned] = await Promise.all([
+            checkStudentExists(student_id),
+            checkAttendance(student_id, schedule_id)
+        ]);
+
+        if (!studentExists) {
+            return res.status(404).json({ message: "Sinh viên không tồn tại" });
+        }
+
+        if (alreadyAssigned) {
+            return res.status(409).json({ message: "Sinh viên đã được gán vào ca thi này" });
+        }
+
+        const attendance = await createExamAttendance({
+            student_id,
+            schedule_id,
+            // is_present: null,          // Chưa điểm danh
+            violation_id: null,
+            reported_by: "1"
+        });
+
+        return res.status(201).json({
+            message: "Sinh viên đã được gán vào ca thi",
+            data: attendance
+        });
+    } catch (error) {
+        console.error("Lỗi gán sinh viên:", error.message);
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+
+
 const updateE = async (req, res) => {
     try {
         const { name, confidence, real_face, timestamp } = req.body;
@@ -116,7 +163,7 @@ const updateE = async (req, res) => {
             return res.status(400).json({ message: "Thiếu dữ liệu" });
         }
 
-        const schedule_id = await getCurrentExamSchedule(); 
+        const schedule_id = await getCurrentExamSchedule();
         console.log(`Current schedule_id: ${schedule_id}`);
         if (!schedule_id) {
             console.log(`Không có ca thi nào đang diễn ra`);
@@ -126,7 +173,7 @@ const updateE = async (req, res) => {
         // Kiểm tra sinh viên
         const studentExists = await checkStudentExists(name);
         console.log(`Check student exists: ${studentExists}`);
-        
+
         if (!studentExists) {
             console.log(`Sinh viên với ID ${name} không tồn tại trong hệ thống`);
             return res.status(404).json({ message: "Sinh viên không tồn tại" });
@@ -176,8 +223,6 @@ const updateE = async (req, res) => {
     }
 };
 
-
-
 const update = async (req, res) => {
     const { id } = req.params;
     const {
@@ -224,5 +269,6 @@ module.exports = {
     create,
     update,
     deleteExamAttendanceController,
-    updateE
+    updateE,
+    assignStudentToExam,
 };

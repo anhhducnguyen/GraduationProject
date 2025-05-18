@@ -41,7 +41,7 @@ import {
 } from "@/pages/products";
 
 
-import SchedulePage from "../src/pages/schedules/list";
+import SchedulePage from "@/pages/schedules/list";
 
 
 
@@ -70,6 +70,7 @@ function App() {
           <Refine
             // dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
             dataProvider={dataProvider("http://localhost:5000/api/v1")}
+            // dataProvider={dataProvider("/api/v1")}
             notificationProvider={useNotificationProvider}
             routerProvider={routerProvider}
             authProvider={authProvider}
@@ -87,6 +88,7 @@ function App() {
                 list: "/users",
                 show: "/users/:id",
                 create: "/users/new",
+                // create: "/users",
               },
               {
                 name: "schedules",
@@ -121,7 +123,7 @@ function App() {
                  <Route path="/users">
                   <Route index element={<UserList />} />
                   <Route path=":id" element={<UserShow />} />
-                  {/* <Route path=":id" element={<UserCreate />} /> */}
+                  <Route path="new" element={<UserCreate />} />
                 </Route>
                 <Route path="/schedules" element={<SchedulePage />} />
 

@@ -11,7 +11,7 @@ import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop';
 import { createEventModalPlugin } from '@schedule-x/event-modal';
 import TimeGridEvent from '../components/time-grid-event.tsx';
 import CustomEventModal from '../components/event-modal.tsx';
-import Sidebar from '../components/side-bar.tsx';
+// import Sidebar from '../components/side-bar.tsx';
 
 // Import date-fns-tz for timezone conversion
 import { formatInTimeZone } from 'date-fns-tz';
@@ -55,7 +55,9 @@ function SchedulePage() {
     ],
     defaultView: 'week',
     events: [],
-    selectedDate: '2025-05-20',
+    // selectedDate: '2025-05-20',
+    selectedDate: new Date().toISOString().split('T')[0],
+
     plugins: [
       createEventModalPlugin(),
       createDragAndDropPlugin()
@@ -117,8 +119,8 @@ function SchedulePage() {
 
   return (
     <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex-1">
+      {/* <Sidebar /> */}
+      <div className="flex-1 sm:ml-67">
         <ScheduleXCalendar
           calendarApp={calendar}
           customComponents={{

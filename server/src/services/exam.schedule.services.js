@@ -5,27 +5,27 @@ const db = require('../../config/database');
 
 const getExamScheduleById = async (schedule_id) => {
     try {
-        const examSchedule = await db('exams_chedules').where({ schedule_id }).first();
+        const examSchedule = await db('examschedules').where({ schedule_id }).first();
         return examSchedule;
     } catch (error) {
-        throw new Error('Error fetching exams_chedules: ' + error.message);
+        throw new Error('Error fetching examschedules: ' + error.message);
     }
 };
 
 const queryExamSchedule = async (filter, options) => {
-    const { sortBy = 'schedule_id:asc', limit = 10, page = 1 } = options;
+    const { sortBy = 'schedule_id:asc', limit = 100, page = 1 } = options;
     const [sortField, sortOrder] = sortBy.split(':');
     
-    const queryExamSchedule = db('exams_chedules')
-    .join('exam_rooms', 'exam_rooms.room_id', 'exams_chedules.room_id')
+    const queryExamSchedule = db('examschedules')
+    .join('examrooms', 'examrooms.room_id', 'examschedules.room_id')
         .select(
-            'exams_chedules.schedule_id',
-            'exams_chedules.start_time',
-            'exams_chedules.end_time',
-            'exams_chedules.room_id',
-            'exams_chedules.status',
-            'exams_chedules.name_schedule',
-            'exam_rooms.room_name'
+            'examschedules.schedule_id',
+            'examschedules.start_time',
+            'examschedules.end_time',
+            'examschedules.room_id',
+            'examschedules.status',
+            'examschedules.name_schedule',
+            'examrooms.room_name'
         );  
     
     if (filter.status) {
@@ -41,6 +41,7 @@ const queryExamSchedule = async (filter, options) => {
         limit,
     };
 }
+
 
 module.exports = {
     getExamScheduleById,

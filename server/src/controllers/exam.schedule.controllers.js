@@ -3,6 +3,7 @@ const {
     queryExamSchedule,
   } = require('../services/exam.schedule.services');
 const pick = require('../utils/pick');
+
 const getExamSchedule = async (req, res) => {
     const { id } = req.params;
     try {
@@ -27,7 +28,6 @@ const getAll = async (req, res) => {
         res.status(err.statusCode || 500).send({ message: err.message });
     }
 };
-
 
 module.exports = {
     getExamSchedule,

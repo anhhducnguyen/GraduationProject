@@ -7,10 +7,10 @@ const dotenv = require("dotenv");
 const passport = require("../config/passport");
 const session = require("express-session");
 const sessionMiddleware = require('../config/session');
+
 const cors = require('cors');
-
-
 app.use(cors());
+
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());

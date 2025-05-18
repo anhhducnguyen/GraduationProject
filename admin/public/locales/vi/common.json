@@ -1,11 +1,22 @@
 {
+  "form": {
+    "required": "Trường này là bắt buộc",
+    "select_gender": "-- Chọn giới tính --",
+    "choose_image": "Chọn ảnh đại diện từ máy",
+    "change_image": "Đổi ảnh"
+  },
   "users": {
     "fields": {
       "id": "ID",
       "first_name": "Tên",
       "last_name": "Họ",
       "age": "Tuổi",
-      "gender": "Giới tính"
+      "gender": "Giới tính",
+      "avatar": "Chọn ảnh đại diện từ máy"
+    },
+    "gender": {
+      "male": "Nam",
+      "female": "Nữ"
     }
   },
   "table": {
