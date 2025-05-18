@@ -4,6 +4,8 @@
 
 ### 🌟 Giới thiệu
 
+Đề tài thực hiện xây dụng một hệ thống xác thực danh tính sinh viên dựa trên công nghệ nhận diện khuôn mặt cho công tác khảo thí (tại đại học Phenikaa) nhằm đảm bảo tính chính xác, minh bạch và an toàn trong các kỳ thi
+
 ### Bản demo, Báo cáo và Slide: 
 
 - [Demo]()
@@ -13,6 +15,19 @@
 - [Video demo]()
 
 - [Video demo RestfulAPT]()
+
+## Author 
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/f50ae9b1-d56b-4ab6-b8d5-577bffdc9f15" alt="Thành viên 1"  height="110" /></td>
+  <td><img src="https://github.com/user-attachments/assets/829daf2d-e9a6-4dfa-9607-720006cf875c" alt="Product"  height="110" /></td>
+  </tr>
+
+  <tr>
+    <td>Nguyen Duc Anh</td>
+    <td>Project: Cosmetics e-commerce website (March 01, 2025 - now)</td>
+  </tr>
+</table>
 
 
 ## 🛠️ Điều kiện tiên quyết
