@@ -105,7 +105,7 @@ git clone https://github.com/anhhducnguyen/Face-Auth-Exam-System-v2.git
     ```
 
 
-#### **Step 4**: Tạo cơ sở dữ liệu
+#### **Step 4**: <a href="#"><img alt="MySQL" src ="https://img.shields.io/badge/MySQL-4479A1.svg?logo=MySQL&logoColor=white"></a> Tạo cơ sở dữ liệu
 
 #### **Step 5**: 🏃‍♂️ Sau khi dự án đã được tạo
 
