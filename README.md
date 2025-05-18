@@ -45,7 +45,7 @@
 
   <tr>
     <td>
-        <a href="https://expressjs.com/" target="_blank">Express - NodeJS</a>
+        <a href="https://expressjs.com/" target="_blank">Express + NodeJS</a>
     </td>
     <td>
       <a href="https://refine.dev/" target="_blank">Refine</a>
