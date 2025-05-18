@@ -25,7 +25,9 @@
   </tr>
 
   <tr>
-    <td>Nguyen Duc Anh</td>
+    <td>
+        <a href="https://github.com/anhhducnguyen" target="_blank">Nguyen Duc Anh</a>
+    </td>
     <td>Giảng viên hướng dẫn: 
       <a href="https://github.com/lethunguyen" target="_blank">TS. Nguyen Le Thu</a>
     </td>
