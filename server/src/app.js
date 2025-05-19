@@ -21,6 +21,10 @@ const authRoutes = require("./routes/auth.routes");
 const examAttendance = require("./routes/exam.attendance.routes");
 const examSchedule = require('./routes/exam.schedule.routes');
 const userRoutes = require('./routes/user.routes');
+const ExamRoomsRoutes = require("./routes/exam.rooms.routes");
+const ExamSchedulesRoutes = require("./routes/exam.schedules.routes");
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
@@ -30,8 +34,7 @@ app.use('/api/v1/users', userRoutes);
 app.use("/auth", authRoutes);
 app.use("/api/v1/exam-attendance", examAttendance);
 app.use('/api/v1/exam-schedule', examSchedule);
-
-
-
+app.use("/api/v1/exam-rooms", ExamRoomsRoutes);
+app.use("/api/v1/exam-schedules", ExamSchedulesRoutes);
 
 module.exports = app;
