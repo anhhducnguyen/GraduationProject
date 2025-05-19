@@ -34,6 +34,14 @@ import {
 } from "@/pages/users";
 
 import {
+  ExamRoomList,
+} from "@/pages/rooms";
+
+import {
+  ExamScheduleList,
+} from "@/pages/exam-schedules";
+
+import {
   ProductCreate,
   ProductEdit,
   ProductList,
@@ -95,6 +103,17 @@ function App() {
                 list: "/schedules",
                 // ...
               },
+              {
+                name: "exam-rooms",
+                list: "/exam-rooms",
+                // ...
+              },
+              {
+                name: "exam-schedules",
+                list: "/exam-schedules",
+                // ...
+              },
+              
             ]}
           >
             <Routes>
@@ -126,6 +145,12 @@ function App() {
                   <Route path="new" element={<UserCreate />} />
                 </Route>
                 <Route path="/schedules" element={<SchedulePage />} />
+                <Route path="/exam-rooms">
+                  <Route index element={<ExamRoomList />} />
+                </Route>
+                <Route path="/exam-schedules">
+                  <Route index element={<ExamScheduleList />} />
+                </Route>
 
                 <Route path="*" element={<ErrorComponent />} />
               </Route>
