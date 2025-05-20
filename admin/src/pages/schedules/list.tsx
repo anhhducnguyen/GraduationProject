@@ -118,13 +118,15 @@ function SchedulePage() {
 }, [calendarControls]);
 
 useEffect(() => {
+  calendarControls.setDayBoundaries({
+    start: '03:00',
+    end: '22:00'
+  });
   if (calendar) {
     calendar.setTheme(mode === 'dark' ? 'dark' : 'light');
   }
 }, [mode, calendar]);
 
-
-  
   useEffect(() => {
     fetch('/api/v1/exam-schedule')
       .then(response => {
@@ -169,8 +171,6 @@ useEffect(() => {
                 ? 'bg-green-500'
                 : 'bg-orange-500',
           };
-
-          
         });
 
         if (calendar) {
