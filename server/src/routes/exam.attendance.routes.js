@@ -8,12 +8,14 @@ const {
     deleteExamAttendanceController,
     updateE,
     getByScheduleId,
-    assignStudentToExam
+    assignStudentToExam,
+    getExamAttendances
   } = require('../controllers/exam.attendance.controller');
   
 router.get(
     '/', 
-    getAll
+    // getAll
+    getExamAttendances
 );
 
 router.put("/", updateE);

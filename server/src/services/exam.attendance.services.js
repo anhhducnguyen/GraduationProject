@@ -1,6 +1,41 @@
 const db = require('../../config/database');
 const dayjs = require('dayjs');
 
+const { buildQuery } = require("../utils/queryBuilder");
+
+const queryExamAttendance= async (filters = {}, options = {}) => {
+    const query = buildQuery(db, 'exam_attendance', {
+        filters,
+        likeFilters: ['room_name_like', 'capacity_like'],
+        exactFilters: ['room_name', 'capacity', 'status'],
+        sort: options.sort,
+        page: options.page,
+        limit: options.limit,
+    });
+
+    const results = await query;
+
+    const formatted = results.map(row => ({
+            id: row.attendance_id,
+            schedule_id: row.schedule_id,
+            isPresent: row.is_present,
+            createdAt: row.created_at,
+            updatedAt: row.updated_at,
+            user: {
+                id: row.student_id,
+                // room_name: row.room_name,
+                // capacity: row.room_capacity
+            }
+        }));
+
+    // return await query;
+    return formatted;
+};
+
+const countExamAttendance = async () => {
+    const [{ count }] = await db('examrooms').count('* as count');
+    return parseInt(count);
+};
 
 const getAllExamAttendances = async () => {
     try {
@@ -128,28 +163,28 @@ const deleteExamAttendance = async (attendance_id) => {
     }
 }
 
-const queryExamAttendance = async (filter, options) => {
-    const { sortBy = 'attendance_id:asc', limit = 10, page = 1 } = options;
-    const [sortField, sortOrder] = sortBy.split(':');
+// const queryExamAttendance = async (filter, options) => {
+//     const { sortBy = 'attendance_id:asc', limit = 10, page = 1 } = options;
+//     const [sortField, sortOrder] = sortBy.split(':');
     
-    const queryExamAttendance = db('exam_attendance');
+//     const queryExamAttendance = db('exam_attendance');
     
-    if (filter.reported_by) {
-        queryExamAttendance.where('reported_by', 'like', `%${filter.reported_by}%`);
-    }
-    if (filter.is_present) {
-        queryExamAttendance.where('is_present', filter.is_present);
-    }
+//     if (filter.reported_by) {
+//         queryExamAttendance.where('reported_by', 'like', `%${filter.reported_by}%`);
+//     }
+//     if (filter.is_present) {
+//         queryExamAttendance.where('is_present', filter.is_present);
+//     }
     
-    const offset = (page - 1) * limit;
-    const data = await queryExamAttendance.orderBy(sortField, sortOrder).limit(limit).offset(offset);
+//     const offset = (page - 1) * limit;
+//     const data = await queryExamAttendance.orderBy(sortField, sortOrder).limit(limit).offset(offset);
     
-    return {
-        results: data,
-        page,
-        limit,
-    };
-}
+//     return {
+//         results: data,
+//         page,
+//         limit,
+//     };
+// }
 
 const updateExamAttendance = async (student_id, schedule_id, updates) => {
     return db("exam_attendance")
@@ -201,5 +236,6 @@ module.exports = {
     checkAttendance,    
     getExamAttendanceByScheduleId,
     getCurrentExamSchedule,
-    checkStudentExists
+    checkStudentExists,
+    countExamAttendance
 };

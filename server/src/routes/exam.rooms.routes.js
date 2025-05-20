@@ -25,10 +25,13 @@ router.route('/')
         getExamRooms)
 //     .post(permission, createExamRoom);
 
-// router.route('/:id')
+router.route('/:id')
 //     .get(permission, getExamRoom)
 //     .put(permission, updateExamRoom)
-//     .delete(permission, deleteExamRoom);
+    .delete(
+        // permission, 
+        deleteExamRoom
+    );
 
 module.exports = router;
 

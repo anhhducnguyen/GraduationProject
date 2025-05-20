@@ -8,11 +8,30 @@ const {
     checkAttendance,
     getExamAttendanceByScheduleId,
     getCurrentExamSchedule,
-    checkStudentExists
+    checkStudentExists,
+    countExamAttendance
 } = require('../services/exam.attendance.services');
 const pick = require('../utils/pick');
 const { activeConnections } = require('../../config/ws');
+const { parseQueryOptions } = require("../utils/queryParser");
 // const { checkStudentExists, checkExamScheduleExists, getCurrentExamSchedule } = require('../clients/checkStudentExists');
+
+const getExamAttendances = async (req, res) => {
+    try {
+        const filter = pick(req.query, ['room_name', 'room_name_like', 'capacity_like', 'status']);
+        const { page, limit, sort } = parseQueryOptions(req.query);
+
+        const count = await countExamAttendance();
+
+        res.set('X-Total-Count', count);
+        res.set('Access-Control-Expose-Headers', 'X-Total-Count');
+
+        const result = await queryExamAttendance(filter, { page, limit, sort });
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
 
 const getAll = async (req, res) => {
     try {
@@ -90,7 +109,7 @@ const create = async (req, res) => {
             student_id: name,   // Tạm thời dùng 'name' làm ID sinh viên
             is_present: real_face ? 1 : 0,
             violation_id: null, // Có thể cập nhật nếu có vi phạm
-            reported_by: 1,  // Hoặc truyền thông tin nhận diện
+            reported_by: 3,  // Hoặc truyền thông tin nhận diện
         });
 
         // Gửi dữ liệu real-time qua WebSocket
@@ -151,8 +170,6 @@ const assignStudentToExam = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
-
-
 
 const updateE = async (req, res) => {
     try {
@@ -271,4 +288,5 @@ module.exports = {
     deleteExamAttendanceController,
     updateE,
     assignStudentToExam,
+    getExamAttendances,
 };
