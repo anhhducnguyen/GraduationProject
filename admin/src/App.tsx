@@ -41,6 +41,8 @@ import {
   ExamScheduleList,
 } from "@/pages/exam-schedules";
 
+import { ExamAttendanceList } from "./pages/exam-attendance";
+
 import {
   ProductCreate,
   ProductEdit,
@@ -84,13 +86,13 @@ function App() {
             authProvider={authProvider}
             i18nProvider={i18nProvider}
             resources={[
-              {
-                name: "products",
-                list: "/products",
-                create: "/products/new",
-                edit: "/products/:id/edit",
-                show: "/products/:id",
-              },
+              // {
+              //   name: "products",
+              //   list: "/products",
+              //   create: "/products/new",
+              //   edit: "/products/:id/edit",
+              //   show: "/products/:id",
+              // },
               {
                 name: "users",
                 list: "/users",
@@ -106,12 +108,21 @@ function App() {
               {
                 name: "exam-rooms",
                 list: "/exam-rooms",
-                // ...
+                // create: "/exam-rooms/new",
+                // edit: "/exam-rooms/:id/edit",
+                // show: "/exam-rooms/:id",
               },
               {
                 name: "exam-schedules",
                 list: "/exam-schedules",
                 // ...
+              },
+              {
+                name: "exam-attendance",
+                list: "/exam-attendance",
+                // create: "/exam-attendance/new",
+                // edit: "/exam-attendance/:id/edit",
+                // show: "/exam-attendance/:id",
               },
               
             ]}
@@ -133,12 +144,12 @@ function App() {
                   index
                   element={<NavigateToResource resource="products" />}
                 />
-                <Route path="/products">
+                {/* <Route path="/products">
                   <Route index element={<ProductList />} />
                   <Route path="new" element={<ProductCreate />} />
                   <Route path=":id" element={<ProductShow />} />
                   <Route path=":id/edit" element={<ProductEdit />} />
-                </Route>
+                </Route> */}
                  <Route path="/users">
                   <Route index element={<UserList />} />
                   <Route path=":id" element={<UserShow />} />
@@ -150,6 +161,9 @@ function App() {
                 </Route>
                 <Route path="/exam-schedules">
                   <Route index element={<ExamScheduleList />} />
+                </Route>
+                <Route path="/exam-attendance">
+                  <Route index element={<ExamAttendanceList />} />
                 </Route>
 
                 <Route path="*" element={<ErrorComponent />} />

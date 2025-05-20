@@ -1,6 +1,6 @@
-import type { AuthBindings } from "@refinedev/core";
+// import type { AuthBindings } from "@refinedev/core";
 
-export const TOKEN_KEY = "refine-auth";
+// export const TOKEN_KEY = "refine-auth";
 
 // export const authProvider: AuthBindings = {
 //   login: async ({ username, email, password }) => {
@@ -76,6 +76,9 @@ export const TOKEN_KEY = "refine-auth";
 //   },
 // };
 
+import type { AuthBindings } from "@refinedev/core";
+
+export const TOKEN_KEY = "refine-auth";
 import axios from 'axios'; // Nếu bạn chưa cài axios, hãy cài qua npm: npm install axios
 
 export const authProvider: AuthBindings = {

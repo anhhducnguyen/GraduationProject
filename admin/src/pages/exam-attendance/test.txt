@@ -1,0 +1,231 @@
+import React, { useMemo } from "react";
+import {
+  useGetLocale,
+  useTranslate,
+  useMany,
+} from "@refinedev/core";
+import { DataGrid, type GridColDef, type GridRenderCellParams } from "@mui/x-data-grid";
+import {
+  DeleteButton,
+  EditButton,
+  List,
+  ShowButton,
+  useDataGrid,
+} from "@refinedev/mui";
+import { Avatar, Typography } from "@mui/material";
+
+type User = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  avatar?: string;
+};
+
+type ExamAttendance = {
+  attendance_id: number;
+  schedule_id: number;
+  is_present: number;
+  users: { id: number };
+};
+
+export const ExamAttendanceList = () => {
+  const { dataGridProps } = useDataGrid<ExamAttendance>();
+  const locale = useGetLocale();
+  const translate = useTranslate();
+
+  // Tạo danh sách ID sinh viên duy nhất
+  const studentIds = useMemo(
+    () =>
+      [
+        ...new Set(
+          dataGridProps?.rows
+            ?.map((item) => item?.users?.student_id)
+            .filter((id): id is number => typeof id === "number")
+        ),
+      ],
+    [dataGridProps?.rows]
+  );
+
+  const { data: users, isLoading } = useMany({
+    resource: "users",
+    ids:
+      // dataGridProps?.rows?.map((item) => item?.users?.id).filter(Boolean) ??
+        dataGridProps?.rows?.map((item) => item?.users?.id).filter(Boolean) ??
+      [],
+    queryOptions: {
+      enabled: !!dataGridProps?.rows,
+    },
+  });
+
+  // console.log(users?.data);
+
+  // console.log(isLoading);
+
+
+  // Định nghĩa các cột
+  const columns = useMemo<GridColDef<ExamAttendance & { index: number }>[]>(() => [
+    {
+      field: "attendance_id",
+      headerName: translate("attendance.fields.attendance_id") ?? "ID",
+      flex: 1,
+      minWidth: 100,
+    },
+    {
+      field: "schedule_id",
+      headerName: translate("attendance.fields.schedule_id") ?? "Lịch học ID",
+      flex: 1,
+      minWidth: 100,
+    },
+    {
+      field: "users",
+      flex: 1,
+      headerName: "attendance.fields.first_name",
+      renderCell: ({ value }) =>
+        isLoading
+          ? "Loading..."
+          : users?.data?.find((item) => item.id === value?.student_id)?.first_name,
+    },
+
+    // {
+    //   field: "users",
+    //   flex: 1,
+    //   headerName: "User",
+    //   renderCell: ({ row }) => {
+    //     if (isLoading) return "Loading...";
+    //     const studentId = row.users?.id;
+    //     const student = users?.data?.find((item) => item.id === studentId);
+    //     return student ? student.first_name : "Không xác định";
+    //   }
+    // },
+
+
+    // {
+    //   field: "student_id",
+    //   headerName: translate("schedules.fields.student_id"),
+    //   flex: 1,
+    //   minWidth: 200,
+    //   renderCell: ({ row }) => {
+    //     const studentId = row.users?.student_id;
+    //     return studentId;
+    //   },
+    // },
+    // {
+    //   field: "avatar",
+    //   headerName: translate("schedules.fields.avatar"),
+    //   flex: 1,
+    //   minWidth: 200,
+    //   renderCell: ({ row }) => {
+    //     const studentId = row.users?.student_id;
+    //     const studentAvatar = studentMap[studentId];
+    //     return studentId && studentAvatar ? studentAvatar : "Không xác định";
+    //   },
+    // },
+
+
+    // Cột avatar
+    // {
+    //   field: "attendance.fields.avatar",
+    //   width: 70,
+    //   sortable: false,
+    //   filterable: false,
+    //   renderCell: (params: GridRenderCellParams<any, ExamAttendance>) => {
+    //     const studentId = params.row.users?.student_id;
+    //     const student = studentId ? studentMap[studentId] : null;
+    //     return student ? (
+    //       <Avatar src={student.avatar} alt={student.first_name} />
+    //     ) : (
+    //       <Avatar />
+    //     );
+    //   },
+    // },
+    // Cột first_name
+    // {
+    //   field: "first_name",
+    //   headerName: translate("schedules.fields.first_name"),
+    //   flex: 1,
+    //   minWidth: 200,
+    //   renderCell: ({ row }) => {
+    //     const studentId = row.users?.student_id;
+    //     const FirstName = studentId !== undefined ? studentMap[studentId] : undefined;
+    //     // const FirstName = studentMap[studentId];
+    //     return studentId && FirstName ? FirstName : "Không xác định";
+    //   },
+    // },
+    // {
+    //   field: "attendance.fields.first_name",
+    //   flex: 1,
+    //   minWidth: 120,
+    //   sortable: false,
+    //   filterable: false,
+    //   renderCell: (params: GridRenderCellParams<any, ExamAttendance>) => {
+    //     const studentId = params.row.users?.student_id;
+    //     const student = studentId ? studentMap[studentId] : null;
+    //     return student ? (
+    //       <Typography>{student.first_name}</Typography>
+    //     ) : (
+    //       <Typography color="textSecondary">Không xác định</Typography>
+    //     );
+    //   },
+    // },
+    // Cột last_name
+    // {
+    //   field: "attendance.fields.last_name",
+    //   flex: 1,
+    //   minWidth: 120,
+    //   sortable: false,
+    //   filterable: false,
+    //   renderCell: (params: GridRenderCellParams<any, ExamAttendance>) => {
+    //     const studentId = params.row.users?.student_id;
+    //     const student = studentId ? studentMap[studentId] : null;
+    //     return student ? (
+    //       <Typography>{student.last_name}</Typography>
+    //     ) : (
+    //       <Typography color="textSecondary">Không xác định</Typography>
+    //     );
+    //   },
+    // },
+    // Cột is_present
+    {
+      field: "is_present",
+      headerName: translate("attendance.fields.is_present") ?? "Có mặt",
+      flex: 0.5,
+      minWidth: 100,
+      renderCell: (params: GridRenderCellParams<any, ExamAttendance>) =>
+        params.value ? "Có mặt" : "Vắng mặt",
+    },
+    // Cột actions
+    {
+      field: "actions",
+      headerName: translate("table.actions"),
+      sortable: false,
+      display: "flex",
+      renderCell: function render({ row }) {
+        return (
+          <>
+            <ShowButton hideText recordItemId={row.attendance_id} />
+            <EditButton hideText recordItemId={row.attendance_id} />
+            <DeleteButton hideText recordItemId={row.attendance_id} />
+          </>
+        );
+      },
+      align: "center",
+      headerAlign: "center",
+      minWidth: 80,
+    },
+  ], [locale, translate,
+    // studentMap
+  ]);
+
+  return (
+    <List>
+      <DataGrid
+        {...dataGridProps}
+        // rows={indexedRows}
+        getRowId={(row) => row.attendance_id}
+        columns={columns}
+        autoHeight
+        loading={dataGridProps.loading}
+      />
+    </List>
+  );
+};

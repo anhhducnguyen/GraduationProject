@@ -65,31 +65,66 @@ function SchedulePage() {
       createDragAndDropPlugin(),
       calendarControls,
     ],
-    isDark: mode === 'dark',
-    locale: 'vi-VN',
+    // isDark: mode === 'dark',
+    // locale: 'vi-VN',
   });
 
-  useEffect(() => {
-    // console.log('Current calendar date:', calendarControls.getDate(), calendarControls.getFirstDayOfWeek(), calendarControls.getLocale(), calendarControls.getWeekOptions());
-    console.log('--- Calendar Controls Info ---');
-  console.log('Current Date:', calendarControls.getDate());
-  console.log('Current View:', calendarControls.getView());
-  console.log('Visible Range:', calendarControls.getRange());
-  console.log('First Day of Week:', calendarControls.getFirstDayOfWeek());
-  console.log('Locale:', calendarControls.getLocale());
-  console.log('Available Views:', calendarControls.getViews());
-  console.log('Day Boundaries:', calendarControls.getDayBoundaries());
-  console.log('Week Options:', calendarControls.getWeekOptions());
-  console.log('Calendars:', calendarControls.getCalendars());
-  console.log('Min Date:', calendarControls.getMinDate());
-  console.log('Max Date:', calendarControls.getMaxDate());
-  console.log('Month Grid Options:', calendarControls.getMonthGridOptions());
-  console.log('------------------------------');
-    // You can also set view or date here if you want
-    // calendarControls.setView('week');
-    // calendarControls.setDate('2025-05-20');
-  }, [calendarControls]);
+  // useEffect(() => {
+  // calendarControls.setDayBoundaries({
+  //   start: '03:00',
+  //   end: '21:00'
+  // });
+  //   // console.log('Current calendar date:', calendarControls.getDate(), calendarControls.getFirstDayOfWeek(), calendarControls.getLocale(), calendarControls.getWeekOptions());
+  // console.log('--- Calendar Controls Info ---');
+  // console.log('Current Date:', calendarControls.getDate());
+  // console.log('Current View:', calendarControls.getView());
+  // console.log('Visible Range:', calendarControls.getRange());
+  // console.log('First Day of Week:', calendarControls.getFirstDayOfWeek());
+  // console.log('Locale:', calendarControls.getLocale());
+  // console.log('Available Views:', calendarControls.getViews());
+  // console.log('Day Boundaries:', calendarControls.getDayBoundaries());
+  // console.log('Week Options:', calendarControls.getWeekOptions());
+  // console.log('Calendars:', calendarControls.getCalendars());
+  // console.log('Min Date:', calendarControls.getMinDate());
+  // console.log('Max Date:', calendarControls.getMaxDate());
+  // console.log('Month Grid Options:', calendarControls.getMonthGridOptions());
+  // console.log('------------------------------');
+  //   // You can also set view or date here if you want
+  //   // calendarControls.setView('week');
+  //   // calendarControls.setDate('2025-05-20');
+  // }, [calendarControls]);
 
+  useEffect(() => {
+  let prevDate = calendarControls.getDate();
+  let prevView = calendarControls.getView();
+
+  const interval = setInterval(() => {
+    const currentDate = calendarControls.getDate();
+    const currentView = calendarControls.getView();
+
+    if (currentDate !== prevDate || currentView !== prevView) {
+      prevDate = currentDate;
+      prevView = currentView;
+
+      console.log('--- Calendar Controls Info ---');
+      console.log('Current Date:', currentDate);
+      console.log('Current View:', currentView);
+      console.log('Visible Range:', calendarControls.getRange());
+      console.log('------------------------------');
+    }
+  }, 300); // 300ms hoặc 500ms tùy ý
+
+  return () => clearInterval(interval);
+}, [calendarControls]);
+
+useEffect(() => {
+  if (calendar) {
+    calendar.setTheme(mode === 'dark' ? 'dark' : 'light');
+  }
+}, [mode, calendar]);
+
+
+  
   useEffect(() => {
     fetch('/api/v1/exam-schedule')
       .then(response => {
@@ -134,9 +169,13 @@ function SchedulePage() {
                 ? 'bg-green-500'
                 : 'bg-orange-500',
           };
+
+          
         });
 
         if (calendar) {
+          // calendar.setTheme('dark');
+          // calendar.setTheme(mode === 'dark' ? 'dark' : 'light');
           calendar.events.set(mappedEvents);
         }
       })
