@@ -1,9 +1,10 @@
 // https://github.com/DuowngM/shopee/blob/main/server/src/categories/dto/categories.dto.ts
 // https://github.com/typicode/json-server?tab=readme-ov-file
 // https://refine.dev/docs/ui-integrations/material-ui/hooks/use-data-grid/#dataprovidername
+// https://refine.dev/tutorial/authentication/data-provider-integration/?utm_source=chatgpt.com
 
 import { Authenticated, type I18nProvider, Refine } from "@refinedev/core";
-import dataProvider from "@refinedev/simple-rest";
+// import dataProvider from "@refinedev/simple-rest";
 
 import routerProvider, {
   CatchAllNavigate,
@@ -24,6 +25,9 @@ import {
 import { useTranslation } from "react-i18next";
 
 import { authProvider } from "./authProvider";
+import { dataProvider } from "./providers/data-provider";
+
+
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./context/color-mode";
 
@@ -78,6 +82,7 @@ function App() {
         <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
         <RefineSnackbarProvider>
           <Refine
+            // dataProvider={dataProvider}
             // dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
             dataProvider={dataProvider("http://localhost:5000/api/v1")}
             // dataProvider={dataProvider("/api/v1")}
@@ -124,7 +129,7 @@ function App() {
                 // edit: "/exam-attendance/:id/edit",
                 // show: "/exam-attendance/:id",
               },
-              
+
             ]}
           >
             <Routes>
@@ -150,7 +155,7 @@ function App() {
                   <Route path=":id" element={<ProductShow />} />
                   <Route path=":id/edit" element={<ProductEdit />} />
                 </Route> */}
-                 <Route path="/users">
+                <Route path="/users">
                   <Route index element={<UserList />} />
                   <Route path=":id" element={<UserShow />} />
                   <Route path="new" element={<UserCreate />} />
@@ -185,8 +190,8 @@ function App() {
                       type="login"
                       formProps={{
                         defaultValues: {
-                          email: "demo@refine.dev",
-                          password: "demodemo",
+                          email: "anhnguyen2k373@gmail.com",
+                          password: "Ducanh12@#",
                         },
                       }}
                     />

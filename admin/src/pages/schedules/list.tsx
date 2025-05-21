@@ -10,7 +10,6 @@ import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop';
 import { createEventModalPlugin } from '@schedule-x/event-modal';
 import TimeGridEvent from '../../components/time-grid-event';
 import CustomEventModal from '../../components/event-modal';
-// import Sidebar from '../components/side-bar.tsx';
 
 // Import date-fns-tz for timezone conversion
 import { formatInTimeZone } from 'date-fns-tz';
@@ -59,7 +58,7 @@ function SchedulePage() {
     ],
     defaultView: 'week',
     events: [],
-    selectedDate: '2025-05-20',
+    selectedDate: new Date().toISOString().split('T')[0],
     plugins: [
       createEventModalPlugin(),
       createDragAndDropPlugin(),
@@ -68,134 +67,98 @@ function SchedulePage() {
     locale: 'vi-VN',
   });
 
-  // useEffect(() => {
-  // calendarControls.setDayBoundaries({
-  //   start: '03:00',
-  //   end: '21:00'
-  // });
-  //   // console.log('Current calendar date:', calendarControls.getDate(), calendarControls.getFirstDayOfWeek(), calendarControls.getLocale(), calendarControls.getWeekOptions());
-  // console.log('--- Calendar Controls Info ---');
-  // console.log('Current Date:', calendarControls.getDate());
-  // console.log('Current View:', calendarControls.getView());
-  // console.log('Visible Range:', calendarControls.getRange());
-  // console.log('First Day of Week:', calendarControls.getFirstDayOfWeek());
-  // console.log('Locale:', calendarControls.getLocale());
-  // console.log('Available Views:', calendarControls.getViews());
-  // console.log('Day Boundaries:', calendarControls.getDayBoundaries());
-  // console.log('Week Options:', calendarControls.getWeekOptions());
-  // console.log('Calendars:', calendarControls.getCalendars());
-  // console.log('Min Date:', calendarControls.getMinDate());
-  // console.log('Max Date:', calendarControls.getMaxDate());
-  // console.log('Month Grid Options:', calendarControls.getMonthGridOptions());
-  // console.log('------------------------------');
-  //   // You can also set view or date here if you want
-  //   // calendarControls.setView('week');
-  //   // calendarControls.setDate('2025-05-20');
-  // }, [calendarControls]);
+  useEffect(() => {
+    calendarControls.setDayBoundaries({
+      start: '03:00',
+      end: '22:00'
+    });
+    if (calendar) {
+      calendar.setTheme(mode === 'dark' ? 'dark' : 'light');
+    }
+  }, [mode, calendar]);
 
   useEffect(() => {
-  let prevDate = calendarControls.getDate();
-  let prevView = calendarControls.getView();
+    let prevDate = calendarControls.getDate();
+    let prevView = calendarControls.getView();
 
-  const interval = setInterval(() => {
-    const currentDate = calendarControls.getDate();
-    const currentView = calendarControls.getView();
+    const interval = setInterval(() => {
+      const currentDate = calendarControls.getDate();
+      const currentView = calendarControls.getView();
 
-    if (currentDate !== prevDate || currentView !== prevView) {
-      prevDate = currentDate;
-      prevView = currentView;
+      // Nếu date hoặc view thay đổi, thực hiện fetch dữ liệu
+      if (currentDate !== prevDate || currentView !== prevView) {
+        prevDate = currentDate;
+        prevView = currentView;
 
-      console.log('--- Calendar Controls Info ---');
-      console.log('Current Date:', currentDate);
-      console.log('Current View:', currentView);
-      console.log('Visible Range:', calendarControls.getRange());
-      console.log('------------------------------');
-    }
-  }, 300); // 300ms hoặc 500ms tùy ý
+        const range = calendarControls.getRange();
+        if (!range) return;
 
-  return () => clearInterval(interval);
-}, [calendarControls]);
+        console.log('--- Calendar Controls Info ---');
+        console.log('Current Date:', currentDate);
+        console.log('Current View:', currentView);
+        console.log('Visible Range:', range);
+        console.log('Current Date:', calendarControls.getDate());
+        console.log('Current View:', calendarControls.getView());
+        console.log('Visible Range:', calendarControls.getRange());
+        console.log('First Day of Week:', calendarControls.getFirstDayOfWeek());
+        console.log('Locale:', calendarControls.getLocale());
+        console.log('Available Views:', calendarControls.getViews());
+        console.log('Day Boundaries:', calendarControls.getDayBoundaries());
+        console.log('Week Options:', calendarControls.getWeekOptions());
+        console.log('Calendars:', calendarControls.getCalendars());
+        console.log('Min Date:', calendarControls.getMinDate());
+        console.log('Max Date:', calendarControls.getMaxDate());
+        console.log('Month Grid Options:', calendarControls.getMonthGridOptions());
+        console.log('------------------------------');
 
-useEffect(() => {
-  calendarControls.setDayBoundaries({
-    start: '03:00',
-    end: '22:00'
-  });
-  if (calendar) {
-    calendar.setTheme(mode === 'dark' ? 'dark' : 'light');
-  }
-}, [mode, calendar]);
+        const params = new URLSearchParams({
+          _start: range.start,
+          _end: range.end
+        });
 
-useEffect(() => {
-  let prevDate = calendarControls.getDate();
-  let prevView = calendarControls.getView();
+        fetch(`/api/v1/exam-schedule?${params.toString()}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (!data || !Array.isArray(data.results)) {
+              console.error('Fetched data.results is not in the expected format:', data);
+              return;
+            }
 
-  const interval = setInterval(() => {
-    const currentDate = calendarControls.getDate();
-    const currentView = calendarControls.getView();
+            const vietnamTimeZone = 'Asia/Ho_Chi_Minh';
 
-    // Nếu date hoặc view thay đổi, thực hiện fetch dữ liệu
-    if (currentDate !== prevDate || currentView !== prevView) {
-      prevDate = currentDate;
-      prevView = currentView;
+            const mappedEvents: MyCalendarEvent[] = data.results.map((item: ApiEventItem) => ({
+              id: item.schedule_id,
+              title: item.name_schedule,
+              start: formatInTimeZone(item.start_time, vietnamTimeZone, 'yyyy-MM-dd HH:mm'),
+              end: formatInTimeZone(item.end_time, vietnamTimeZone, 'yyyy-MM-dd HH:mm'),
+              description: item.name_schedule,
+              room: item.room_name,
+              status: item.status,
+              color:
+                item.status === 'scheduled'
+                  ? 'bg-blue-900'
+                  : item.status === 'completed'
+                    ? 'bg-green-500'
+                    : 'bg-orange-500',
+            }));
 
-      const range = calendarControls.getRange();
-      if (!range) return;
+            console.log(data.results);
 
-      console.log('--- Calendar Controls Info ---');
-      console.log('Current Date:', currentDate);
-      console.log('Current View:', currentView);
-      console.log('Visible Range:', range);
-      console.log('------------------------------');
+            if (calendar) {
+              calendar.events.set(mappedEvents);
+            }
+          })
+          .catch(error => console.error('Lỗi fetch dữ liệu:', error));
+      }
+    }, 500); 
 
-      const params = new URLSearchParams({
-        _start: range.start,
-        _end: range.end
-      });
-
-      fetch(`/api/v1/exam-schedule?${params.toString()}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (!data || !Array.isArray(data.results)) {
-            console.error('Fetched data.results is not in the expected format:', data);
-            return;
-          }
-
-          const vietnamTimeZone = 'Asia/Ho_Chi_Minh';
-
-          const mappedEvents: MyCalendarEvent[] = data.results.map((item: ApiEventItem) => ({
-            id: item.schedule_id,
-            title: item.name_schedule,
-            start: formatInTimeZone(item.start_time, vietnamTimeZone, 'yyyy-MM-dd HH:mm'),
-            end: formatInTimeZone(item.end_time, vietnamTimeZone, 'yyyy-MM-dd HH:mm'),
-            description: item.name_schedule,
-            room: item.room_name,
-            status: item.status,
-            color:
-              item.status === 'scheduled'
-                ? 'bg-blue-900'
-                : item.status === 'completed'
-                ? 'bg-green-500'
-                : 'bg-orange-500',
-          }));
-
-          console.log(data.results);
-
-          if (calendar) {
-            calendar.events.set(mappedEvents);
-          }
-        })
-        .catch(error => console.error('Lỗi fetch dữ liệu:', error));
-    }
-  }, 500); // hoặc 500ms tùy ý
-
-  return () => clearInterval(interval);
-}, [calendar, calendarControls]);
+    return () => clearInterval(interval);
+  }, [calendar, calendarControls]);
 
   return (
     <div className="flex h-screen">
