@@ -37,7 +37,7 @@ passport.use(new LocalStrategy(
 
       // ✅ Không serializeUser, mà trả về token
       const payload = { id: user.id, email: user.email, role: user.role };
-      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "3h" });
 
       return done(null, { 
         token,

@@ -56,12 +56,13 @@ import {
 
 
 import SchedulePage from "@/pages/schedules/list";
+import Home from "@/pages/home/home";
 
 
 
 function App() {
   const { t, i18n } = useTranslation();
-  console.log(i18n.language);
+  // console.log(i18n.language);
   // const i18nProvider: I18nProvider = {
   //   translate: (key, params) => t(key, params).toString(),
   //   changeLocale: (lang: string | undefined) => i18n.changeLanguage(lang),
@@ -82,6 +83,7 @@ function App() {
         <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
         <RefineSnackbarProvider>
           <Refine
+            // accessControlProvider={accessControlProvider}
             // dataProvider={dataProvider}
             // dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
             dataProvider={dataProvider("http://localhost:5000/api/v1")}
@@ -98,6 +100,10 @@ function App() {
               //   edit: "/products/:id/edit",
               //   show: "/products/:id",
               // },
+              {
+                name: "home",
+                list: "/home", // thêm dòng này để Refine biết về resource "home"
+              },
               {
                 name: "users",
                 list: "/users",
@@ -129,7 +135,6 @@ function App() {
                 // edit: "/exam-attendance/:id/edit",
                 // show: "/exam-attendance/:id",
               },
-
             ]}
           >
             <Routes>
@@ -145,16 +150,18 @@ function App() {
                   </Authenticated>
                 }
               >
-                <Route
+                <Route index element={<NavigateToResource resource="home" />} />
+                {/* <Route
                   index
                   element={<NavigateToResource resource="products" />}
-                />
+                /> */}
                 {/* <Route path="/products">
                   <Route index element={<ProductList />} />
                   <Route path="new" element={<ProductCreate />} />
                   <Route path=":id" element={<ProductShow />} />
                   <Route path=":id/edit" element={<ProductEdit />} />
                 </Route> */}
+                <Route path="/home" element={<Home />} />
                 <Route path="/users">
                   <Route index element={<UserList />} />
                   <Route path=":id" element={<UserShow />} />
@@ -191,7 +198,7 @@ function App() {
                       formProps={{
                         defaultValues: {
                           email: "anhnguyen2k373@gmail.com",
-                          password: "Ducanh12@#",
+                          password: "Anh12@#",
                         },
                       }}
                     />

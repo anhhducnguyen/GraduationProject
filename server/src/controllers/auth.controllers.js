@@ -46,7 +46,8 @@ const resetPassword = async (req, res) => {
     }
 
     const resetToken = await generateResetToken(email);  
-    const resetLink = `http://localhost:5000/reset-password?token=${resetToken}`;
+    // const resetLink = `http://localhost:5000/reset-password?token=${resetToken}`;
+    const resetLink = `http://localhost:5173/update-password?token=${resetToken}`;
     await sendResetEmail(email, resetLink); 
 
     res.json({ message: "Link đặt lại mật khẩu đã được gửi qua email" });
@@ -58,14 +59,15 @@ const resetPassword = async (req, res) => {
 
 const confirmResetPassword = async (req, res) => {
   try {
-    const { token, newPassword } = req.body;
+    // console.log("BODY:", req.body);
+    const { token, password } = req.body;
     const user = await findUserByResetToken(token);  
 
     if (!user || user.reset_token_expiry < Date.now()) {
       return res.status(400).json({ message: "Token không hợp lệ hoặc đã hết hạn" });
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     await resetPasswordByToken(token, hashedPassword);  
 
     res.json({ message: "Mật khẩu đã được đặt lại thành công" });
