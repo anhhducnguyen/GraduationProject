@@ -56,9 +56,9 @@ export const ExamRoomList = () => {
         renderCell: function render({ row }) {
           return (
             <>
-              <ShowButton hideText recordItemId={row.id} />
-              <EditButton hideText recordItemId={row.id} />
-              <DeleteButton hideText recordItemId={row.id} />
+              <ShowButton hideText recordItemId={row.room_id} />
+              <EditButton hideText recordItemId={row.room_id} />
+              <DeleteButton hideText recordItemId={row.room_id} />
             </>
           );
         },

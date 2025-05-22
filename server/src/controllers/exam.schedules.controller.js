@@ -1,10 +1,12 @@
 const {
     queryExamSchedules,
-    countExamSchedules
+    countExamSchedules,
+    deleteScheduleById
 } = require('../services/exam.schedules.services');
 const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
 
+// Get all exam schedules
 const getExamSchedules = async (req, res) => {
     try {
         const filter = pick(req.query, ['name_schedule_like', 'status_like', 'start_time_like', 'end_time_like']);
@@ -22,6 +24,21 @@ const getExamSchedules = async (req, res) => {
     }
 };
 
+// Delete exam schedule by ID
+const deletedExamSchedule = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const deletedExamSchedule = await deleteScheduleById(id);
+        if (!deletedExamSchedule) {
+            return res.status(404).json({ message: 'Exam schedule not found' });
+        }
+        return res.status(200).json({ message: 'Exam schedule deleted successfully' });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     getExamSchedules,
+    deletedExamSchedule,
 };

@@ -127,7 +127,7 @@ export const ExamScheduleList = () => {
           <>
             <ShowButton hideText recordItemId={row.id} />
             <EditButton hideText recordItemId={row.id} />
-            <DeleteButton hideText recordItemId={row.id} />
+            <DeleteButton hideText recordItemId={row.schedule_id} />
           </>
         );
       },

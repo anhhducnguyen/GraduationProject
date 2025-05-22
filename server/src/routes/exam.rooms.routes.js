@@ -26,7 +26,9 @@ router.route('/')
 //     .post(permission, createExamRoom);
 
 router.route('/:id')
-//     .get(permission, getExamRoom)
+    .get(
+        // permission, 
+        getExamRoom)
 //     .put(permission, updateExamRoom)
     .delete(
         // permission, 

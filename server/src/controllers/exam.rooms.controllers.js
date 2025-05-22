@@ -10,6 +10,7 @@ const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
 const db = require('../../config/database');
 
+// Get all exam rooms
 const getExamRooms = async (req, res) => {
     try {
         const filter = pick(req.query, ['room_name', 'room_name_like', 'capacity_like', 'status']);
@@ -27,6 +28,7 @@ const getExamRooms = async (req, res) => {
     }
 };
 
+// Get exam room by ID
 const getExamRoom = async (req, res) => {
     const { id } = req.params;
     try {
@@ -84,6 +86,7 @@ const updateExamRoom = async (req, res) => {
     }
 };
 
+// Delete exam room by ID
 const deleteExamRoom = async (req, res) => {
     const { id } = req.params;
     try {

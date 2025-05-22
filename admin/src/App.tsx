@@ -39,6 +39,7 @@ import {
 
 import {
   ExamRoomList,
+  RoomShow,
 } from "@/pages/rooms";
 
 import {
@@ -121,7 +122,7 @@ function App() {
                 list: "/exam-rooms",
                 // create: "/exam-rooms/new",
                 // edit: "/exam-rooms/:id/edit",
-                // show: "/exam-rooms/:id",
+                show: "/exam-rooms/:id",
               },
               {
                 name: "exam-schedules",
@@ -167,13 +168,17 @@ function App() {
                   <Route path=":id" element={<UserShow />} />
                   <Route path="new" element={<UserCreate />} />
                 </Route>
+
                 <Route path="/schedules" element={<SchedulePage />} />
                 <Route path="/exam-rooms">
                   <Route index element={<ExamRoomList />} />
+                  <Route path=":id" element={<RoomShow />} />
                 </Route>
+
                 <Route path="/exam-schedules">
                   <Route index element={<ExamScheduleList />} />
                 </Route>
+
                 <Route path="/exam-attendance">
                   <Route index element={<ExamAttendanceList />} />
                 </Route>

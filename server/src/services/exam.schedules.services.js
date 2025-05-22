@@ -1,27 +1,8 @@
 const db = require('../../config/database');
 const { buildQuery } = require("../utils/queryBuilder");
 
+// Get all exam schedules
 const queryExamSchedules = async (filters = {}, options = {}) => {
-    //     try {
-    //         const query = buildQuery(db, 'examschedules', {
-    //             filters,
-    //             likeFilters: ['name_schedule_like', 'status_like', 'start_time_like', 'end_time_like'],
-    //             exactFilters: ['name_schedule', 'status', 'start_time', 'end_time'],
-    //             sort: options.sort,
-    //             page: options.page,
-    //             limit: options.limit,
-    //         });
-    //         query.join('examrooms', 'examschedules.room_id', '=', 'examrooms.room_id')
-    //             .select('examschedules.*', 'examrooms.room_name')
-    //             .orderBy('examschedules.start_time', 'asc');
-    //         console.log('Query:', query.toSQL().sql);
-
-    //         return await query;
-    //     } catch (error) {
-    //         throw error;
-    //     }
-    // };
-
     try {
         const query = buildQuery(db, 'examschedules', {
             filters,
@@ -40,8 +21,6 @@ const queryExamSchedules = async (filters = {}, options = {}) => {
                 'examschedules.name_schedule',
                 'examschedules.status',
                 'examrooms.room_id as room_id',
-                // 'examrooms.room_name as room_name',
-                // 'examrooms.capacity as room_capacity'
             )
             .orderBy('examschedules.start_time', 'desc');
 
@@ -55,8 +34,6 @@ const queryExamSchedules = async (filters = {}, options = {}) => {
             status: row.status,
             room: {
                 room_id: row.room_id,
-                // room_name: row.room_name,
-                // capacity: row.room_capacity
             }
         }));
 
@@ -66,13 +43,26 @@ const queryExamSchedules = async (filters = {}, options = {}) => {
     }
 }
 
-
+// Count all exam schedules
 const countExamSchedules = async () => {
     const [{ count }] = await db('examschedules').count('* as count');
     return parseInt(count);
 };
 
+// Delete exam schedule by ID
+const deleteScheduleById = async (schedule_id) => {
+    try {
+        const deletedExamSchedule = await db('examschedules')
+            .where({ schedule_id })
+            .del();
+        return deletedExamSchedule;
+    } catch (error) {
+        throw new Error('Error deleting exam schedule: ' + error.message);
+    }
+};
+
 module.exports = {
     queryExamSchedules,
     countExamSchedules,
+    deleteScheduleById
 };

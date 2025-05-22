@@ -10,78 +10,45 @@ import {
   TextFieldComponent as TextField,
 } from "@refinedev/mui";
 
-import type { User } from "./types"; // bạn nên định nghĩa User type tương tự như ở phần Create
+import type { Room } from "./types";
 
-export const UserShow: React.FC = () => {
+export const RoomShow: React.FC = () => {
   const translate = useTranslate();
   const {
-    query: { data: userResult, isLoading },
-  } = useShow<User>();
+    query: { data: roomResult, isLoading },
+  } = useShow<Room>();
 
-  const user = userResult?.data;
+  const room = roomResult?.data;
 
   return (
     <Show isLoading={isLoading}>
       <Stack gap={1}>
         <Typography variant="body1" fontWeight="bold">
-          {translate("users.fields.id")}
+          {translate("rooms.fields.id")}
         </Typography>
-        {user ? (
-          <NumberField value={user.id} />
+        {room ? (
+          <TextField value={room.room_id} />
         ) : (
           <Skeleton height="20px" width="200px" />
         )}
 
         <Typography variant="body1" fontWeight="bold">
-          {translate("users.fields.first_name")}
+          {translate("rooms.fields.room_name")}
         </Typography>
-        {user ? (
-          <TextField value={user.first_name} />
+        {room ? (
+          <TextField value={room.room_name} />
         ) : (
           <Skeleton height="20px" width="200px" />
         )}
 
         <Typography variant="body1" fontWeight="bold">
-          {translate("users.fields.last_name")}
+          {translate("rooms.fields.capacity")}
         </Typography>
-        {user ? (
-          <TextField value={user.last_name} />
+        {room ? (
+          <NumberField value={room.capacity} />
         ) : (
           <Skeleton height="20px" width="200px" />
         )}
-
-        <Typography variant="body1" fontWeight="bold">
-          {translate("users.fields.age")}
-        </Typography>
-        {user ? (
-          <NumberField value={user.age} />
-        ) : (
-          <Skeleton height="20px" width="200px" />
-        )}
-
-        <Typography variant="body1" fontWeight="bold">
-          {translate("users.fields.gender")}
-        </Typography>
-        {user ? (
-          <TextField value={user.gender} />
-        ) : (
-          <Skeleton height="20px" width="200px" />
-        )}
-
-        {/* <Typography variant="body1" fontWeight="bold">
-          {translate("users.fields.avatar")}
-        </Typography>
-        {user?.avatar ? (
-          <img
-            src={user.avatar}
-            alt={`${user.first_name} ${user.last_name}`}
-            style={{ maxWidth: "200px", borderRadius: "8px" }}
-          />
-        ) : isLoading ? (
-          <Skeleton height="120px" width="200px" />
-        ) : (
-          <TextField value="No avatar" />
-        )} */}
       </Stack>
     </Show>
   );

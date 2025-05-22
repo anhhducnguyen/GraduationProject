@@ -17,18 +17,7 @@ const getExamSchedule = async (req, res) => {
     }
 };
 
-// const getAll = async (req, res) => {
-//     try {
-//         //GET /api/users?name=John&role=admin&sortBy=name:asc&limit=10&page=2 
-//         const filter = pick(req.query, ['status']);
-//         const options = pick(req.query, ['sortBy', 'limit', 'page']);
-//         const result = await queryExamSchedule(filter, options);
-//         res.send(result);
-//     } catch (err) {
-//         res.status(err.statusCode || 500).send({ message: err.message });
-//     }
-// };
-
+// Get all exam schedules
 const getAll = async (req, res) => {
   try {
     const filter = pick(req.query, ['status']);
