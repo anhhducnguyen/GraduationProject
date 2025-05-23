@@ -1,82 +1,81 @@
-import { useMemo } from "react";
-import {
-  useGetLocale,
-  useList,
-  useTranslate,
-} from "@refinedev/core";
-import { DataGrid, type GridColDef } from "@mui/x-data-grid";
-import {
-  DeleteButton,
-  EditButton,
-  List,
-  NumberField,
-  ShowButton,
-  useDataGrid,
-} from "@refinedev/mui";
+// import { useMemo } from "react";
+// import {
+//   useGetLocale,
+//   useList,
+//   useTranslate,
+// } from "@refinedev/core";
+// import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+// import {
+//   DeleteButton,
+//   EditButton,
+//   List,
+//   NumberField,
+//   ShowButton,
+//   useDataGrid,
+// } from "@refinedev/mui";
 
-// Define the product type with the category field
-type ExamRoom = {
-  room_id: string;
-  room_name: string;
-};
+// // Define the product type with the category field
+// type ExamRoom = {
+//   room_id: string;
+//   room_name: string;
+// };
 
-export const ExamRoomList = () => {
-  const { dataGridProps } = useDataGrid<ExamRoom>();
+// export const ExamRoomList = () => {
+//   const { dataGridProps } = useDataGrid<ExamRoom>();
 
-  const locale = useGetLocale()();
-  const translate = useTranslate();
+//   const locale = useGetLocale()();
+//   const translate = useTranslate();
 
 
-  const columns = useMemo<GridColDef[]>(
-    () => [
-      {
-        field: "room_id",
-        flex: 1,
-        headerName: translate("rooms.fields.id"),
-        minWidth: 300,
-      },
-      {
-        field: "room_name",
-        flex: 1,
-        headerName: translate("rooms.fields.room_name"),
-        minWidth: 300,
-      },
-      {
-        field: "capacity",
-        flex: 1,
-        headerName: translate("rooms.fields.capacity"),
-        minWidth: 100,
-        renderCell: ({ value }) => <NumberField value={value} />,
-      },
-      {
-        field: "actions",
-        headerName: translate("table.actions"),
-        sortable: false,
-        display: "flex",
-        renderCell: function render({ row }) {
-          return (
-            <>
-              <ShowButton hideText recordItemId={row.room_id} />
-              <EditButton hideText recordItemId={row.room_id} />
-              <DeleteButton hideText recordItemId={row.room_id} />
-            </>
-          );
-        },
-        align: "center",
-        headerAlign: "center",
-        minWidth: 80,
-      },
-    ],
-    [
-      locale, translate]
-  );
+//   const columns = useMemo<GridColDef[]>(
+//     () => [
+//       {
+//         field: "room_id",
+//         flex: 1,
+//         headerName: translate("rooms.fields.id"),
+//         minWidth: 300,
+//       },
+//       {
+//         field: "room_name",
+//         flex: 1,
+//         headerName: translate("rooms.fields.room_name"),
+//         minWidth: 300,
+//       },
+//       {
+//         field: "capacity",
+//         flex: 1,
+//         headerName: translate("rooms.fields.capacity"),
+//         minWidth: 100,
+//       },
+//       {
+//         field: "actions",
+//         headerName: translate("table.actions"),
+//         sortable: false,
+//         display: "flex",
+//         renderCell: function render({ row }) {
+//           return (
+//             <>
+//               <ShowButton hideText recordItemId={row.room_id} />
+//               <EditButton hideText recordItemId={row.room_id} />
+//               <DeleteButton hideText recordItemId={row.room_id} />
+//             </>
+//           );
+//         },
+//         align: "center",
+//         headerAlign: "center",
+//         minWidth: 80,
+//       },
+//     ],
+//     [
+//       locale, translate]
+//   );
 
-  return (
-    <List>
-      <DataGrid {...dataGridProps} getRowId={(row) => row.room_id} columns={columns} />
-    </List>
-  );
-};
+//   return (
+//     <List>
+//       <DataGrid {...dataGridProps} getRowId={(row) => row.room_id} columns={columns} />
+//     </List>
+//   );
+// };
 
 
 // import { useMemo } from "react";
@@ -160,3 +159,100 @@ export const ExamRoomList = () => {
 //     </List>
 //   );
 // };
+import { useMemo } from "react";
+import {
+  useGetLocale,
+  useTranslate,
+} from "@refinedev/core";
+import {
+  DataGrid,
+  type GridColDef,
+} from "@mui/x-data-grid";
+import {
+  DeleteButton,
+  EditButton,
+  List,
+  NumberField,
+  ShowButton,
+  useDataGrid,
+} from "@refinedev/mui";
+
+type ExamRoom = {
+  room_id: string;       // Nếu trong DB là number thì đổi thành number
+  room_name: string;
+  capacity: number;
+  location: string;
+  status: "schedule" | "ongoing" | "complete" | "cancelled"; // enum tương ứng
+};
+
+export const ExamRoomList = () => {
+  const { dataGridProps } = useDataGrid<ExamRoom>();
+
+  const locale = useGetLocale()();
+  const translate = useTranslate();
+
+  const columns = useMemo<GridColDef[]>(
+    () => [
+      {
+        field: "room_id",
+        flex: 1,
+        headerName: translate("rooms.fields.id", "Room ID"),
+        minWidth: 100,
+      },
+      {
+        field: "room_name",
+        flex: 1,
+        headerName: translate("rooms.fields.room_name", "Room Name"),
+        minWidth: 150,
+      },
+      {
+        field: "capacity",
+        flex: 1,
+        headerName: translate("rooms.fields.capacity", "Capacity"),
+        minWidth: 100,
+      },
+      {
+        field: "location",
+        flex: 1,
+        headerName: translate("rooms.fields.location", "Location"),
+        minWidth: 150,
+      },
+      {
+        field: "status",
+        flex: 1,
+        headerName: translate("rooms.fields.status", "Status"),
+        minWidth: 150,
+      },
+      {
+        field: "actions",
+        headerName: translate("table.actions"),
+        sortable: false,
+        display: "flex",
+        renderCell: function render({ row }) {
+          return (
+            <>
+              <ShowButton hideText recordItemId={row.room_id} />
+              <EditButton hideText recordItemId={row.room_id} />
+              <DeleteButton hideText recordItemId={row.room_id} />
+            </>
+          );
+        },
+        align: "center",
+        headerAlign: "center",
+        minWidth: 80,
+      },
+    ],
+    [locale, translate],
+  );
+
+  return (
+    <List>
+      <DataGrid
+        {...dataGridProps}
+        getRowId={(row) => row.room_id}
+        columns={columns}
+        autoHeight
+      />
+    </List>
+  );
+};

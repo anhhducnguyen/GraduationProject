@@ -4,7 +4,8 @@ const router = express.Router();
 
 const {
     getExamSchedules,
-    deletedExamSchedule
+    deletedExamSchedule,
+    createExamSchedule,
 } = require('../controllers/exam.schedules.controller');
 
 // const {
@@ -20,7 +21,9 @@ router.route('/')
     .get(
         // permission, 
         getExamSchedules)
-//     .post(permission, createExamRoom);
+    .post(
+        // permission, 
+        createExamSchedule);
 
 router.route('/:id')
 //     .get(permission, getExamRoom)

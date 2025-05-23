@@ -19,6 +19,27 @@
       "female": "Nữ"
     }
   },
+  "rooms": {
+    "fields": {
+      "id": "Mã phòng",
+      "room_name": "Tên phòng",
+      "capacity": "Sức chứa"
+    }
+  },
+  "schedules": {
+    "fields": {
+      "id": "Mã lịch thi",
+      "name_schedule": "Tên lịch thi",
+      "start_time": "Thời gian bắt đầu",
+      "end_time": "Thời gian kết thúc",
+      "status": "Trạng thái"
+    },
+    "status": {
+      "scheduled": "Đã lên lịch",
+      "completed": "Đã hoàn thành",
+      "cancelled": "Đã hủy"
+    }
+  },
   "table": {
     "actions": "Hành động"
   }

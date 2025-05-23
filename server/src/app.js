@@ -14,6 +14,7 @@ app.use(cors());
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.json());
 
 dotenv.config();
 

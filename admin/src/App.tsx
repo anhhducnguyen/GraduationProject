@@ -40,20 +40,22 @@ import {
 import {
   ExamRoomList,
   RoomShow,
+  RoomCreate,
 } from "@/pages/rooms";
 
 import {
   ExamScheduleList,
+  // ExamScheduleCreate,
 } from "@/pages/exam-schedules";
 
 import { ExamAttendanceList } from "./pages/exam-attendance";
 
-import {
-  ProductCreate,
-  ProductEdit,
-  ProductList,
-  ProductShow,
-} from "@/pages/products";
+// import {
+//   ProductCreate,
+//   ProductEdit,
+//   ProductList,
+//   ProductShow,
+// } from "@/pages/products";
 
 
 import SchedulePage from "@/pages/schedules/list";
@@ -63,12 +65,6 @@ import Home from "@/pages/home/home";
 
 function App() {
   const { t, i18n } = useTranslation();
-  // console.log(i18n.language);
-  // const i18nProvider: I18nProvider = {
-  //   translate: (key, params) => t(key, params).toString(),
-  //   changeLocale: (lang: string | undefined) => i18n.changeLanguage(lang),
-  //   getLocale: () => i18n.language,
-  // };
   const i18nProvider: I18nProvider = {
     translate: (key, params) => t(key, params).toString(),
     changeLocale: async (lang) => {
@@ -120,14 +116,14 @@ function App() {
               {
                 name: "exam-rooms",
                 list: "/exam-rooms",
-                // create: "/exam-rooms/new",
+                create: "/exam-rooms/new",
                 // edit: "/exam-rooms/:id/edit",
                 show: "/exam-rooms/:id",
               },
               {
                 name: "exam-schedules",
                 list: "/exam-schedules",
-                // ...
+                create: "/exam-schedules/new",
               },
               {
                 name: "exam-attendance",
@@ -173,10 +169,13 @@ function App() {
                 <Route path="/exam-rooms">
                   <Route index element={<ExamRoomList />} />
                   <Route path=":id" element={<RoomShow />} />
+                  <Route path="new" element={<RoomCreate />} />
                 </Route>
 
                 <Route path="/exam-schedules">
                   <Route index element={<ExamScheduleList />} />
+                  {/* <Route path=":id" element={<ExamScheduleShow />} /> */}
+                  {/* <Route path=":id/edit" element={<ExamScheduleEdit />} /> */}
                 </Route>
 
                 <Route path="/exam-attendance">

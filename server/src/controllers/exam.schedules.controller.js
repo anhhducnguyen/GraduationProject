@@ -1,7 +1,8 @@
 const {
     queryExamSchedules,
     countExamSchedules,
-    deleteScheduleById
+    deleteScheduleById,
+    create
 } = require('../services/exam.schedules.services');
 const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
@@ -38,7 +39,30 @@ const deletedExamSchedule = async (req, res) => {
     }
 };
 
+const createExamSchedule = async (req, res) => {
+    const { 
+        start_time, 
+        end_time, 
+        name_schedule, 
+        status, 
+        room_id 
+    } = req.body;
+    try {
+        const newExamSchedule = await create({ 
+            start_time, 
+            end_time, 
+            name_schedule, 
+            status, 
+            room_id 
+        });
+        return res.status(201).json(newExamSchedule);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     getExamSchedules,
     deletedExamSchedule,
+    createExamSchedule
 };

@@ -4,11 +4,10 @@ const {
     update,
     deleteExamRoomById,
     queryExamRoom,
-    countExamRooms
+    countExamRooms,
 } = require('../services/exam.rooms.services');
 const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
-const db = require('../../config/database');
 
 // Get all exam rooms
 const getExamRooms = async (req, res) => {
@@ -43,6 +42,7 @@ const getExamRoom = async (req, res) => {
 };
 
 const createExamRoom = async (req, res) => {
+    console.log(req.body);
     const { 
         room_name, 
         capacity, 
@@ -50,7 +50,7 @@ const createExamRoom = async (req, res) => {
         status 
     } = req.body;
     try {
-        const newExamRoom = await createExamRoom({ 
+        const newExamRoom = await create({ 
             room_name, 
             capacity, 
             location, 

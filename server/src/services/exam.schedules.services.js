@@ -61,8 +61,35 @@ const deleteScheduleById = async (schedule_id) => {
     }
 };
 
+// Create new exam schedule
+const create = async ({
+    start_time,
+    end_time,
+    room_id,
+    status,
+    name_schedule
+}) => {
+    try {
+        const [schedule_id] = await db('examschedules').insert({
+            start_time,
+            end_time,
+            room_id,
+            status,
+            name_schedule
+        });
+
+        const newExamSchedule = await db('examschedules')
+            .where({ schedule_id })
+            .first();
+        return newExamSchedule;
+    } catch (error) {
+        throw new Error('Error creating exam schedule: ' + error.message);
+    }
+};
+
 module.exports = {
     queryExamSchedules,
     countExamSchedules,
-    deleteScheduleById
+    deleteScheduleById,
+    create
 };

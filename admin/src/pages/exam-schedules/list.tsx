@@ -58,13 +58,13 @@ export const ExamScheduleList = () => {
   const columns = useMemo<GridColDef[]>(() => [
     {
       field: "schedule_id",
-      headerName: translate("schedules.fields.id", "ID"),
+      headerName: translate("schedules.fields.id"),
       flex: 1,
       minWidth: 100,
     },
     {
       field: "name_schedule",
-      headerName: translate("schedules.fields.name_schedule", "Schedule Name"),
+      headerName: translate("schedules.fields.name_schedule"),
       flex: 1,
       minWidth: 200,
     },
@@ -80,21 +80,21 @@ export const ExamScheduleList = () => {
     },
     {
       field: "start_time",
-      headerName: translate("schedules.fields.start_time", "Start Time"),
+      headerName: translate("schedules.fields.start_time"),
       flex: 1,
       minWidth: 180,
       renderCell: ({ value }) => dayjs(value).format("YYYY-MM-DD HH:mm"),
     },
     {
       field: "end_time",
-      headerName: translate("schedules.fields.end_time", "End Time"),
+      headerName: translate("schedules.fields.end_time"),
       flex: 1,
       minWidth: 180,
       renderCell: ({ value }) => dayjs(value).format("YYYY-MM-DD HH:mm"),
     },
     {
       field: "status",
-      headerName: translate("schedules.fields.status", "Status"),
+      headerName: translate("schedules.fields.status"),
       flex: 1,
       minWidth: 120,
       renderCell: ({ value }) => {

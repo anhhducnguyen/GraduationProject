@@ -24,7 +24,7 @@ export const RoomShow: React.FC = () => {
     <Show isLoading={isLoading}>
       <Stack gap={1}>
         <Typography variant="body1" fontWeight="bold">
-          {translate("rooms.fields.id")}
+          {translate("rooms.fields.id", "Room ID")}
         </Typography>
         {room ? (
           <TextField value={room.room_id} />
@@ -33,7 +33,7 @@ export const RoomShow: React.FC = () => {
         )}
 
         <Typography variant="body1" fontWeight="bold">
-          {translate("rooms.fields.room_name")}
+          {translate("rooms.fields.room_name", "Room Name")}
         </Typography>
         {room ? (
           <TextField value={room.room_name} />
@@ -42,10 +42,28 @@ export const RoomShow: React.FC = () => {
         )}
 
         <Typography variant="body1" fontWeight="bold">
-          {translate("rooms.fields.capacity")}
+          {translate("rooms.fields.capacity", "Capacity")}
         </Typography>
         {room ? (
           <NumberField value={room.capacity} />
+        ) : (
+          <Skeleton height="20px" width="200px" />
+        )}
+
+        <Typography variant="body1" fontWeight="bold">
+          {translate("rooms.fields.location", "Location")}
+        </Typography>
+        {room ? (
+          <TextField value={room.location} />
+        ) : (
+          <Skeleton height="20px" width="200px" />
+        )}
+
+        <Typography variant="body1" fontWeight="bold">
+          {translate("rooms.fields.status", "Status")}
+        </Typography>
+        {room ? (
+          <TextField value={room.status} />
         ) : (
           <Skeleton height="20px" width="200px" />
         )}
