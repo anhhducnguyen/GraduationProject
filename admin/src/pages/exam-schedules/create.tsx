@@ -1,116 +1,91 @@
-// import {
-//   Create,
-//   useAutocomplete,
-// } from "@refinedev/mui";
-// import { useForm } from "@refinedev/react-hook-form";
+import { type HttpError, useTranslate } from "@refinedev/core";
+import { useForm } from "@refinedev/react-hook-form";
+import { TextField, Box } from "@mui/material";
+import { Create } from "@refinedev/mui";
+import type { ExamSchedule } from "./types";
 
-// import {
-//   TextField,
-//   Box,
-//   Stack,
-//   MenuItem,
-// } from "@mui/material";
-// import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-// import dayjs from "dayjs";
+export const ExamScheduleCreate: React.FC = () => {
+  const translate = useTranslate();
+  const {
+    saveButtonProps,
+    refineCore: { formLoading, onFinish },
+    register,
+    formState: { errors },
+  } = useForm<ExamSchedule, HttpError, ExamSchedule>();
 
-// export const ExamScheduleCreate: React.FC = () => {
-//   const {
-//     saveButtonProps,
-//     register,
-//     control,
-//     handleSubmit,
-//     formState: { errors },
-//     setValue,
-//     watch,
-//   } = useForm();
+  const onSubmit = (data: ExamSchedule) => {
+  console.log("DATA:", data);
+  onFinish(data);
+};
 
-//   const { autocompleteProps: roomAutocompleteProps } = useAutocomplete({
-//     resource: "exam-rooms",
-//     optionLabel: "room_name",
-//     optionValue: "room_id",
-//   });
-
-//   return (
-//     <Create saveButtonProps={saveButtonProps}>
-//       <Box
-//         component="form"
-//         autoComplete="off"
-//         onSubmit={handleSubmit(() => {})}
-//       >
-//         <Stack gap={3}>
-//           <TextField
-//             {...register("name_schedule", {
-//               required: "Tên lịch thi là bắt buộc",
-//             })}
-//             label="Tên lịch thi"
-//             error={!!errors.name_schedule}
-//             helperText={errors.name_schedule?.message}
-//             fullWidth
-//           />
-
-//           <DateTimePicker
-//             label="Thời gian bắt đầu"
-//             value={watch("start_time") ? dayjs(watch("start_time")) : null}
-//             onChange={(value) => {
-//               setValue("start_time", value?.toISOString());
-//             }}
-//             slotProps={{
-//               textField: {
-//                 fullWidth: true,
-//                 error: !!errors.start_time,
-//                 helperText: errors.start_time?.message,
-//               },
-//             }}
-//           />
-
-//           <DateTimePicker
-//             label="Thời gian kết thúc"
-//             value={watch("end_time") ? dayjs(watch("end_time")) : null}
-//             onChange={(value) => {
-//               setValue("end_time", value?.toISOString());
-//             }}
-//             slotProps={{
-//               textField: {
-//                 fullWidth: true,
-//                 error: !!errors.end_time,
-//                 helperText: errors.end_time?.message,
-//               },
-//             }}
-//           />
-
-//           <TextField
-//             select
-//             label="Phòng thi"
-//             fullWidth
-//             {...register("room.room_id", {
-//               required: "Phòng thi là bắt buộc",
-//               valueAsNumber: true,
-//             })}
-//             error={!!errors.room?.room_id}
-//             helperText={errors.room?.room_id?.message}
-//           >
-//             {roomAutocompleteProps?.options?.map((option) => (
-//               <MenuItem key={option.room_id} value={option.room_id}>
-//                 {option.room_name}
-//               </MenuItem>
-//             ))}
-//           </TextField>
-
-//           <TextField
-//             select
-//             label="Trạng thái"
-//             fullWidth
-//             {...register("status", { required: "Trạng thái là bắt buộc" })}
-//             error={!!errors.status}
-//             helperText={errors.status?.message}
-//             defaultValue="scheduled"
-//           >
-//             <MenuItem value="scheduled">Scheduled</MenuItem>
-//             <MenuItem value="completed">Completed</MenuItem>
-//             <MenuItem value="cancelled">Cancelled</MenuItem>
-//           </TextField>
-//         </Stack>
-//       </Box>
-//     </Create>
-//   );
-// };
+  return (
+    <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
+      <Box
+        component="form"
+        sx={{ display: "flex", flexDirection: "column" }}
+        autoComplete="off"
+      >
+        <TextField
+          {...register("schedule_id", {
+            required: translate("form.required"),
+          })}
+          error={!!errors?.schedule_id}
+          helperText={<>{errors?.schedule_id?.message}</>}
+          margin="normal"
+          fullWidth
+          label="schedule_id"
+        />
+        <TextField
+          {...register("name_schedule", {
+            required: translate("form.required"),
+          })}
+          error={!!errors?.name_schedule}
+          helperText={<>{errors?.name_schedule?.message}</>}
+          margin="normal"
+          fullWidth
+          label="name_schedule"
+        />
+        <TextField
+          {...register("start_time", {
+            required: translate("form.required"),
+          })}
+          error={!!errors?.start_time}
+          helperText={<>{errors?.start_time?.message}</>}
+          margin="normal"
+          fullWidth
+          label="start_time"
+        />
+        <TextField
+          {...register("end_time", {
+            required: translate("form.required"),
+          })}
+          error={!!errors?.end_time}
+          helperText={<>{errors?.end_time?.message}</>}
+          margin="normal"
+          fullWidth
+          label="end_time"
+        />
+        <TextField
+          {...register("room_id", {
+            required: translate("form.required"),
+          })}
+          error={!!errors?.room_id}
+          helperText={<>{errors?.room_id?.message}</>}
+          margin="normal"
+          fullWidth
+          label="room_id"
+        />
+        <TextField
+          {...register("status", {
+            required: translate("form.required"),
+          })}
+          error={!!errors?.status}
+          helperText={<>{errors?.status?.message}</>}
+          margin="normal"
+          fullWidth
+          label="status"
+        />
+      </Box>
+    </Create>
+  );
+};

@@ -40,6 +40,7 @@ const deletedExamSchedule = async (req, res) => {
 };
 
 const createExamSchedule = async (req, res) => {
+    // console.log(req.body);
     const { 
         start_time, 
         end_time, 

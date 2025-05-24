@@ -45,7 +45,7 @@ import {
 
 import {
   ExamScheduleList,
-  // ExamScheduleCreate,
+  ExamScheduleCreate,
 } from "@/pages/exam-schedules";
 
 import { ExamAttendanceList } from "./pages/exam-attendance";
@@ -174,8 +174,7 @@ function App() {
 
                 <Route path="/exam-schedules">
                   <Route index element={<ExamScheduleList />} />
-                  {/* <Route path=":id" element={<ExamScheduleShow />} /> */}
-                  {/* <Route path=":id/edit" element={<ExamScheduleEdit />} /> */}
+                  <Route path="new" element={<ExamScheduleCreate />} />
                 </Route>
 
                 <Route path="/exam-attendance">

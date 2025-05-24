@@ -20,7 +20,7 @@ export const RoomCreate: React.FC = () => {
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
       >
-        <TextField
+        {/* <TextField
           {...register("room_id", {
             required: translate("form.required"),
           })}
@@ -29,7 +29,7 @@ export const RoomCreate: React.FC = () => {
           margin="normal"
           fullWidth
           label="Room ID"
-        />
+        /> */}
         <TextField
           {...register("room_name", {
             required: translate("form.required"),

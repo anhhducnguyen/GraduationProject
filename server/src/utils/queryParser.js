@@ -1,7 +1,8 @@
 const parseQueryOptions = (query) => {
     // Pagination
     let page = 1;
-    let limit = 10;
+    // let limit = 1000;
+    let limit = query.limit !== undefined ? parseInt(query.limit) : undefined;
 
     if (query._start !== undefined && query._end !== undefined) {
         const start = parseInt(query._start);

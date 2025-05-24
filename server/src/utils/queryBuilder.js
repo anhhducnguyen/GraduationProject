@@ -5,7 +5,8 @@ const buildQuery = (db, table, options) => {
         exactFilters = [],
         sort = {},
         page = 1,
-        limit = 10,
+        // limit = 10,
+        limit
     } = options;
 
     const offset = (page - 1) * limit;
@@ -36,7 +37,10 @@ const buildQuery = (db, table, options) => {
     }
 
     // Pagination
-    query.limit(limit).offset(offset);
+    // query.limit(limit).offset(offset);
+    if (limit !== undefined && limit !== 0) {
+        query.limit(limit).offset(offset);
+    }
 
     return query;
 };

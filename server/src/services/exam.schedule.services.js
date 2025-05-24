@@ -14,8 +14,8 @@ const queryExamSchedule = async (filter, options) => {
   const { sortBy = 'schedule_id:asc', limit = 100, page = 1, _start, _end } = options;
   const [sortField, sortOrder] = sortBy.split(':');
 
-  console.log('start', _start);
-  console.log('end', _end);
+  // console.log('start', _start);
+  // console.log('end', _end);
 
   const queryExamSchedule = db('examschedules')
     .join('examrooms', 'examrooms.room_id', 'examschedules.room_id')
