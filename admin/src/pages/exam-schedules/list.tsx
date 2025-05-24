@@ -70,6 +70,19 @@ export const ExamScheduleList = () => {
       minWidth: 200,
     },
     {
+      field: "duration",
+      headerName: translate("schedules.fields.duration"),
+      flex: 1,
+      minWidth: 120,
+      renderCell: ({ row }) => {
+        const start = dayjs(row.start_time);
+        const end = dayjs(row.end_time);
+        const durationMinutes = end.diff(start, "minute");
+
+        return `${durationMinutes} ${translate("schedules.fields.minutes", "minutes")}`;
+      },
+    },
+    {
       field: "room",
       headerName: translate("rooms.fields.room_name"),
       flex: 1,
@@ -88,19 +101,6 @@ export const ExamScheduleList = () => {
       minWidth: 180,
       renderCell: ({ value }) =>
         dayjs(value).locale(locale ?? "en").format("dddd, DD/MM/YYYY HH:mm"),
-    },
-    {
-      field: "duration",
-      headerName: translate("schedules.fields.duration"),
-      flex: 1,
-      minWidth: 120,
-      renderCell: ({ row }) => {
-        const start = dayjs(row.start_time);
-        const end = dayjs(row.end_time);
-        const durationMinutes = end.diff(start, "minute");
-
-        return `${durationMinutes} ${translate("schedules.fields.minutes", "minutes")}`;
-      },
     },
     {
       field: "status",
@@ -136,8 +136,8 @@ export const ExamScheduleList = () => {
       renderCell: function render({ row }) {
         return (
           <>
-            <ShowButton hideText recordItemId={row.id} />
-            <EditButton hideText recordItemId={row.id} />
+            <ShowButton hideText recordItemId={row.schedule_id} />
+            <EditButton hideText recordItemId={row.schedule_id} />
             <DeleteButton hideText recordItemId={row.schedule_id} />
           </>
         );

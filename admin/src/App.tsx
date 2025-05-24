@@ -12,9 +12,6 @@ import routerProvider, {
 } from "@refinedev/react-router";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
 import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import {
@@ -29,7 +26,6 @@ import { useTranslation } from "react-i18next";
 
 import { authProvider } from "./authProvider";
 import { dataProvider } from "./providers/data-provider";
-
 
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./context/color-mode";
@@ -49,6 +45,7 @@ import {
 import {
   ExamScheduleList,
   ExamScheduleCreate,
+  ExamScheduleShow,
 } from "@/pages/exam-schedules";
 
 import { ExamAttendanceList } from "./pages/exam-attendance";
@@ -60,11 +57,8 @@ import { ExamAttendanceList } from "./pages/exam-attendance";
 //   ProductShow,
 // } from "@/pages/products";
 
-
 import SchedulePage from "@/pages/schedules/list";
 import Home from "@/pages/home/home";
-
-
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -102,14 +96,13 @@ function App() {
               // },
               {
                 name: "home",
-                list: "/home", // thêm dòng này để Refine biết về resource "home"
+                list: "/home",
               },
               {
                 name: "users",
                 list: "/users",
                 show: "/users/:id",
                 create: "/users/new",
-                // create: "/users",
               },
               {
                 name: "schedules",
@@ -127,6 +120,8 @@ function App() {
                 name: "exam-schedules",
                 list: "/exam-schedules",
                 create: "/exam-schedules/new",
+                // show: "/exam-schedules/:id",
+                show: "/exam-schedules/:id",
               },
               {
                 name: "exam-attendance",
@@ -178,6 +173,7 @@ function App() {
                 <Route path="/exam-schedules">
                   <Route index element={<ExamScheduleList />} />
                   <Route path="new" element={<ExamScheduleCreate />} />
+                  <Route path=":id" element={<ExamScheduleShow />} />
                 </Route>
 
                 <Route path="/exam-attendance">

@@ -1,88 +1,124 @@
-// import { useShow, useTranslate } from "@refinedev/core";
+import { useShow, useTranslate } from "@refinedev/core";
 
-// import Skeleton from "@mui/material/Skeleton";
-// import Stack from "@mui/material/Stack";
-// import Typography from "@mui/material/Typography";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import Paper from "@mui/material/Paper";
+import { Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 
-// import {
-//   NumberField,
-//   Show,
-//   TextFieldComponent as TextField,
-// } from "@refinedev/mui";
+import {
+  DateField,
+  TextFieldComponent as TextField,
+  Show,
+} from "@refinedev/mui";
 
-// import type { User } from "./types"; // bạn nên định nghĩa User type tương tự như ở phần Create
+type Room = {
+  room_id: number;
+  room_name: string;
+  capacity: number;
+};
 
-// export const UserShow: React.FC = () => {
-//   const translate = useTranslate();
-//   const {
-//     query: { data: userResult, isLoading },
-//   } = useShow<User>();
+type Student = {
+  student_id: number;
+  first_name: string;
+  last_name: string;
+  is_present: number;
+  updated_at: string;
+};
 
-//   const user = userResult?.data;
+type ExamSchedule = {
+  schedule_id: number;
+  name_schedule: string;
+  status: string;
+  start_time: string;
+  end_time: string;
+  room?: Room;
+  students?: Student[];
+};
 
-//   return (
-//     <Show isLoading={isLoading}>
-//       <Stack gap={1}>
-//         <Typography variant="body1" fontWeight="bold">
-//           {translate("users.fields.id")}
-//         </Typography>
-//         {user ? (
-//           <NumberField value={user.id} />
-//         ) : (
-//           <Skeleton height="20px" width="200px" />
-//         )}
+export const ExamScheduleShow: React.FC = () => {
+  const translate = useTranslate();
+  const {
+    query: { data, isLoading },
+  } = useShow<ExamSchedule>();
 
-//         <Typography variant="body1" fontWeight="bold">
-//           {translate("users.fields.first_name")}
-//         </Typography>
-//         {user ? (
-//           <TextField value={user.first_name} />
-//         ) : (
-//           <Skeleton height="20px" width="200px" />
-//         )}
+  const schedule = data?.data;
 
-//         <Typography variant="body1" fontWeight="bold">
-//           {translate("users.fields.last_name")}
-//         </Typography>
-//         {user ? (
-//           <TextField value={user.last_name} />
-//         ) : (
-//           <Skeleton height="20px" width="200px" />
-//         )}
+  return (
+    <Show isLoading={isLoading}>
+      <Stack gap={2}>
+        <Typography variant="h5" fontWeight="bold">
+          {translate("exams.title", "Exam Schedule Details")}
+        </Typography>
 
-//         <Typography variant="body1" fontWeight="bold">
-//           {translate("users.fields.age")}
-//         </Typography>
-//         {user ? (
-//           <NumberField value={user.age} />
-//         ) : (
-//           <Skeleton height="20px" width="200px" />
-//         )}
+        <Divider />
 
-//         <Typography variant="body1" fontWeight="bold">
-//           {translate("users.fields.gender")}
-//         </Typography>
-//         {user ? (
-//           <TextField value={user.gender} />
-//         ) : (
-//           <Skeleton height="20px" width="200px" />
-//         )}
+        <Stack gap={1}>
+          <Typography fontWeight="bold">Schedule ID</Typography>
+          {schedule ? <TextField value={schedule.schedule_id} /> : <Skeleton height="20px" width="200px" />}
 
-//         {/* <Typography variant="body1" fontWeight="bold">
-//           {translate("users.fields.avatar")}
-//         </Typography>
-//         {user?.avatar ? (
-//           <img
-//             src={user.avatar}
-//             alt={`${user.first_name} ${user.last_name}`}
-//             style={{ maxWidth: "200px", borderRadius: "8px" }}
-//           />
-//         ) : isLoading ? (
-//           <Skeleton height="120px" width="200px" />
-//         ) : (
-//           <TextField value="No avatar" />
-//         )} */}
-//       </Stack>
-//     </Show>
-//   );
-// };
+          <Typography fontWeight="bold">Schedule Name</Typography>
+          {schedule ? <TextField value={schedule.name_schedule} /> : <Skeleton height="20px" width="200px" />}
+
+          <Typography fontWeight="bold">Status</Typography>
+          {schedule ? <TextField value={schedule.status} /> : <Skeleton height="20px" width="200px" />}
+
+          <Typography fontWeight="bold">Start Time</Typography>
+          {schedule ? <DateField value={schedule.start_time} /> : <Skeleton height="20px" width="200px" />}
+
+          <Typography fontWeight="bold">End Time</Typography>
+          {schedule ? <DateField value={schedule.end_time} /> : <Skeleton height="20px" width="200px" />}
+        </Stack>
+
+        <Divider />
+
+        <Typography variant="h6" fontWeight="bold">
+          Room Information
+        </Typography>
+        {schedule?.room ? (
+          <Stack gap={1}>
+            <Typography>Room Name: <strong>{schedule.room.room_name}</strong></Typography>
+            <Typography>Capacity: <strong>{schedule.room.capacity}</strong></Typography>
+          </Stack>
+        ) : (
+          <Skeleton height="50px" width="100%" />
+        )}
+
+        <Divider />
+
+        <Typography variant="h6" fontWeight="bold">
+          Student List
+        </Typography>
+        {schedule?.students?.length ? (
+          <Paper>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Student ID</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Present</TableCell>
+                  <TableCell>Last Updated</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {schedule.students.map((student) => (
+                  <TableRow key={student.student_id}>
+                    <TableCell>{student.student_id}</TableCell>
+                    <TableCell>{`${student.first_name} ${student.last_name}`}</TableCell>
+                    <TableCell>{student.is_present ? "Yes" : "No"}</TableCell>
+                    <TableCell>
+                      <DateField value={student.updated_at} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        ) : (
+          <Typography>No students found for this schedule.</Typography>
+        )}
+      </Stack>
+    </Show>
+  );
+};
