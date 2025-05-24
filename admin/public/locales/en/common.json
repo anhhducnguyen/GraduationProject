@@ -1,11 +1,51 @@
 {
+  "form": {
+    "required": "This field is required",
+    "select_gender": "-- Select gender --",
+    "choose_image": "Choose an avatar from your device",
+    "change_image": "Change image"
+  },
   "users": {
     "fields": {
       "id": "ID",
       "first_name": "First Name",
       "last_name": "Last Name",
       "age": "Age",
-      "gender": "Gender"
+      "gender": "Gender",
+      "avatar": "Avatar"
+    },
+    "gender": {
+      "male": "Male",
+      "female": "Female"
+    }
+  },
+  "rooms": {
+    "fields": {
+      "id": "Room ID",
+      "room_name": "Room Name",
+      "capacity": "Capacity",
+      "location": "Location",
+      "status": "Status"
+    },
+    "status": {
+      "schedule": "Scheduled",
+      "complete": "Completed",
+      "cancel": "Cancelled"
+    }
+  },
+  "schedules": {
+    "fields": {
+      "id": "Schedule ID",
+      "name_schedule": "Schedule Name",
+      "start_time": "Start Time",
+      "end_time": "End Time",
+      "duration": "Duration",
+      "status": "Status"
+    },
+    "status": {
+      "scheduled": "Scheduled",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
     }
   },
   "table": {

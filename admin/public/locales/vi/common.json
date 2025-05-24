@@ -12,7 +12,7 @@
       "last_name": "Họ",
       "age": "Tuổi",
       "gender": "Giới tính",
-      "avatar": "Chọn ảnh đại diện từ máy"
+      "avatar": "Ảnh đại diện"
     },
     "gender": {
       "male": "Nam",
@@ -23,7 +23,14 @@
     "fields": {
       "id": "Mã phòng",
       "room_name": "Tên phòng",
-      "capacity": "Sức chứa"
+      "capacity": "Sức chứa",
+      "location": "Vị trí",
+      "status": "Trạng thái"
+    },
+    "status": {
+      "schedule": "Đã lên lịch",
+      "complete": "Hoàn thành",
+      "cancel": "Đã hủy"
     }
   },
   "schedules": {
@@ -32,6 +39,7 @@
       "name_schedule": "Tên lịch thi",
       "start_time": "Thời gian bắt đầu",
       "end_time": "Thời gian kết thúc",
+      "duration": "Thời gian",
       "status": "Trạng thái"
     },
     "status": {
