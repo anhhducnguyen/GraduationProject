@@ -40,21 +40,27 @@ const deletedExamSchedule = async (req, res) => {
 };
 
 const createExamSchedule = async (req, res) => {
-    // console.log(req.body);
-    const { 
-        start_time, 
-        end_time, 
-        name_schedule, 
-        status, 
-        room_id 
+    console.log(req.body);
+    const {
+        start_time,
+        end_time,
+        name_schedule,
+        status,
+        room,
+        // room_id 
     } = req.body;
+    const room_id = room?.room_id;
+
+    if (!room_id) {
+        return res.status(400).json({ message: "room_id is required" });
+    }
     try {
-        const newExamSchedule = await create({ 
-            start_time, 
-            end_time, 
-            name_schedule, 
-            status, 
-            room_id 
+        const newExamSchedule = await create({
+            start_time,
+            end_time,
+            name_schedule,
+            status,
+            room_id
         });
         return res.status(201).json(newExamSchedule);
     } catch (error) {
