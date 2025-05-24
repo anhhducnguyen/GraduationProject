@@ -1,6 +1,6 @@
 import { type HttpError, useTranslate, useMany } from "@refinedev/core";
 import { useForm } from "@refinedev/react-hook-form";
-import { TextField, Box, Select, MenuItem } from "@mui/material";
+import { TextField, Box, MenuItem, Autocomplete } from "@mui/material";
 import { Create } from "@refinedev/mui";
 import { useMemo } from "react";
 import { Controller } from "react-hook-form";
@@ -25,11 +25,15 @@ export const ExamScheduleCreate: React.FC = () => {
 
     const {
         saveButtonProps,
-        refineCore: { formLoading, onFinish },
+        refineCore: { formLoading },
         register,
         control,
         formState: { errors },
-    } = useForm<ExamSchedule, HttpError, ExamSchedule>();
+    } = useForm<ExamSchedule, HttpError, ExamSchedule>({
+        defaultValues: {
+            status: "scheduled",
+        },
+    });
 
     const roomIds = [
         ...new Set(
@@ -86,7 +90,9 @@ export const ExamScheduleCreate: React.FC = () => {
                                 label="Thời gian bắt đầu"
                                 value={field.value ? dayjs(field.value) : null}
                                 onChange={(value) =>
-                                    field.onChange(value?.toISOString())
+                                    value
+                                        ? field.onChange(dayjs(value).format("YYYY-MM-DD HH:mm:ss"))
+                                        : field.onChange("")
                                 }
                                 slotProps={{
                                     textField: {
@@ -109,7 +115,9 @@ export const ExamScheduleCreate: React.FC = () => {
                                 label="Thời gian kết thúc"
                                 value={field.value ? dayjs(field.value) : null}
                                 onChange={(value) =>
-                                    field.onChange(value?.toISOString())
+                                    value
+                                        ? field.onChange(dayjs(value).format("YYYY-MM-DD HH:mm:ss"))
+                                        : field.onChange("")
                                 }
                                 slotProps={{
                                     textField: {
@@ -129,37 +137,57 @@ export const ExamScheduleCreate: React.FC = () => {
                         name="room.room_id"
                         rules={{ required: translate("form.required") }}
                         render={({ field }) => (
-                            <Select
-                                {...field}
-                                value={field.value || ""}
-                                onChange={(e) => field.onChange(Number(e.target.value))}
-                                displayEmpty
-                                fullWidth
-                                // margin="normal"
-                                error={!!errors?.room?.room_id}
-                            >
-                                <MenuItem value="" disabled>
-                                    Chọn phòng thi
-                                </MenuItem>
-                                {Object.entries(roomMap).map(([id, name]) => (
-                                    <MenuItem key={id} value={Number(id)}>
-                                        {name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
+                            <Autocomplete
+                                options={Object.entries(roomMap).map(([id, name]) => ({
+                                    label: name,
+                                    value: Number(id),
+                                }))}
+                                getOptionLabel={(option) => option.label}
+                                isOptionEqualToValue={(option, value) => option.value === value.value}
+                                onChange={(_, value) => field.onChange(value?.value ?? "")}
+                                value={
+                                    Object.entries(roomMap)
+                                        .map(([id, name]) => ({
+                                            label: name,
+                                            value: Number(id),
+                                        }))
+                                        .find((item) => item.value === field.value) || null
+                                }
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Chọn phòng thi"
+                                        fullWidth
+                                        margin="normal"
+                                        error={!!errors?.room?.room_id}
+                                        helperText={errors?.room?.room_id?.message}
+                                    />
+                                )}
+                            />
                         )}
                     />
 
                     {/* Trạng thái */}
-                    <TextField
-                        {...register("status", {
-                            required: translate("form.required"),
-                        })}
-                        error={!!errors?.status}
-                        helperText={<>{errors?.status?.message}</>}
-                        margin="normal"
-                        fullWidth
-                        label="Trạng thái"
+                    <Controller
+                        control={control}
+                        name="status"
+                        defaultValue="schedule"
+                        rules={{ required: translate("form.required") }}
+                        render={({ field }) => (
+                            <TextField
+                                {...field}
+                                select
+                                label="Trạng thái"
+                                fullWidth
+                                margin="normal"
+                                error={!!errors?.status}
+                                helperText={errors?.status?.message}
+                            >
+                                <MenuItem value="scheduled">Đã lên lịch</MenuItem>
+                                <MenuItem value="completed">Hoàn thành</MenuItem>
+                                <MenuItem value="cancelled">Đã hủy</MenuItem>
+                            </TextField>
+                        )}
                     />
                 </Box>
             </Create>

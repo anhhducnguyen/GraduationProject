@@ -1,7 +1,8 @@
 import { type HttpError, useTranslate } from "@refinedev/core";
 import { useForm } from "@refinedev/react-hook-form";
-import { TextField, Box } from "@mui/material";
+import { TextField, Box, MenuItem } from "@mui/material";
 import { Create } from "@refinedev/mui";
+import { Controller } from "react-hook-form";
 import type { Room } from "./types";
 
 export const RoomCreate: React.FC = () => {
@@ -10,8 +11,13 @@ export const RoomCreate: React.FC = () => {
     saveButtonProps,
     refineCore: { formLoading },
     register,
+    control,
     formState: { errors },
-  } = useForm<Room, HttpError, Room>();
+  } = useForm<Room, HttpError, Room>({
+    defaultValues: {
+      status: "schedule",
+    },
+  });
 
   return (
     <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
@@ -66,7 +72,7 @@ export const RoomCreate: React.FC = () => {
           fullWidth
           label="Location"
         />
-        <TextField
+        {/* <TextField
           {...register("status", {
             required: translate("form.required"),
           })}
@@ -75,6 +81,27 @@ export const RoomCreate: React.FC = () => {
           margin="normal"
           fullWidth
           label="Status"
+        /> */}
+        <Controller
+          control={control}
+          name="status"
+          defaultValue="scheduled"
+          rules={{ required: translate("form.required") }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              select
+              label="Trạng thái"
+              fullWidth
+              margin="normal"
+              error={!!errors?.status}
+              helperText={errors?.status?.message}
+            >
+              <MenuItem value="schedule">Đã lên lịch</MenuItem>
+              <MenuItem value="complete">Hoàn thành</MenuItem>
+              <MenuItem value="cancel">Đã hủy</MenuItem>
+            </TextField>
+          )}
         />
       </Box>
     </Create>
