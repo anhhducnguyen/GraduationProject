@@ -48,8 +48,6 @@ import {
   ExamScheduleShow,
 } from "@/pages/exam-schedules";
 
-import { ExamAttendanceList } from "./pages/exam-attendance";
-
 // import {
 //   ProductCreate,
 //   ProductEdit,
@@ -123,10 +121,6 @@ function App() {
                 // show: "/exam-schedules/:id",
                 show: "/exam-schedules/:id",
               },
-              // {
-              //   name: "exam-attendance",
-              //   list: "/exam-attendance",
-              // },
             ]}
           >
             <Routes>
@@ -172,10 +166,6 @@ function App() {
                   <Route path="new" element={<ExamScheduleCreate />} />
                   <Route path=":id" element={<ExamScheduleShow />} />
                 </Route>
-
-                {/* <Route path="/exam-attendance">
-                  <Route index element={<ExamAttendanceList />} />
-                </Route> */}
 
                 <Route path="*" element={<ErrorComponent />} />
               </Route>

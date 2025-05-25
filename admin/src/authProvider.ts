@@ -1,13 +1,12 @@
 import type { AuthBindings } from "@refinedev/core";
 
 export const TOKEN_KEY = "refine-auth";
-import axios from 'axios'; // Nếu bạn chưa cài axios, hãy cài qua npm: npm install axios
+import axios from 'axios'; 
 
 
 export const authProvider: AuthBindings = {
   login: async ({ email, password }) => {
     try {
-      // Gửi yêu cầu đăng nhập đến API
       const response = await axios.post("http://localhost:5000/auth/login", {
         email,
         password,
@@ -26,7 +25,6 @@ export const authProvider: AuthBindings = {
         redirectTo: "/",
       };
     } catch (error) {
-      // Nếu có lỗi trong quá trình đăng nhập, trả về lỗi
       return {
         success: false,
         error: {
@@ -84,15 +82,6 @@ export const authProvider: AuthBindings = {
     console.error(error);
     return { error };
   },
-  // forgotPassword: async (params) => {
-  //   return {
-  //     success: true,
-  //     redirectTo: "/update-password",
-  //     successNotification: {
-  //       message: "Email has been sent.",
-  //     },
-  //   };
-  // },
   forgotPassword: async ({ email }) => {
     try {
       const response = await axios.post("http://localhost:5000/auth/reset-password", {
@@ -117,15 +106,6 @@ export const authProvider: AuthBindings = {
       };
     }
   },
-  // updatePassword: async (params) => {
-  //   return {
-  //     success: true,
-  //     redirectTo: "/login",
-  //     successNotification: {
-  //       message: "Successfully updated password.",
-  //     },
-  //   };
-  // },
   updatePassword: async (params) => {
     try {
       const { token, password, confirmPassword } = params;

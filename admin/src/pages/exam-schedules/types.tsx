@@ -8,7 +8,6 @@ export interface ExamSchedule {
   name_schedule: string;
   start_time: string;   // ISO 8601 datetime string, e.g. "2025-05-23T09:00:00Z"
   end_time: string;
-  // room: ExamRoom | null;
   room_id: number;
   status: "scheduled" | "completed" | "cancelled"; // Optional: use union type for better safety
   created_by?: string | null;
