@@ -37,8 +37,6 @@ router.route('/:id')
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        // const rows = await db('examschedules')
-
         const rows = await db('exam_attendance')
             .join('examschedules', 'exam_attendance.schedule_id', 'examschedules.schedule_id')
             .join('examrooms', 'examschedules.room_id', 'examrooms.room_id')
@@ -62,6 +60,8 @@ router.get('/:id', async (req, res) => {
                 'exam_attendance.updated_at'
             )
             .where('examschedules.schedule_id', id);
+
+        
 
         if (rows.length === 0) {
             return res.status(404).json({ message: 'Exam schedule not found' });

@@ -1,3 +1,165 @@
+// import { useMemo } from "react";
+// import "dayjs/locale/vi";
+// import {
+//   useGetLocale,
+//   useTranslate,
+//   useMany,
+// } from "@refinedev/core";
+// import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+// import {
+//   DeleteButton,
+//   EditButton,
+//   List,
+//   ShowButton,
+//   useDataGrid,
+// } from "@refinedev/mui";
+// import dayjs from "dayjs";
+// import { Chip } from "@mui/material";
+
+// type ExamSchedule = {
+//   schedule_id: number;
+//   start_time: string;
+//   end_time: string;
+//   room: { room_id: number; room_name: string } | null;
+//   created_by?: string | null;
+//   status: string;
+//   name_schedule: string;
+// };
+
+// export const ExamScheduleList = () => {
+//   const { dataGridProps } = useDataGrid<ExamSchedule>();
+//   const locale = useGetLocale()();
+//   const translate = useTranslate();
+
+//   const roomIds = [
+//     ...new Set(
+//       dataGridProps?.rows
+//         ?.map((item) => item?.room?.room_id)
+//         .filter((id): id is number => typeof id === "number")
+//     ),
+//   ];
+
+//   const {
+//     data: roomData,
+//     isLoading: roomLoading,
+//   } = useMany({
+//     resource: "exam-rooms",
+//     ids: roomIds,
+//     queryOptions: { enabled: roomIds.length > 0 },
+//   });
+
+//   const roomMap = useMemo(() => {
+//     const map: Record<number, string> = {};
+//     roomData?.data?.forEach((room) => {
+//       map[room.room_id] = room.room_name;
+//     });
+//     return map;
+//   }, [roomData?.data]);
+
+//   const columns = useMemo<GridColDef[]>(() => [
+//     {
+//       field: "schedule_id",
+//       headerName: translate("schedules.fields.id"),
+//       flex: 1,
+//       minWidth: 100,
+//     },
+//     {
+//       field: "name_schedule",
+//       headerName: translate("schedules.fields.name_schedule"),
+//       flex: 1,
+//       minWidth: 200,
+//     },
+//     {
+//       field: "duration",
+//       headerName: translate("schedules.fields.duration"),
+//       flex: 1,
+//       minWidth: 120,
+//       renderCell: ({ row }) => {
+//         const start = dayjs(row.start_time);
+//         const end = dayjs(row.end_time);
+//         const durationMinutes = end.diff(start, "minute");
+
+//         return `${durationMinutes} ${translate("schedules.fields.minutes", "minutes")}`;
+//       },
+//     },
+//     {
+//       field: "room",
+//       headerName: translate("rooms.fields.room_name"),
+//       flex: 1,
+//       renderCell: ({ row }) => {
+//         const roomId = row.room?.room_id;
+//         const roomName = roomMap[roomId];
+//         return roomId && roomName
+//           ? roomName
+//           : translate("form.unknown", "Unknown");
+//       },
+//     },
+//     {
+//       field: "start_time",
+//       headerName: translate("schedules.fields.start_time"),
+//       flex: 2,
+//       minWidth: 180,
+//       renderCell: ({ value }) =>
+//         dayjs(value).locale(locale ?? "en").format("dddd, DD/MM/YYYY HH:mm"),
+//     },
+//     {
+//       field: "status",
+//       headerName: translate("schedules.fields.status"),
+//       flex: 1,
+//       minWidth: 120,
+//       renderCell: ({ value }) => {
+//         let color: "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" = "default";
+//         let label = value;
+
+//         switch (value) {
+//           case "scheduled":
+//             color = "info";
+//             label = translate("schedules.status.scheduled", "Scheduled");
+//             break;
+//           case "completed":
+//             color = "success";
+//             label = translate("schedules.status.completed", "Completed");
+//             break;
+//           case "cancelled":
+//             color = "error";
+//             label = translate("schedules.status.cancelled", "Cancelled");
+//             break;
+//         }
+//         return <Chip label={label} color={color} size="small" />;
+//       },
+//     },
+//     {
+//       field: "actions",
+//       headerName: translate("table.actions"),
+//       sortable: false,
+//       display: "flex",
+//       renderCell: function render({ row }) {
+//         return (
+//           <>
+//             <ShowButton hideText recordItemId={row.schedule_id} />
+//             <EditButton hideText recordItemId={row.schedule_id} />
+//             <DeleteButton hideText recordItemId={row.schedule_id} />
+//           </>
+//         );
+//       },
+//       align: "center",
+//       headerAlign: "center",
+//       minWidth: 80,
+//     },
+//   ], [locale, translate, roomMap]);
+
+//   return (
+//     <List>
+//       <DataGrid
+//         {...dataGridProps}
+//         getRowId={(row) => row.schedule_id}
+//         columns={columns}
+//       />
+//     </List>
+//   );
+// };
+
+
 import { useMemo } from "react";
 import "dayjs/locale/vi";
 import {
@@ -5,7 +167,11 @@ import {
   useTranslate,
   useMany,
 } from "@refinedev/core";
-import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  type GridColDef,
+  // viVN as gridViVN,
+} from "@mui/x-data-grid";
 import {
   DeleteButton,
   EditButton,
@@ -14,7 +180,13 @@ import {
   useDataGrid,
 } from "@refinedev/mui";
 import dayjs from "dayjs";
-import { Chip } from "@mui/material";
+import {
+  Chip,
+  Box,
+  Paper,
+  Typography,
+  useTheme,
+} from "@mui/material";
 
 type ExamSchedule = {
   schedule_id: number;
@@ -30,6 +202,7 @@ export const ExamScheduleList = () => {
   const { dataGridProps } = useDataGrid<ExamSchedule>();
   const locale = useGetLocale()();
   const translate = useTranslate();
+  const theme = useTheme();
 
   const roomIds = [
     ...new Set(
@@ -66,8 +239,8 @@ export const ExamScheduleList = () => {
     {
       field: "name_schedule",
       headerName: translate("schedules.fields.name_schedule"),
-      flex: 1,
-      minWidth: 200,
+      flex: 1.5,
+      minWidth: 180,
     },
     {
       field: "duration",
@@ -85,7 +258,8 @@ export const ExamScheduleList = () => {
     {
       field: "room",
       headerName: translate("rooms.fields.room_name"),
-      flex: 1,
+      flex: 1.2,
+      minWidth: 140,
       renderCell: ({ row }) => {
         const roomId = row.room?.room_id;
         const roomName = roomMap[roomId];
@@ -97,7 +271,7 @@ export const ExamScheduleList = () => {
     {
       field: "start_time",
       headerName: translate("schedules.fields.start_time"),
-      flex: 2,
+      flex: 1.5,
       minWidth: 180,
       renderCell: ({ value }) =>
         dayjs(value).locale(locale ?? "en").format("dddd, DD/MM/YYYY HH:mm"),
@@ -125,36 +299,54 @@ export const ExamScheduleList = () => {
             label = translate("schedules.status.cancelled", "Cancelled");
             break;
         }
-        return <Chip label={label} color={color} size="small" />;
+        return <Chip label={label} color={color} size="small" variant="outlined" />;
       },
     },
     {
       field: "actions",
       headerName: translate("table.actions"),
       sortable: false,
-      display: "flex",
-      renderCell: function render({ row }) {
-        return (
-          <>
-            <ShowButton hideText recordItemId={row.schedule_id} />
-            <EditButton hideText recordItemId={row.schedule_id} />
-            <DeleteButton hideText recordItemId={row.schedule_id} />
-          </>
-        );
-      },
+      disableColumnMenu: true,
+      flex: 1,
+      minWidth: 120,
       align: "center",
       headerAlign: "center",
-      minWidth: 80,
+      renderCell: ({ row }) => (
+        <Box display="flex" justifyContent="center" gap={1}>
+          <ShowButton hideText size="small" recordItemId={row.schedule_id} />
+          <EditButton hideText size="small" recordItemId={row.schedule_id} />
+          <DeleteButton hideText size="small" recordItemId={row.schedule_id} />
+        </Box>
+      ),
     },
   ], [locale, translate, roomMap]);
 
   return (
     <List>
-      <DataGrid
-        {...dataGridProps}
-        getRowId={(row) => row.schedule_id}
-        columns={columns}
-      />
+      <Paper elevation={1} sx={{ p: 2, mt: 2 }}>
+        {/* <Typography variant="h6" mb={2} fontWeight={600}>
+          {translate("schedules.titles.list", "Danh sách lịch thi")}
+        </Typography> */}
+        <DataGrid
+          {...dataGridProps}
+          // localeText={gridViVN.components.MuiDataGrid.defaultProps.localeText}
+          getRowId={(row) => row.schedule_id}
+          columns={columns}
+          autoHeight
+          rowHeight={52}
+          sx={{
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: theme.palette.grey[100],
+              fontWeight: 600,
+              fontSize: "0.9rem",
+            },
+            "& .MuiDataGrid-cell": {
+              fontSize: "0.875rem",
+            },
+            border: "none",
+          }}
+        />
+      </Paper>
     </List>
   );
 };

@@ -123,13 +123,10 @@ function App() {
                 // show: "/exam-schedules/:id",
                 show: "/exam-schedules/:id",
               },
-              {
-                name: "exam-attendance",
-                list: "/exam-attendance",
-                // create: "/exam-attendance/new",
-                // edit: "/exam-attendance/:id/edit",
-                // show: "/exam-attendance/:id",
-              },
+              // {
+              //   name: "exam-attendance",
+              //   list: "/exam-attendance",
+              // },
             ]}
           >
             <Routes>
@@ -176,9 +173,9 @@ function App() {
                   <Route path=":id" element={<ExamScheduleShow />} />
                 </Route>
 
-                <Route path="/exam-attendance">
+                {/* <Route path="/exam-attendance">
                   <Route index element={<ExamAttendanceList />} />
-                </Route>
+                </Route> */}
 
                 <Route path="*" element={<ErrorComponent />} />
               </Route>

@@ -161,7 +161,7 @@ warnings.filterwarnings('ignore')
 
 KNOWN_FACE_PATH = "./known_faces/"
 FRAME_SKIP = 5
-API_URL = "http://192.168.1.4:5000/api/v1/exam-attendance/"
+API_URL = "http://192.168.1.5:5000/api/v1/exam-attendance/"
 last_sent_time = {}
 send_lock = threading.Lock()
 
