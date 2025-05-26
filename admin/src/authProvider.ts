@@ -1,7 +1,7 @@
 import type { AuthBindings } from "@refinedev/core";
 
 export const TOKEN_KEY = "refine-auth";
-import axios from 'axios'; 
+import axios from 'axios';
 
 
 export const authProvider: AuthBindings = {
@@ -67,17 +67,30 @@ export const authProvider: AuthBindings = {
     return null;
   },
 
+  // getIdentity: async () => {
+  //   const token = localStorage.getItem(TOKEN_KEY);
+  //   if (token) {
+  //     return {
+  //       id: 1,
+  //       name: "John Doe",
+  //       avatar: "https://i.pravatar.cc/300",
+  //     };
+  //   }
+  //   return null;
+  // },
   getIdentity: async () => {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (token) {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const { id, username } = JSON.parse(user);
       return {
-        id: 1,
-        name: "John Doe",
-        avatar: "https://i.pravatar.cc/300",
+        id: id,
+        name: username, // hoặc dùng email nếu bạn thích
+        // avatar: "https://i.pravatar.cc/300", // hoặc để trống nếu chưa có avatar
       };
     }
     return null;
   },
+
   onError: async (error) => {
     console.error(error);
     return { error };
