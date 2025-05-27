@@ -65,6 +65,7 @@ Trước khi bắt đầu, hãy đảm bảo rằng bạn đã cài đặt các 
 - [opencv_python](https://opencv.org/) _(version 4.10.0.84 or higher)_
 - [dlib](https://github.com/davisking/dlib) _(tại đây tôi gặp lỗi khi thử `pip install dlib`, nếu bạn gặp lỗi truy cập [Dlib_Windows_Python3.x](https://github.com/z-mahmud22/Dlib_Windows_Python3.x) để cài đặt thủ công theo hướng dẫn)_
 - [face-recognition](https://github.com/ageitgey/face_recognition) _(version 1.3.0 or higher)_
+- [Silent-Face-Anti-Spoofing](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing)(author: minivision-ai)
 
 ## 🔧 Cài đặt từng bước
 #### **Step 1**: 🚀 Cài đặt NodeJS
