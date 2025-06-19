@@ -71,7 +71,7 @@ const updateExamRoom = async (req, res) => {
         status 
     } = req.body;
     try {
-        const updatedExamRoom = await updateExamRoom(id, { 
+        const updatedExamRoom = await update(id, { 
             room_name, 
             capacity, 
             location, 

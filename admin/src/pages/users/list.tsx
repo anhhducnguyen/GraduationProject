@@ -97,6 +97,8 @@ type User = {
   last_name: string;
   age: number;
   gender: "male" | "female" | "other";
+  email: string;
+  role: string;
 };
 
 export const UserList = () => {
@@ -114,6 +116,12 @@ export const UserList = () => {
         minWidth: 100,
       },
       {
+        field: "email",
+        flex: 1,
+        headerName: translate("users.fields.email") || "Email",
+        minWidth: 120,
+      },
+      {
         field: "last_name",
         flex: 1,
         headerName: translate("users.fields.last_name") || "Last Name",
@@ -125,19 +133,25 @@ export const UserList = () => {
         headerName: translate("users.fields.first_name") || "First Name",
         minWidth: 150,
       },
+      // {
+      //   field: "age",
+      //   flex: 1,
+      //   headerName: translate("users.fields.age") || "Age",
+      //   minWidth: 100,
+      //   type: "number",
+      // },
       {
-        field: "age",
+        field: "role",
         flex: 1,
-        headerName: translate("users.fields.age") || "Age",
-        minWidth: 100,
-        type: "number",
-      },
-      {
-        field: "gender",
-        flex: 1,
-        headerName: translate("users.fields.gender") || "Gender",
+        headerName: translate("users.fields.role") || "Role",
         minWidth: 120,
       },
+      // {
+      //   field: "gender",
+      //   flex: 1,
+      //   headerName: translate("users.fields.gender") || "Gender",
+      //   minWidth: 120,
+      // },
       {
         field: "actions",
         type: "actions", // <-- thêm dòng này

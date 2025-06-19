@@ -186,6 +186,63 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+// GET /api/v1/exam-schedules/:id/students
+// router.get('/:id/students', async (req, res) => {
+//     const schedule_id = req.params.id;
+
+//     try {
+//         const students = await db('exam_attendance')
+//             .join('users', 'exam_attendance.student_id', '=', 'users.id')
+//             .where('exam_attendance.schedule_id', schedule_id)
+//             .select(
+//                 'users.id as student_id',
+//                 'users.first_name',
+//                 'users.last_name',
+//                 'exam_attendance.is_present',
+//                 'exam_attendance.updated_at'
+//             );
+
+//         // res.status(200).json(students);
+//         res.json({ results: students })
+//     } catch (error) {
+//         console.error('Error fetching students:', error);
+//         res.status(500).json({ error: 'Internal server error' });
+//     }
+// });
+
+router.get('/:id/students', async (req, res) => {
+  const schedule_id = req.params.id;
+
+  try {
+    const students = await db('exam_attendance')
+      .join('users', 'exam_attendance.student_id', '=', 'users.id')
+      .where('exam_attendance.schedule_id', schedule_id)
+      .select(
+        'users.id as student_id',
+        'users.first_name',
+        'users.last_name',
+        'exam_attendance.is_present',
+        'exam_attendance.updated_at'
+      );
+
+    res.json({
+      results: students.map((student) => ({
+        id: String(student.student_id),
+        firstName: student.first_name,
+        lastName: student.last_name,
+        status: student.is_present === 1 ? 'present' : 'absent',
+        confidence: 100, // tuỳ bạn có muốn truyền dữ liệu thật không
+        checkInTime: student.updated_at,
+      })),
+    });
+  } catch (error) {
+    console.error('Error fetching students:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 module.exports = router;
 
 

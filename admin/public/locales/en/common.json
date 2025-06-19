@@ -34,6 +34,9 @@
     }
   },
   "schedules": {
+    "buttons": {
+      "add": "Add Schedule"
+    },
     "fields": {
       "id": "Schedule ID",
       "name_schedule": "Schedule Name",
@@ -47,6 +50,26 @@
       "completed": "Completed",
       "cancelled": "Cancelled"
     }
+  },
+  "attendance": {
+    "index": "No.",
+    "student_id": "Student ID",
+    "last_name": "Last Name",
+    "first_name": "First Name",
+    "status": "Status",
+    "confidence": "Confidence (%)",
+    "checkin_time": "Check-in Time",
+    "present": "Present",
+    "absent": "Absent",
+    "class": "Class",
+    "room": "Room",
+    "time": "Time",
+    "lecturer": "Lecturer",
+    "download_list": "Download List",
+    "import_excel": "Import Students from Excel",
+    "start_exam": "Start Exam",
+    "add_students": "Add Students to Exam",
+    "reload_data": "Reload Data"
   },
   "table": {
     "actions": "Actions"

@@ -29,17 +29,26 @@ import { dataProvider } from "./providers/data-provider";
 
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./context/color-mode";
+import { HiUserGroup } from "react-icons/hi2";
+import { IoCalendar } from "react-icons/io5";
+import { MdDashboardCustomize } from "react-icons/md";
+import { BsBox2Fill } from "react-icons/bs";
+
+
+
 
 import {
   UserList,
   UserShow,
   UserCreate,
+  AddStudentToExamSchedule,
 } from "@/pages/users";
 
 import {
   ExamRoomList,
   RoomShow,
   RoomCreate,
+  RoomEdit,
 } from "@/pages/rooms";
 
 import {
@@ -57,6 +66,8 @@ import {
 
 import SchedulePage from "@/pages/schedules/list";
 import Home from "@/pages/home/home";
+import { CustomTitle } from "@/components/CustomTitle";
+
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -95,24 +106,40 @@ function App() {
               {
                 name: "home",
                 list: "/home",
+                meta: { 
+                  icon: <MdDashboardCustomize />,
+                  label: "Dashboard"
+                },
               },
               {
                 name: "users",
                 list: "/users",
                 show: "/users/:id",
                 create: "/users/new",
+                meta: { 
+                  icon: <HiUserGroup />, 
+                  label: "Users" 
+                },
               },
               {
                 name: "schedules",
                 list: "/schedules",
+                meta: { 
+                  icon: <IoCalendar />, 
+                  label: "Schedules" 
+                },
                 // ...
               },
               {
                 name: "exam-rooms",
                 list: "/exam-rooms",
                 create: "/exam-rooms/new",
-                // edit: "/exam-rooms/:id/edit",
+                edit: "/exam-rooms/:id/edit",
                 show: "/exam-rooms/:id",
+                meta: { 
+                  icon: <BsBox2Fill />, 
+                  label: "Exam Rooms" 
+                },
               },
               {
                 name: "exam-schedules",
@@ -120,6 +147,10 @@ function App() {
                 create: "/exam-schedules/new",
                 // show: "/exam-schedules/:id",
                 show: "/exam-schedules/:id",
+                meta: { 
+                  icon: <IoCalendar />, 
+                  label: "Exam Schedules" 
+                },
               },
             ]}
           >
@@ -130,7 +161,11 @@ function App() {
                     key="authenticated-inner"
                     fallback={<CatchAllNavigate to="/login" />}
                   >
-                    <ThemedLayoutV2 Header={() => <Header sticky />}>
+                    <ThemedLayoutV2 
+                    Header={() => <Header sticky />}
+                    Title={CustomTitle}
+                    // Sider={() => null}
+                    >
                       <Outlet />
                     </ThemedLayoutV2>
                   </Authenticated>
@@ -152,13 +187,20 @@ function App() {
                   <Route index element={<UserList />} />
                   <Route path=":id" element={<UserShow />} />
                   <Route path="new" element={<UserCreate />} />
+                  {/* <Route path="add" element={<AddStudentToExamSchedule />} /> */}
                 </Route>
 
+                {/* <Route path="/exam-schedules/:id/add-student" element={<AddStudentToExamSchedule />} /> */}
+                <Route path="add" element={<AddStudentToExamSchedule />} />
+
+
                 <Route path="/schedules" element={<SchedulePage />} />
+
                 <Route path="/exam-rooms">
                   <Route index element={<ExamRoomList />} />
                   <Route path=":id" element={<RoomShow />} />
                   <Route path="new" element={<RoomCreate />} />
+                  <Route path=":id/edit" element={<RoomEdit />} />
                 </Route>
 
                 <Route path="/exam-schedules">

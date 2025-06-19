@@ -14,11 +14,26 @@ import CustomEventModal from '../../components/event-modal';
 import { formatInTimeZone } from 'date-fns-tz';
 import { createCalendarControlsPlugin } from '@schedule-x/calendar-controls';
 import { ColorModeContext } from '../../context/color-mode';
-import type { ApiResponse, ApiEventItem, MyCalendarEvent } from './types'
+import type { ApiResponse, ApiEventItem, MyCalendarEvent } from './types';
+
+import React, { useState } from 'react';
+import { Button, Flex } from 'antd';
+import { IoCalendarSharp } from "react-icons/io5";
+import type { ConfigProviderProps } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { DownloadOutlined } from '@ant-design/icons';
+import { useTranslate } from "@refinedev/core";
+
+
+type SizeType = ConfigProviderProps['componentSize'];
 
 function SchedulePage() {
   const calendarControls = useMemo(() => createCalendarControlsPlugin(), []);
   const { mode } = useContext(ColorModeContext);
+  const [size, setSize] = useState<SizeType>('large');
+  const navigate = useNavigate();
+  const translate = useTranslate();
+
 
   const calendar = useCalendarApp({
     views: [
@@ -34,7 +49,7 @@ function SchedulePage() {
       createDragAndDropPlugin(),
       calendarControls,
     ],
-    locale: 'vi-VN',
+    // locale: 'vi-VN',
   });
 
   // Thiết lập theme và giới hạn giờ hiển thị
@@ -121,6 +136,28 @@ function SchedulePage() {
   return (
     <div className="flex h-screen">
       <div className="flex-1">
+        <Flex gap="small" wrap justify="end" className="mb-4">
+          <Button
+            icon={<IoCalendarSharp />}
+            size={size}
+            style={{
+              backgroundColor: '#1976d2',
+              borderColor: '#1890ff',
+              color: 'white',
+            }}
+            onClick={() => navigate('/exam-schedules/new')}
+          >
+            {translate("schedules.buttons.add", "Add exam schedule")}
+          </Button>
+
+          <Button
+            shape="circle"
+            icon={<DownloadOutlined />}
+            size={size}
+            style={{ backgroundColor: '#1976d2', borderColor: '#1890ff', color: 'white' }}
+          />
+        </Flex>
+
         <ScheduleXCalendar
           calendarApp={calendar}
           customComponents={{

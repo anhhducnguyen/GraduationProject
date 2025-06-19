@@ -77,7 +77,7 @@ export const ExamScheduleCreate: React.FC = () => {
                         helperText={<>{errors?.name_schedule?.message}</>}
                         margin="normal"
                         fullWidth
-                        label="Tên lịch thi"
+                        label={translate("schedules.fields.name_schedule", "Tên lịch thi")}
                     />
 
                     {/* Thời gian bắt đầu */}
@@ -87,7 +87,7 @@ export const ExamScheduleCreate: React.FC = () => {
                         rules={{ required: translate("form.required") }}
                         render={({ field }) => (
                             <DateTimePicker
-                                label="Thời gian bắt đầu"
+                                label={translate("schedules.fields.start_time", "Thời gian bắt đầu")}
                                 value={field.value ? dayjs(field.value) : null}
                                 onChange={(value) =>
                                     value
@@ -112,7 +112,7 @@ export const ExamScheduleCreate: React.FC = () => {
                         rules={{ required: translate("form.required") }}
                         render={({ field }) => (
                             <DateTimePicker
-                                label="Thời gian kết thúc"
+                                label={translate("schedules.fields.end_time", "Thời gian kết thúc")}
                                 value={field.value ? dayjs(field.value) : null}
                                 onChange={(value) =>
                                     value
@@ -156,7 +156,7 @@ export const ExamScheduleCreate: React.FC = () => {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Chọn phòng thi"
+                                        label={translate("rooms.fields.room_name", "Chọn phòng thi")}
                                         fullWidth
                                         margin="normal"
                                         error={!!errors?.room?.room_id}
@@ -177,15 +177,22 @@ export const ExamScheduleCreate: React.FC = () => {
                             <TextField
                                 {...field}
                                 select
-                                label="Trạng thái"
+                                label={translate("schedules.fields.status", "Trạng thái")}
                                 fullWidth
                                 margin="normal"
                                 error={!!errors?.status}
                                 helperText={errors?.status?.message}
                             >
-                                <MenuItem value="scheduled">Đã lên lịch</MenuItem>
-                                <MenuItem value="completed">Hoàn thành</MenuItem>
-                                <MenuItem value="cancelled">Đã hủy</MenuItem>
+                                <MenuItem value="scheduled">
+                                    {translate("schedules.status.scheduled", "Đã lên lịch")}
+                                </MenuItem>
+                                <MenuItem value="completed">
+                                    {translate("schedules.status.completed", "Hoàn thành")}
+                                </MenuItem>
+                                <MenuItem value="cancelled">
+                                    {translate("schedules.status.cancelled", "Đã hủy")}
+                                </MenuItem>
+
                             </TextField>
                         )}
                     />

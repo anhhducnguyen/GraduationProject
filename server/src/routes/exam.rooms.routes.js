@@ -31,7 +31,9 @@ router.route('/:id')
     .get(
         // permission, 
         getExamRoom)
-//     .put(permission, updateExamRoom)
+    .patch(
+        // permission, 
+        updateExamRoom)
     .delete(
         // permission, 
         deleteExamRoom

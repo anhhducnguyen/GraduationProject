@@ -1,26 +1,6 @@
 const db = require('../../config/database');
 
-class UserService {
-    static async getAll({ page = 1, limit = 10, sortBy = 'id', sortOrder = 'asc' }) {
-        const offset = (page - 1) * limit;  // Tính toán offset cho phân trang
-
-        return db("users")
-            .select(
-                "id",
-                "name",
-                // "email",
-                "age",
-                // "gender",
-                // "username",
-                // "role",
-                // "google_id",
-                "avatar"
-            )
-            .orderBy(sortBy, sortOrder)
-            .limit(limit)
-            .offset(offset);
-    }
-    
+class UserService {    
     static async queryUsers(filter, options) {
         const {
             sortBy = 'id:asc',
@@ -31,7 +11,22 @@ class UserService {
         } = options;
 
         const [sortField, sortOrder] = sortBy.split(':');
-        const query = db('users');
+        const query = db('users')
+        .join("auth", "users.id", "auth.id")
+            .select(
+            "users.id",
+            "users.first_name",
+            "users.last_name",
+            "users.age",
+            "users.gender",
+            "users.avatar",
+            "auth.email",
+            "auth.username",
+            "auth.role",
+            "auth.google_id",
+            "auth.created_at as auth_created_at",
+            "users.created_at as user_created_at"
+        );
 
         // Global search
         if (search) {
@@ -72,29 +67,70 @@ class UserService {
             .select("*");
     }
 
+    // static async create({
+    //     first_name,
+    //     last_name,
+    //     age,
+    //     gender,
+    //     // role, 
+    //     // username, 
+    //     // email, 
+    //     // hashedPassword, 
+    //     avatar
+    // }) {
+    //     return db("users").insert({
+    //         // username,
+    //         // email,
+    //         // password: hashedPassword, 
+    //         avatar,
+    //         first_name,
+    //         last_name,
+    //         age,
+    //         gender,
+    //         // role,
+    //     })
+    // }
     static async create({
-        first_name,
-        last_name,
-        age,
-        gender,
-        // role, 
-        // username, 
-        // email, 
-        // hashedPassword, 
-        avatar
-    }) {
-        return db("users").insert({
-            // username,
-            // email,
-            // password: hashedPassword, 
-            avatar,
-            first_name,
-            last_name,
-            age,
-            gender,
-            // role,
-        })
-    }
+    first_name,
+    last_name,
+    age,
+    gender,
+    role,
+    username,
+    email,
+    hashedPassword,
+    avatar
+}) {
+    return await db.transaction(async trx => {
+        // Bước 1: Thêm vào bảng auth
+        const [authId] = await trx("auth")
+            .insert({
+                email,
+                password: hashedPassword,
+                username,
+                role,
+                created_at: new Date(),
+                updated_at: new Date()
+            })
+            .returning("id");
+
+        // Bước 2: Thêm vào bảng users, dùng cùng id
+        await trx("users")
+            .insert({
+                id: authId,
+                first_name,
+                last_name,
+                age,
+                gender,
+                avatar,
+                created_at: new Date(),
+                updated_at: new Date()
+            });
+
+        return { id: authId };
+    });
+}
+
 
     static async update({
         id,

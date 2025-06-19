@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const pick = require('../utils/pick');
 const db = require('../../config/database');
 
-
 class UserController extends BaseController {
     static async getUsers(req, res) {
         try {
@@ -92,39 +91,79 @@ class UserController extends BaseController {
             return BaseController.errorResponse(res, error);
         }
     }
-    static async createUser(req, res) {
-        try {
-            const {
-                first_name,
-                last_name,
-                age,
-                gender,
-                // role, 
-                // username, 
-                // email, 
-                // password 
-            } = req.body;
+    // static async createUser(req, res) {
+    //     try {
+    //         const {
+    //             first_name,
+    //             last_name,
+    //             age,
+    //             gender,
+    //             // role, 
+    //             // username, 
+    //             // email, 
+    //             // password 
+    //         } = req.body;
 
-            // const hashedPassword = await bcrypt.hash(password, 10);
-            let avatar = req.fileName;
+    //         // const hashedPassword = await bcrypt.hash(password, 10);
+    //         let avatar = req.fileName;
 
-            const data = await Service.create({
-                first_name,
-                last_name,
-                age,
-                gender,
-                // role, 
-                // username, 
-                // email, 
-                // hashedPassword, 
-                avatar
-            });
+    //         const data = await Service.create({
+    //             first_name,
+    //             last_name,
+    //             age,
+    //             gender,
+    //             // role, 
+    //             // username, 
+    //             // email, 
+    //             // hashedPassword, 
+    //             avatar
+    //         });
 
-            return BaseController.successResponse(res, data, 'Create successfully', 201);
-        } catch (error) {
-            return BaseController.errorResponse(res, error);
-        }
-    };
+    //         return BaseController.successResponse(res, data, 'Create successfully', 201);
+    //     } catch (error) {
+    //         return BaseController.errorResponse(res, error);
+    //     }
+    // };
+
+static async createUser(req, res) {
+    try {
+        const {
+            first_name,
+            last_name,
+            age,
+            gender,
+            role,
+            username,
+            email,
+            password
+        } = req.body;
+
+        // Băm mật khẩu
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Lấy avatar từ file upload (nếu có)
+        const avatar = req.fileName || null;
+
+        // Gọi service để tạo user và auth
+        const data = await Service.create({
+            first_name,
+            last_name,
+            age,
+            gender,
+            role,
+            username,
+            email,
+            hashedPassword,
+            avatar
+        });
+
+        return BaseController.successResponse(res, data, 'Create successfully', 201);
+    } catch (error) {
+        console.error("Error creating user:", error);
+        return BaseController.errorResponse(res, error);
+    }
+}
+
     static async updateUser(req, res) {
         try {
             let id = req.params.id;

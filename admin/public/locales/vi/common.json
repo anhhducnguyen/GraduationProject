@@ -34,6 +34,9 @@
     }
   },
   "schedules": {
+    "buttons": {
+      "add": "Thêm lịch thi"
+    },
     "fields": {
       "id": "Mã lịch thi",
       "name_schedule": "Tên lịch thi",
@@ -47,6 +50,26 @@
       "completed": "Đã hoàn thành",
       "cancelled": "Đã hủy"
     }
+  },
+  "attendance": {
+    "index": "STT",
+    "student_id": "Mã số",
+    "last_name": "Họ đệm",
+    "first_name": "Tên",
+    "status": "Trạng thái",
+    "confidence": "Độ chính xác (%)",
+    "checkin_time": "Thời gian điểm danh",
+    "present": "Có mặt",
+    "absent": "Vắng mặt",
+    "class": "Lớp",
+    "room": "Phòng",
+    "time": "Thời gian",
+    "lecturer": "Giảng viên",
+    "download_list": "Tải danh sách",
+    "import_excel": "Nhập sinh viên từ Excel",
+    "start_exam": "Bắt đầu ca thi",
+    "add_students": "Thêm sinh viên vào ca thi",
+    "reload_data": "Tải lại dữ liệu"
   },
   "table": {
     "actions": "Hành động"

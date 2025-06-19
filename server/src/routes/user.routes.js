@@ -10,11 +10,11 @@ const {
 
 router.get(
     '/', 
-    authenticate,
-    authorize([
-        ROLES.ADMIN, 
-        ROLES.TEACHER
-    ]), 
+    // authenticate,
+    // authorize([
+    //     ROLES.ADMIN, 
+    //     ROLES.TEACHER
+    // ]), 
     Controller.getUsers
 );
 router.get(
