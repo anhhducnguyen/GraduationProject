@@ -138,17 +138,6 @@ pip install -r requirements.txt
 python main.py
 ```
 
-### UML Class Diagram
-![image](https://github.com/user-attachments/assets/20332b52-91ad-4dec-9696-e899d5c5dc7d)
-
-### Structure Diagram
-![Image](https://github.com/user-attachments/assets/78bb7df6-1a4d-46e0-821f-b6850967daf2)
-
-### UseCase Diagram
-![Image](https://github.com/user-attachments/assets/8261917f-6ee9-4c08-bc8b-7c86d94cc3dc)
-
-### Entity Diagram
-![Image](https://github.com/user-attachments/assets/154c27e7-fb8b-4ad0-945d-85c8ba01598c)
 
 
 See details at our [Issue](https://github.com/anhhducnguyen/Face-Auth-Exam-System-v2/issues/1)
