@@ -10,8 +10,6 @@
 
 - [Report](https://drive.google.com/drive/folders/1McMyjsh_j6sM73bt2YO14lyoNT0qciUn?usp=sharing)
   
-- <a href="https://drive.google.com/drive/folders/1McMyjsh_j6sM73bt2YO14lyoNT0qciUn?usp=sharing" target="_blank">📄 Report</a>
-
 - [Video demo]()
 
 - [Video demo RestfulAPT]()
