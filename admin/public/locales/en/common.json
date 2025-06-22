@@ -12,7 +12,9 @@
       "last_name": "Last Name",
       "age": "Age",
       "gender": "Gender",
-      "avatar": "Avatar"
+      "avatar": "Avatar",
+      "email": "Email",
+      "role": "Role"
     },
     "gender": {
       "male": "Male",
@@ -37,6 +39,7 @@
     "buttons": {
       "add": "Add Schedule"
     },
+    "import_excel": "Import Schedule from Excel",
     "fields": {
       "id": "Schedule ID",
       "name_schedule": "Schedule Name",
@@ -61,17 +64,26 @@
     "checkin_time": "Check-in Time",
     "present": "Present",
     "absent": "Absent",
-    "class": "Class",
+    "class": "Exam subject",
     "room": "Room",
     "time": "Time",
-    "lecturer": "Lecturer",
+    "lecturer": "Lecturers",
     "download_list": "Download List",
     "import_excel": "Import Students from Excel",
     "start_exam": "Start Exam",
     "add_students": "Add Students to Exam",
-    "reload_data": "Reload Data"
+    "reload_data": "Reload Data",
+    "minute": "minutes",
+    "delete_selected": "Delete Selected Students",
+    "confirm_delete_title": "Confirm delete",
+    "confirm_delete_message": "Are you sure you want to delete {{count}} students from the exam?",
+    "delete": "Delete",
+    "cancel": "Cancel"
   },
   "table": {
     "actions": "Actions"
+  },
+  "search": {
+    "placeholder": "Search..."
   }
 }

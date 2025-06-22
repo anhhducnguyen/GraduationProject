@@ -15,7 +15,7 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import {
-  AuthPage,
+  // AuthPage,
   ErrorComponent,
   RefineSnackbarProvider,
   ThemedLayoutV2,
@@ -33,8 +33,6 @@ import { HiUserGroup } from "react-icons/hi2";
 import { IoCalendar } from "react-icons/io5";
 import { MdDashboardCustomize } from "react-icons/md";
 import { BsBox2Fill } from "react-icons/bs";
-
-
 
 
 import {
@@ -67,7 +65,7 @@ import {
 import SchedulePage from "@/pages/schedules/list";
 import Home from "@/pages/home/home";
 import { CustomTitle } from "@/components/CustomTitle";
-
+import { AuthPage } from "@/pages/auth/index";
 
 function App() {
   const { t, i18n } = useTranslation();

@@ -16,14 +16,7 @@ import {
   useDataGrid,
 } from "@refinedev/mui";
 import { Chip } from "@mui/material";
-
-type ExamRoom = {
-  room_id: string;       
-  room_name: string;
-  capacity: number;
-  location: string;
-  status: "schedule" | "ongoing" | "complete" | "cancelled"; 
-};
+import type { ExamRoom } from "./types"; 
 
 export const ExamRoomList = () => {
   const { dataGridProps } = useDataGrid<ExamRoom>();

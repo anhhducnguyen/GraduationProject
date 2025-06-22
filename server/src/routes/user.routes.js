@@ -7,6 +7,8 @@ const {
     authenticate, 
     authorize 
 } = require("../utils/auth/index");
+const db = require('../../config/database');
+
 
 router.get(
     '/', 
@@ -16,6 +18,23 @@ router.get(
     //     ROLES.TEACHER
     // ]), 
     Controller.getUsers
+);
+router.get(
+    '/students',
+    // authenticate,
+    // authorize([ROLES.ADMIN, ROLES.TEACHER]),
+    async (req, res) => {
+        try {
+            const students = await db('auth')
+            .join('users', 'auth.id', 'users.id')
+
+            .where('role', ROLES.STUDENT);
+            res.json(students);
+        } catch (error) {
+            console.error("Error fetching students:", error);
+            res.status(500).json({ message: "Failed to fetch students" });
+        }
+    }
 );
 router.get(
     '/:id', 
@@ -34,6 +53,7 @@ router.post(
     // checkEmailExist, 
     Controller.createUser
 );
+
 router.put(
     '/:id', 
     authenticate,
@@ -49,6 +69,9 @@ router.delete(
     // checkUserExistById, 
     Controller.deleteUser
 );
+
+
+
 
 
 module.exports = router;

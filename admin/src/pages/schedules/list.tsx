@@ -10,7 +10,7 @@ import "@schedule-x/theme-default/dist/calendar.css";
 import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop';
 import { createEventModalPlugin } from '@schedule-x/event-modal';
 import TimeGridEvent from '../../components/time-grid-event';
-import CustomEventModal from '../../components/event-modal';
+import CustomEventModal from './show';
 import { formatInTimeZone } from 'date-fns-tz';
 import { createCalendarControlsPlugin } from '@schedule-x/calendar-controls';
 import { ColorModeContext } from '../../context/color-mode';
@@ -23,6 +23,7 @@ import type { ConfigProviderProps } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { DownloadOutlined } from '@ant-design/icons';
 import { useTranslate } from "@refinedev/core";
+import { RiFileExcel2Fill } from 'react-icons/ri';
 
 
 type SizeType = ConfigProviderProps['componentSize'];
@@ -137,6 +138,9 @@ function SchedulePage() {
     <div className="flex h-screen">
       <div className="flex-1">
         <Flex gap="small" wrap justify="end" className="mb-4">
+          <Button icon={<RiFileExcel2Fill />} size={size} style={{ backgroundColor: '#1976d2', color: 'white', borderColor: '#1890ff' }}>
+            {translate("schedules.import_excel", "Nhập lịch từ Excel")}
+          </Button>
           <Button
             icon={<IoCalendarSharp />}
             size={size}

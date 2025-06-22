@@ -27,3 +27,14 @@ export interface ApiEventItem {
 export interface ApiResponse {
   results: ApiEventItem[];
 }
+
+// show.txt
+
+export type Student = {
+  id: string;
+  lastName: string;
+  firstName: string;
+  status: string;
+  confidence: number;
+  checkInTime: string;
+};

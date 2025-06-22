@@ -1,224 +1,3 @@
-
-// import {
-//   type HttpError,
-//   useTranslate,
-// } from "@refinedev/core";
-// import { useForm } from "@refinedev/react-hook-form";
-// import {
-//   Box,
-//   TextField,
-//   FormControl,
-//   InputLabel,
-//   Select,
-//   MenuItem,
-//   FormHelperText,
-//   Typography,
-// } from "@mui/material";
-// import { Create } from "@refinedev/mui";
-// import { useTheme } from "@mui/material/styles";
-// import React, { useState } from "react";
-// import { Controller } from "react-hook-form";
-
-
-// type User = {
-//   id?: string;
-//   first_name: string;
-//   last_name: string;
-//   age: number;
-//   gender: string;
-//   avatar?: string;
-//   email: string;
-//   username: string;
-//   password: string;
-//   role: string;
-//   examScheduleId?: number;
-// };
-
-// export const AddStudentToExamSchedule: React.FC = () => {
-//   const translate = useTranslate();
-//   const theme = useTheme();
-
-//   const {
-//     saveButtonProps,
-//     refineCore: { formLoading },
-//     register,
-//     setValue,
-//     control,
-//     formState: { errors },
-//   } = useForm<User, HttpError, User>({
-//     defaultValues: {
-//       role: "student",
-//     },
-//   });
-
-//   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-
-//   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = e.target.files?.[0];
-//     if (file) {
-//       const fileUrl = URL.createObjectURL(file);
-//       setAvatarPreview(fileUrl);
-//       setValue("avatar", file.name); 
-//     }
-//   };
-
-//   return (
-//     <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
-//       <Box
-//         component="form"
-//         sx={{ display: "flex", flexDirection: "column" }}
-//         autoComplete="off"
-//       >
-//         <TextField
-//           {...register("first_name", { required: "Required" })}
-//           error={!!errors?.first_name}
-//           helperText={errors?.first_name?.message}
-//           margin="normal"
-//           fullWidth
-//           label="First Name"
-//         />
-
-//         <TextField
-//           {...register("last_name", { required: "Required" })}
-//           error={!!errors?.last_name}
-//           helperText={errors?.last_name?.message}
-//           margin="normal"
-//           fullWidth
-//           label="Last Name"
-//         />
-
-//         <TextField
-//           {...register("age", {
-//             required: "Required",
-//             valueAsNumber: true,
-//             min: { value: 0, message: "Age must be >= 0" },
-//           })}
-//           error={!!errors?.age}
-//           helperText={errors?.age?.message}
-//           margin="normal"
-//           fullWidth
-//           type="number"
-//           label="Age"
-//         />
-
-//         <FormControl fullWidth margin="normal" error={!!errors?.gender}>
-//           <InputLabel id="gender-label">Gender</InputLabel>
-//           <Select
-//             labelId="gender-label"
-//             defaultValue=""
-//             {...register("gender", { required: "Required" })}
-//             label="Gender"
-//           >
-//             <MenuItem value=""><em>Choose...</em></MenuItem>
-//             <MenuItem value="male">Male</MenuItem>
-//             <MenuItem value="female">Female</MenuItem>
-//           </Select>
-//           <FormHelperText>{errors?.gender?.message}</FormHelperText>
-//         </FormControl>
-
-//         {/* Auth fields */}
-//         <TextField
-//           {...register("email", { required: "Required" })}
-//           error={!!errors?.email}
-//           helperText={errors?.email?.message}
-//           margin="normal"
-//           fullWidth
-//           label="Email"
-//           type="email"
-//         />
-
-//         <TextField
-//           {...register("username", { required: "Required" })}
-//           error={!!errors?.username}
-//           helperText={errors?.username?.message}
-//           margin="normal"
-//           fullWidth
-//           label="Username"
-//         />
-
-//         <TextField
-//           {...register("password", {
-//             required: "Required",
-//             minLength: {
-//               value: 6,
-//               message: "Password must be at least 6 characters",
-//             },
-//           })}
-//           error={!!errors?.password}
-//           helperText={errors?.password?.message}
-//           margin="normal"
-//           fullWidth
-//           type="password"
-//           label="Password"
-//         />
-
-//         <FormControl fullWidth margin="normal" error={!!errors?.role}>
-//           <InputLabel id="role-label">Role</InputLabel>
-//           <Controller
-//             name="role"
-//             control={control}
-//             rules={{ required: "Required" }}
-//             render={({ field }) => (
-//               <Select
-//                 {...field}
-//                 labelId="role-label"
-//                 label="Role"
-//                 defaultValue="student"
-//               >
-//                 <MenuItem value=""><em>Choose...</em></MenuItem>
-//                 <MenuItem value="student">Student</MenuItem>
-//                 <MenuItem value="admin">Admin</MenuItem>
-//                 <MenuItem value="teacher">Teacher</MenuItem>
-//               </Select>
-//             )}
-//           />
-//           <FormHelperText>{errors?.role?.message}</FormHelperText>
-//         </FormControl>
-
-
-//         {/* Avatar Upload */}
-//         <Box mt={2}>
-//           <Box
-//             component="label"
-//             htmlFor="avatar"
-//             sx={{
-//               border: `1px solid ${theme.palette.divider}`,
-//               borderRadius: "6px",
-//               padding: "14px 16px",
-//               backgroundColor: theme.palette.background.paper,
-//               display: "block",
-//               cursor: "pointer",
-//               color: theme.palette.text.primary,
-//             }}
-//           >
-//             <input
-//               id="avatar"
-//               type="file"
-//               accept="image/*"
-//               hidden
-//               onChange={handleAvatarChange}
-//             />
-//             <Typography variant="body2">
-//               {avatarPreview ? "Change Image" : "Choose Image"}
-//             </Typography>
-//           </Box>
-
-//           {avatarPreview && (
-//             <Box mt={2}>
-//               <Typography variant="body2">Avatar Preview:</Typography>
-//               <img
-//                 src={avatarPreview}
-//                 alt="Avatar preview"
-//                 style={{ width: "120px", height: "auto", marginTop: "8px" }}
-//               />
-//             </Box>
-//           )}
-//         </Box>
-//       </Box>
-//     </Create>
-//   );
-// };
-
 // import React from "react";
 // import {
 //   Box,
@@ -228,6 +7,8 @@
 // } from "@mui/material";
 // import { useForm } from "@refinedev/react-hook-form";
 // import { Create } from "@refinedev/mui";
+// import { useNavigate, useLocation } from "react-router-dom";
+// import { useNotification } from "@refinedev/core";
 
 // type AssignPayload = {
 //   username: string;
@@ -235,11 +16,21 @@
 // };
 
 // export const AddStudentToExamSchedule: React.FC = () => {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const { open } = useNotification();
+
+//   const examScheduleIdFromState = location.state?.examScheduleId || 0;
+
 //   const {
 //     register,
 //     handleSubmit,
 //     formState: { errors },
-//   } = useForm<AssignPayload>();
+//   } = useForm<AssignPayload>({
+//     defaultValues: {
+//       examScheduleId: examScheduleIdFromState,
+//     },
+//   });
 
 //   const onSubmit = async (data: AssignPayload) => {
 //     try {
@@ -259,9 +50,19 @@
 //         throw new Error(errorData.message || "Failed to assign student.");
 //       }
 
-//       alert("Student assigned successfully!");
+//       open?.({
+//         type: "success",
+//         message: "Thành công",
+//         description: "Sinh viên đã được thêm vào ca thi",
+//       });
+
+//       navigate("/schedules");
 //     } catch (error: any) {
-//       alert("Error: " + error.message);
+//       open?.({
+//         type: "error",
+//         message: "Thất bại",
+//         description: error.message,
+//       });
 //     }
 //   };
 
@@ -285,20 +86,16 @@
 //           {...register("username", { required: "Student ID is required" })}
 //           label="Student ID"
 //           error={!!errors.username}
-//           // helperText={errors.username?.message}
+//           helperText={errors.username?.message}
 //           fullWidth
 //         />
 
-//         <TextField
+//         <input
+//           type="hidden"
 //           {...register("examScheduleId", {
-//             required: "Schedule ID is required",
+//             required: true,
 //             valueAsNumber: true,
 //           })}
-//           label="Schedule ID"
-//           type="number"
-//           error={!!errors.examScheduleId}
-//           // helperText={errors.examScheduleId?.message}
-//           fullWidth
 //         />
 
 //         <Button type="submit" variant="contained" color="primary">
@@ -309,49 +106,98 @@
 //   );
 // };
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
-  TextField,
   Button,
   Typography,
+  Autocomplete,
+  TextField,
 } from "@mui/material";
 import { useForm } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
 import { Create } from "@refinedev/mui";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useNotification } from "@refinedev/core";
+
+type Student = {
+  id: number;
+  first_name: string;
+  last_name: string;
+};
 
 type AssignPayload = {
-  username: string;
+  student: Student | null;
   examScheduleId: number;
 };
 
 export const AddStudentToExamSchedule: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { open } = useNotification();
+
+  const examScheduleIdFromState = location.state?.examScheduleId || 0;
+
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AssignPayload, any, AssignPayload>(); // ✅ Fix lỗi TypeScript tại đây
+  } = useForm<AssignPayload>({
+    defaultValues: {
+      student: null,
+      examScheduleId: examScheduleIdFromState,
+    },
+  });
+
+  const [students, setStudents] = useState<Student[]>([]);
+
+  useEffect(() => {
+    // Gọi API để lấy danh sách sinh viên
+    fetch("http://localhost:5000/api/v1/users/students")
+      .then((res) => res.json())
+      .then((data) => setStudents(data))
+      .catch((error) => console.error("Failed to fetch students:", error));
+  }, []);
 
   const onSubmit = async (data: AssignPayload) => {
+    if (!data.student?.id) {
+      open?.({
+        type: "error",
+        message: "Thiếu thông tin",
+        description: "Vui lòng chọn sinh viên hợp lệ.",
+      });
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:5000/api/v1/exam-attendance/assign", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          student_id: data.username,
+          student_id: data.student.id,
           schedule_id: data.examScheduleId,
         }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to assign student.");
+        throw new Error(errorData.message || "Assign failed");
       }
 
-      alert("Student assigned successfully!");
+      open?.({
+        type: "success",
+        message: "Thành công",
+        description: "Sinh viên đã được thêm vào ca thi",
+      });
+
+      navigate("/schedules");
     } catch (error: any) {
-      alert("Error: " + error.message);
+      open?.({
+        type: "error",
+        message: "Thất bại",
+        description: error.message,
+      });
     }
   };
 
@@ -360,35 +206,43 @@ export const AddStudentToExamSchedule: React.FC = () => {
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          maxWidth: 400,
-          mt: 2,
-        }}
+        sx={{ display: "flex", flexDirection: "column", gap: 2, maxWidth: 500, mt: 2 }}
         autoComplete="off"
       >
         <Typography variant="h6">Assign Student to Exam Schedule</Typography>
 
-        <TextField
-          {...register("username", { required: "Student ID is required" })}
-          label="Student ID"
-          error={!!errors.username}
-          helperText={errors.username?.message}
-          fullWidth
+        <Controller
+          name="student"
+          control={control}
+          rules={{ required: "Please select a student" }}
+          render={({ field }) => (
+            <Autocomplete<Student>
+              {...field}
+              options={students}
+              getOptionLabel={(option) =>
+                `${option.id} - ${option.first_name} ${option.last_name}`
+              }
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              onChange={(_, value) => field.onChange(value)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Select Student"
+                  error={!!errors.student}
+                  helperText={errors.student?.message}
+                />
+              )}
+            />
+          )}
         />
 
-        <TextField
+        {/* Hidden input for schedule ID */}
+        <input
+          type="hidden"
           {...register("examScheduleId", {
-            required: "Schedule ID is required",
+            required: true,
             valueAsNumber: true,
           })}
-          label="Schedule ID"
-          type="number"
-          error={!!errors.examScheduleId}
-          helperText={errors.examScheduleId?.message}
-          fullWidth
         />
 
         <Button type="submit" variant="contained" color="primary">

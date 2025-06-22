@@ -12,7 +12,9 @@
       "last_name": "Họ",
       "age": "Tuổi",
       "gender": "Giới tính",
-      "avatar": "Ảnh đại diện"
+      "avatar": "Ảnh đại diện",
+      "email": "Email",
+      "role": "Vai trò"
     },
     "gender": {
       "male": "Nam",
@@ -37,6 +39,7 @@
     "buttons": {
       "add": "Thêm lịch thi"
     },
+    "import_excel": "Nhập lịch thi từ Excel",
     "fields": {
       "id": "Mã lịch thi",
       "name_schedule": "Tên lịch thi",
@@ -61,7 +64,7 @@
     "checkin_time": "Thời gian điểm danh",
     "present": "Có mặt",
     "absent": "Vắng mặt",
-    "class": "Lớp",
+    "class": "Môn thi",
     "room": "Phòng",
     "time": "Thời gian",
     "lecturer": "Giảng viên",
@@ -69,9 +72,18 @@
     "import_excel": "Nhập sinh viên từ Excel",
     "start_exam": "Bắt đầu ca thi",
     "add_students": "Thêm sinh viên vào ca thi",
-    "reload_data": "Tải lại dữ liệu"
+    "reload_data": "Tải lại dữ liệu",
+    "minute": "phút",
+    "delete_selected": "Xóa sinh viên đã chọn",
+    "confirm_delete_title": "Xác nhận xoá",
+    "confirm_delete_message": "Bạn có chắc chắn muốn xoá {{count}} sinh viên khỏi ca thi không?",
+    "delete": "Xoá",
+    "cancel": "Hủy"
   },
   "table": {
     "actions": "Hành động"
+  },
+  "search": {
+    "placeholder": "Tìm kiếm..."
   }
 }

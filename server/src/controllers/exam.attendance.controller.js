@@ -196,7 +196,8 @@ const create = async (req, res) => {
             return res.status(400).json({ message: "Thiếu dữ liệu" });
         }
 
-        const schedule_id = await getCurrentExamSchedule();
+        // const schedule_id = await getCurrentExamSchedule();
+        const schedule_id = 54;
 
         // Kiểm tra sinh viên và bản ghi điểm danh
         const [studentExists, attendanceExists] = await Promise.all([
