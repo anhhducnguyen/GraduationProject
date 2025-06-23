@@ -90,14 +90,14 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
                       alignItems="center"
                       justifyContent="center"
                     >
-                      <Avatar
+                      {/* <Avatar
                         sx={{
                           width: "24px",
                           height: "24px",
                           marginRight: "5px",
                         }}
                         src={`/images/flags/${lang}.svg`}
-                      />
+                      /> */}
                       <Typography >
                         {lang === "en" ? "English" : "Vietnamese"}
                       </Typography>
@@ -110,6 +110,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
             <IconButton 
               sx={{ mr: 1.5 }}
               color="inherit"
+              aria-label="Toggle dark mode"
               onClick={() => {
                 setMode();
               }}

@@ -13,10 +13,17 @@ export const CustomTitle = () => {
                 padding: "12px 16px",
             }}
         >
-            <img
+            {/* <img
                 src="/public/images/pka.png"
                 alt="Logo"
-            />
+            /> */}
+{/* <img
+  src="/images/pka.png"
+  alt="Logo"
+  width="300"
+  height="150"
+/> */}
+
             {/* <Typography
         variant="h6"
         sx={{ fontWeight: "bold", color: "black" }}

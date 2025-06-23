@@ -347,7 +347,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
           columns={columns}
           dataSource={students}
           rowKey="id"
-          pagination={{ pageSize: 10 }}
+          pagination={{ pageSize: 40 }}
           bordered
           loading={loading}
         />

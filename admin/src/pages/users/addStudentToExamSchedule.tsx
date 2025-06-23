@@ -205,7 +205,7 @@ export const AddStudentToExamSchedule: React.FC = () => {
     <Create title="Assign Student to Exam">
       <Box
         component="form"
-        onSubmit={handleSubmit(onSubmit)}
+        // onSubmit={handleSubmit(onSubmit)}
         sx={{ display: "flex", flexDirection: "column", gap: 2, maxWidth: 500, mt: 2 }}
         autoComplete="off"
       >
@@ -229,7 +229,7 @@ export const AddStudentToExamSchedule: React.FC = () => {
                   {...params}
                   label="Select Student"
                   error={!!errors.student}
-                  helperText={errors.student?.message}
+                  // helperText={errors.student?.message}
                 />
               )}
             />

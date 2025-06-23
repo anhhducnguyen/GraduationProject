@@ -25,6 +25,25 @@ import { DownloadOutlined } from '@ant-design/icons';
 import { useTranslate } from "@refinedev/core";
 import { RiFileExcel2Fill } from 'react-icons/ri';
 
+import { Upload, message } from 'antd';
+import type { UploadProps } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+
+const props: UploadProps = {
+  name: 'file',
+  accept: '.xlsx,.xls',
+  showUploadList: false,
+  action: '/api/v1/exam-schedule/import', // API backend để xử lý
+  onChange(info) {
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} uploaded successfully`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} upload failed.`);
+    }
+  },
+};
+
+
 
 type SizeType = ConfigProviderProps['componentSize'];
 
@@ -138,9 +157,15 @@ function SchedulePage() {
     <div className="flex h-screen">
       <div className="flex-1">
         <Flex gap="small" wrap justify="end" className="mb-4">
-          <Button icon={<RiFileExcel2Fill />} size={size} style={{ backgroundColor: '#1976d2', color: 'white', borderColor: '#1890ff' }}>
+          {/* <Button icon={<RiFileExcel2Fill />} size={size} style={{ backgroundColor: '#1976d2', color: 'white', borderColor: '#1890ff' }}>
             {translate("schedules.import_excel", "Nhập lịch từ Excel")}
-          </Button>
+          </Button> */}
+          <Upload {...props}>
+            <Button icon={<RiFileExcel2Fill />} size={size} style={{ backgroundColor: '#1976d2', color: 'white', borderColor: '#1890ff' }}>
+              {translate("schedules.import_excel", "Nhập lịch từ Excel")}
+            </Button>
+          </Upload>
+
           <Button
             icon={<IoCalendarSharp />}
             size={size}
