@@ -87,7 +87,8 @@ function App() {
             // accessControlProvider={accessControlProvider}
             // dataProvider={dataProvider}
             // dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
-            dataProvider={dataProvider("http://localhost:5000/api/v1")}
+            // dataProvider={dataProvider("http://localhost:5000/api/v1")}
+            dataProvider={dataProvider("https://graduationproject-nx7m.onrender.com/api/v1")}
             // dataProvider={dataProvider("/api/v1")}
             notificationProvider={useNotificationProvider}
             routerProvider={routerProvider}

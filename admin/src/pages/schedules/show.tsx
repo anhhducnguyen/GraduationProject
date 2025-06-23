@@ -154,7 +154,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
     if (!calendarEvent?.id) return;
     try {
       setLoading(true);
-      const res = await fetch(`/api/v1/exam-schedules/${calendarEvent.id}/students`);
+      const res = await fetch(`https://graduationproject-nx7m.onrender.com/api/v1/exam-schedules/${calendarEvent.id}/students`);
       const data = await res.json();
       if (Array.isArray(data.results)) {
         setStudents(data.results);
@@ -207,7 +207,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       const studentIds: string[] = jsonData.map((row) => row['Mã số'] || row['id']).filter(Boolean);
 
       try {
-        const res = await fetch(`/api/v1/exam-schedules/${calendarEvent.id}/students/import-ids`, {
+        const res = await fetch(`https://graduationproject-nx7m.onrender.com/api/v1/exam-schedules/${calendarEvent.id}/students/import-ids`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ studentIds }),
@@ -235,7 +235,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       cancelText: translate("attendance.cancel", "Huỷ"),
       onOk: async () => {
         try {
-          const res = await fetch(`/api/v1/exam-schedules/${calendarEvent.id}/students/delete`, {
+          const res = await fetch(`https://graduationproject-nx7m.onrender.com/api/v1/exam-schedules/${calendarEvent.id}/students/delete`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ studentIds: selectedRowKeys }),
