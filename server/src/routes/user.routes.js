@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Controller = require('../controllers/user.controllers');
+const Controller = require('../controllers/user.controller');
 const upload = require("../middlewares/upload.single");
 const ROLES = require("../constants/role");
 const { 

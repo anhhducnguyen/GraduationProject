@@ -3,7 +3,7 @@ const {
     countExamSchedules,
     deleteScheduleById,
     create
-} = require('../services/exam.schedules.services');
+} = require('../services/exam.schedules.service');
 const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
 

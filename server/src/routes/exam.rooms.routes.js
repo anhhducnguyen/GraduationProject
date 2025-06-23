@@ -8,7 +8,7 @@ const {
     createExamRoom,
     updateExamRoom,
     deleteExamRoom
-} = require('../controllers/exam.rooms.controllers');
+} = require('../controllers/exam.rooms.controller');
 
 // const {
 //     authenticate,

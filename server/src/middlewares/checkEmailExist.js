@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const Service = require("../services/auth.services");
+const Service = require("../services/auth.service");
 
 module.exports.checkEmailExist = async (req, res, next) => {
     const { email } = req.body;

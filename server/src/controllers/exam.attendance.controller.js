@@ -10,7 +10,7 @@ const {
     getCurrentExamSchedule,
     checkStudentExists,
     countExamAttendance
-} = require('../services/exam.attendance.services');
+} = require('../services/exam.attendance.service');
 const pick = require('../utils/pick');
 const { activeConnections } = require('../../config/ws');
 const { parseQueryOptions } = require("../utils/queryParser");

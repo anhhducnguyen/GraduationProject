@@ -5,7 +5,7 @@ const {
     deleteExamRoomById,
     queryExamRoom,
     countExamRooms,
-} = require('../services/exam.rooms.services');
+} = require('../services/exam.rooms.service');
 const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
 

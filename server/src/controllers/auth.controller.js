@@ -7,7 +7,7 @@ const {
   findEmail,
   generateResetToken,
   sendResetEmail,
-} = require("../services/auth.services");
+} = require("../services/auth.service");
 
 const register = async (req, res) => {
   try {

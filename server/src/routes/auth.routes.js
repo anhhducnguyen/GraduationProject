@@ -7,7 +7,7 @@ const {
   resetPassword,
   confirmResetPassword,
   getProfile
-} = require("../controllers/auth.controllers");  // Destructure controller functions
+} = require("../controllers/auth.controller");  // Destructure controller functions
 
 const { checkEmailExist } = require("../middlewares/checkEmailExist");
 const { registerUserSchema } = require("../middlewares/validate-schema");
