@@ -6,6 +6,8 @@ const {
 } = require('../services/exam.schedules.service');
 const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
+const { clearExamScheduleCache } = require('../utils/cache');
+
 
 // Get all exam schedules
 const getExamSchedules = async (req, res) => {
@@ -33,6 +35,9 @@ const deletedExamSchedule = async (req, res) => {
         if (!deletedExamSchedule) {
             return res.status(404).json({ message: 'Exam schedule not found' });
         }
+
+        await clearExamScheduleCache();
+
         return res.status(200).json({ message: 'Exam schedule deleted successfully' });
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -40,7 +45,6 @@ const deletedExamSchedule = async (req, res) => {
 };
 
 const createExamSchedule = async (req, res) => {
-    console.log(req.body);
     const {
         start_time,
         end_time,
@@ -62,6 +66,9 @@ const createExamSchedule = async (req, res) => {
             status,
             room_id
         });
+
+        await clearExamScheduleCache();
+
         return res.status(201).json(newExamSchedule);
     } catch (error) {
         return res.status(500).json({ message: error.message });
