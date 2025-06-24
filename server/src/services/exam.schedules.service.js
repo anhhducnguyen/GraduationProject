@@ -22,7 +22,7 @@ const queryExamSchedules = async (filters = {}, options = {}) => {
                 'examschedules.status',
                 'examrooms.room_id as room_id',
             )
-            // .orderBy('examschedules.start_time', 'desc');
+        // .orderBy('examschedules.start_time', 'desc');
 
         const results = await query;
 
@@ -87,9 +87,81 @@ const create = async ({
     }
 };
 
+// Lấy danh sách sinh viên trong ca thi
+const getStudentsInExamScheduleService = async (schedule_id) => {
+    try {
+        const students = await db('exam_attendance')
+            .join('users', 'exam_attendance.student_id', '=', 'users.id')
+            .where('exam_attendance.schedule_id', schedule_id)
+            .orderBy('users.first_name', 'asc')
+            .select(
+                'users.id as student_id',
+                'users.first_name',
+                'users.last_name',
+                'exam_attendance.is_present',
+                'exam_attendance.updated_at'
+            );
+        return students;
+    } catch (error) {
+        throw new Error('Error fetching students in exam schedule: ' + error.message);
+    }
+};
+
+// Lọc ra student_id hợp lệ từ danh sách sinh viên
+const filterValidStudentIds = async (studentIds) => {
+    try {
+        const existingUsers = await db('users')
+            .whereIn('id', studentIds)
+            .select('id');
+        return existingUsers;
+    } catch (error) {
+        throw new Error('Error filtering valid student IDs: ' + error.message);
+    }
+};
+
+// Lọc bỏ các student đã có trong ca thi
+const filterStudentsInExam = async (validUserIds, schedule_id) => {
+    try {
+        const existingInExam = await db('exam_attendance')
+            .whereIn('student_id', validUserIds)
+            .andWhere('schedule_id', schedule_id)
+            .select('student_id');
+
+        return existingInExam;
+    } catch (error) {
+        throw new Error('Error filtering students in exam: ' + error.message);
+    }
+};
+
+// Thêm danh sách sinh viên vào ca thi
+const addStudentsToExamScheduleService = async (insertData) => {
+    try {
+        await db('exam_attendance').insert(insertData);
+    } catch (error) {
+        throw new Error('Error adding students to exam schedule: ' + error.message);
+    }
+};
+
+// Xóa sinh viên khỏi ca thi
+const deleteStudentFromExamScheduleService = async (studentIds, schedule_id) => {
+    try {
+        await db('exam_attendance')
+            .whereIn('student_id', studentIds)
+            .andWhere('schedule_id', schedule_id)
+            .del();
+    } catch (error) {
+        throw new Error('Error deleting students from exam schedule: ' + error.message);
+    }
+}
+
 module.exports = {
     queryExamSchedules,
     countExamSchedules,
     deleteScheduleById,
-    create
+    create,
+    getStudentsInExamScheduleService,
+    filterValidStudentIds,
+    filterStudentsInExam,
+    addStudentsToExamScheduleService,
+    deleteStudentFromExamScheduleService
 };

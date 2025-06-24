@@ -14,8 +14,8 @@ export const authProvider: AuthBindings = {
 
       // Lưu token vào localStorage nếu đăng nhập thành công
       const { token, user } = response.data;
-      console.log(token);
-      console.log(user);
+      // console.log(token);
+      // console.log(user);
 
       localStorage.setItem(TOKEN_KEY, token);
       localStorage.setItem("user", JSON.stringify(user));

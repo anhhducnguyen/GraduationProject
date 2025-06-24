@@ -39,6 +39,8 @@ export default function CustomEventModal({ calendarEvent }: Props) {
   const getLocale = useGetLocale();
   const locale = getLocale();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const token = localStorage.getItem("refine-auth");
+
 
   dayjs.locale(locale);
 
@@ -154,7 +156,13 @@ export default function CustomEventModal({ calendarEvent }: Props) {
     if (!calendarEvent?.id) return;
     try {
       setLoading(true);
-      const res = await fetch(`/api/v1/exam-schedules/${calendarEvent.id}/students`);
+      const res = await fetch(`/api/v1/exam-schedules/${calendarEvent.id}/students`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`,
+        },
+      });
       const data = await res.json();
       if (Array.isArray(data.results)) {
         setStudents(data.results);
@@ -209,7 +217,10 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       try {
         const res = await fetch(`/api/v1/exam-schedules/${calendarEvent.id}/students/import-ids`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`,
+          },
           body: JSON.stringify({ studentIds }),
         });
 
@@ -237,7 +248,10 @@ export default function CustomEventModal({ calendarEvent }: Props) {
         try {
           const res = await fetch(`/api/v1/exam-schedules/${calendarEvent.id}/students/delete`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
+            },
             body: JSON.stringify({ studentIds: selectedRowKeys }),
           });
 

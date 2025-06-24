@@ -6,26 +6,29 @@ const router = express.Router();
 const {
     getExamSchedule,
     getAll
-} = require('../controllers/exam.schedule.controller');
+} = require('../controllers/exam.calendar.controller');
 const multer = require('multer');
 const xlsx = require('xlsx');
 const db = require('../../config/database');
 const fs = require('fs');
 const upload = multer({ dest: 'uploads/' });
 
+const {
+    authenticate,
+} = require("../../src/utils/auth/index");
+router.use(authenticate);
+const permission = require("../../src/constants/permission");
+
 // Lấy danh sách lịch thi với cache
 router.get(
     '/',
-    // authenticate,
-    // authorize([ROLES.ADMIN, ROLES.TEACHER]),
+    permission,
     getAll
 );
 
 // Hiển thị chi tiết lịch thi
 router.get(
     '/:id',
-    // authenticate,
-    // authorize([ROLES.ADMIN, ROLES.TEACHER]),
     getExamSchedule
 );
 

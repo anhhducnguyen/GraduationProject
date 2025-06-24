@@ -1,7 +1,7 @@
 const {
     getExamScheduleById,
     queryExamSchedule,
-  } = require('../services/exam.schedule.service');
+  } = require('../services/exam.calendar.service');
 const pick = require('../utils/pick');
 const redisClient = require('../utils/redis');
 

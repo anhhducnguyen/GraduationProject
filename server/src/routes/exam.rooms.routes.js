@@ -3,7 +3,6 @@
 **/
 const express = require('express');
 const router = express.Router();
-
 const {
     getExamRooms,
     getExamRoom,
@@ -11,15 +10,11 @@ const {
     updateExamRoom,
     deleteExamRoom
 } = require('../controllers/exam.rooms.controller');
-
-// const {
-//     authenticate,
-//     authorize
-// } = require("../../../libs/auth/index");
-
-// const ROLES = require("../../../libs/constants/roles");
-// router.use(authenticate);
-// const permission = authorize([ROLES.ADMIN, ROLES.TEACHER, ROLES.STUDENT]);
+const {
+    authenticate,
+} = require("../../src/utils/auth/index");
+router.use(authenticate);
+const permission = require("../../src/constants/permission");
 
 /** 
 - Lấy danh sách phòng thi 
@@ -27,10 +22,10 @@ const {
 **/
 router.route('/')
     .get(
-        // permission, 
+        permission, 
         getExamRooms)
     .post(
-        // permission, 
+        permission, 
         createExamRoom);
 
 /**
@@ -40,13 +35,13 @@ router.route('/')
 **/
 router.route('/:id')
     .get(
-        // permission, 
+        permission, 
         getExamRoom)
     .patch(
-        // permission, 
+        permission, 
         updateExamRoom)
     .delete(
-        // permission, 
+        permission, 
         deleteExamRoom
     );
 
@@ -57,60 +52,3 @@ module.exports = router;
 
 
 
-
-
-
-
-
-
-
-
-
-
-// const express = require('express');
-// const router = express.Router();
-// const {
-//     getExamRooms,
-//     getExamRoom,
-//     createExamRoom,
-//     updateExamRoom,
-//     deleteExamRoom
-// } = require('../controllers/exam.rooms.controllers');
-
-// const {
-//     authenticate,
-//     authorize
-// } = require("../../../libs/auth/index");
-// const ROLES = require("../../../libs/constants/roles");
-
-// const permission = authorize([ROLES.ADMIN, ROLES.TEACHER]);
-// router.use(authenticate);
-
-// router.get(
-//     '/',
-//     permission,
-//     getExamRooms
-// );
-// router.get(
-//     '/:id',
-//     permission,
-//     getExamRoom
-// );
-// router.post(
-//     '/',
-//     permission,
-//     createExamRoom
-// );
-
-// router.put(
-//     '/:id',
-//     permission,
-//     updateExamRoom
-// );
-// router.delete(
-//     '/:id',
-//     permission,
-//     deleteExamRoom
-// );
-
-// module.exports = router;

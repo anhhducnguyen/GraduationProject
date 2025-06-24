@@ -27,13 +27,17 @@ import { RiFileExcel2Fill } from 'react-icons/ri';
 
 import { Upload, message } from 'antd';
 import type { UploadProps } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+
+const token = localStorage.getItem("refine-auth");
 
 const props: UploadProps = {
   name: 'file',
   accept: '.xlsx,.xls',
   showUploadList: false,
-  action: '/api/v1/exam-schedule/import', // API backend để xử lý
+  action: '/api/v1/exam-schedule/import', 
+  headers: {
+    Authorization: `Bearer ${token}`, 
+  },
   onChange(info) {
     if (info.file.status === 'done') {
       message.success(`${info.file.name} uploaded successfully`);
@@ -42,8 +46,6 @@ const props: UploadProps = {
     }
   },
 };
-
-
 
 type SizeType = ConfigProviderProps['componentSize'];
 
@@ -93,7 +95,12 @@ function SchedulePage() {
       _end: range.end,
     });
 
-    fetch(`/api/v1/exam-schedule?${params.toString()}`)
+    fetch(`/api/v1/exam-schedule?${params.toString()}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${token}`,
+      },
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -157,9 +164,6 @@ function SchedulePage() {
     <div className="flex h-screen">
       <div className="flex-1">
         <Flex gap="small" wrap justify="end" className="mb-4">
-          {/* <Button icon={<RiFileExcel2Fill />} size={size} style={{ backgroundColor: '#1976d2', color: 'white', borderColor: '#1890ff' }}>
-            {translate("schedules.import_excel", "Nhập lịch từ Excel")}
-          </Button> */}
           <Upload {...props}>
             <Button icon={<RiFileExcel2Fill />} size={size} style={{ backgroundColor: '#1976d2', color: 'white', borderColor: '#1890ff' }}>
               {translate("schedules.import_excel", "Nhập lịch từ Excel")}
