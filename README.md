@@ -167,5 +167,12 @@ python main.py
 
 See details at our [Issue](https://github.com/anhhducnguyen/Face-Auth-Exam-System-v2/issues/1)
 
+## 📄 License
+
+This project is licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html).
+
+© 2025 Nguyen Duc Anh
+
+
 
 
