@@ -1,7 +1,7 @@
 const db = require('../../config/database');
 const { buildQuery } = require("../utils/queryBuilder");
 
-// Get all exam schedules
+// Lấy danh sách lịch thi
 const queryExamSchedules = async (filters = {}, options = {}) => {
     try {
         const query = buildQuery(db, 'examschedules', {
@@ -43,13 +43,13 @@ const queryExamSchedules = async (filters = {}, options = {}) => {
     }
 }
 
-// Count all exam schedules
+// Đếm tổng số lịch thi
 const countExamSchedules = async () => {
     const [{ count }] = await db('examschedules').count('* as count');
     return parseInt(count);
 };
 
-// Delete exam schedule by ID
+// Xóa lịch thi theo mã lịch thi
 const deleteScheduleById = async (schedule_id) => {
     try {
         const deletedExamSchedule = await db('examschedules')
@@ -61,7 +61,7 @@ const deleteScheduleById = async (schedule_id) => {
     }
 };
 
-// Create new exam schedule
+// Tạo mới lịch thi
 const create = async ({
     start_time,
     end_time,

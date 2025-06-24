@@ -9,6 +9,7 @@ const {
   sendResetEmail,
 } = require("../services/auth.service");
 
+// Đăng ký người dùng mới
 const register = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -23,6 +24,7 @@ const register = async (req, res) => {
   }
 };
 
+// Đăng xuất người dùng
 const logout = (req, res, next) => {
   req.logout(function (err) {
     if (err) return next(err);
@@ -36,6 +38,7 @@ const logout = (req, res, next) => {
   });
 };
 
+// Xử lý yêu cầu đặt lại mật khẩu
 const resetPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -46,7 +49,6 @@ const resetPassword = async (req, res) => {
     }
 
     const resetToken = await generateResetToken(email);  
-    // const resetLink = `http://localhost:5000/reset-password?token=${resetToken}`;
     const resetLink = `http://localhost:5173/update-password?token=${resetToken}`;
     await sendResetEmail(email, resetLink); 
 
@@ -57,9 +59,9 @@ const resetPassword = async (req, res) => {
   }
 };
 
+// Xác nhận đặt lại mật khẩu
 const confirmResetPassword = async (req, res) => {
   try {
-    // console.log("BODY:", req.body);
     const { token, password } = req.body;
     const user = await findUserByResetToken(token);  
 
@@ -77,6 +79,7 @@ const confirmResetPassword = async (req, res) => {
   }
 };
 
+// Lấy thông tin người dùng
 const getProfile = async (req, res) => {
   try {
     const userId = req.user.id;

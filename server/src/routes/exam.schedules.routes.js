@@ -9,7 +9,6 @@ const {
 } = require('../controllers/exam.schedules.controller');
 const db = require('../../config/database');
 
-
 // const {
 //     authenticate,
 //     authorize
@@ -19,6 +18,10 @@ const db = require('../../config/database');
 // router.use(authenticate);
 // const permission = authorize([ROLES.ADMIN, ROLES.TEACHER, ROLES.STUDENT]);
 
+/**
+- Lấy danh sách lịch thi
+- Thêm mới lịch thi 
+**/
 router.route('/')
     .get(
         // permission, 
@@ -27,12 +30,16 @@ router.route('/')
         // permission, 
         createExamSchedule);
 
+/**
+- Xóa lịch thi theo mã lịch thi
+**/
 router.route('/:id')
     //     .get(permission, getExamRoom)
     //     .put(permission, updateExamRoom)
     .delete(
         // permission, 
         deletedExamSchedule);
+
 
 // router.get('/students/:byIdExamScheduleId', async (req, res) => {
 // router.get('/:id', async (req, res) => {
@@ -114,8 +121,6 @@ router.route('/:id')
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        // const rows = await db('exam_attendance')
-        //     .join('examschedules', 'exam_attendance.schedule_id', 'examschedules.schedule_id')
         const rows = await db('examschedules')
             .leftJoin('exam_attendance', 'exam_attendance.schedule_id', 'examschedules.schedule_id')
             .leftJoin('examrooms', 'examschedules.room_id', 'examrooms.room_id')
@@ -182,7 +187,6 @@ router.get('/:id', async (req, res) => {
         };
 
         res.status(200).json(response);
-        // res.status(200).json(rows)
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -351,9 +355,6 @@ router.post('/:id/students/import-ids', async (req, res) => {
     res.status(500).json({ message: 'Lỗi server khi thêm sinh viên' });
   }
 });
-
-
-
 
 module.exports = router;
 

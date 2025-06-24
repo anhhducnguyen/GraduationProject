@@ -1,6 +1,7 @@
 const db = require('../../config/database');
 
-class UserService {    
+class UserService {
+    // Lấy danh sách tất cả người dùng
     static async queryUsers(filter, options) {
         const {
             sortBy = 'id:asc',
@@ -12,32 +13,30 @@ class UserService {
 
         const [sortField, sortOrder] = sortBy.split(':');
         const query = db('users')
-        .join("auth", "users.id", "auth.id")
+            .join("auth", "users.id", "auth.id")
             .select(
-            "users.id",
-            "users.first_name",
-            "users.last_name",
-            "users.age",
-            "users.gender",
-            "users.avatar",
-            "auth.email",
-            "auth.username",
-            "auth.role",
-            "auth.google_id",
-            "auth.created_at as auth_created_at",
-            "users.created_at as user_created_at"
-        );
+                "users.id",
+                "users.first_name",
+                "users.last_name",
+                "users.age",
+                "users.gender",
+                "users.avatar",
+                "auth.email",
+                "auth.username",
+                "auth.role",
+                "auth.google_id",
+                "auth.created_at as auth_created_at",
+                "users.created_at as user_created_at"
+            );
 
-        // Global search
         if (search) {
             query.where(builder => {
                 builder
                     .where('name', 'like', `%${search}%`)
-                    .orWhere('email', 'like', `%${search}%`); // thêm trường khác nếu có
+                    .orWhere('email', 'like', `%${search}%`); 
             });
         }
 
-        // Lọc theo filter
         if (filter.name) {
             query.where('name', 'like', `%${filter.name}%`);
         }
@@ -45,9 +44,8 @@ class UserService {
             query.where('age', filter.age);
         }
 
-        // Chọn trường
         if (fields) {
-            const selectedFields = fields.split(','); // vd: name,email
+            const selectedFields = fields.split(','); 
             query.select(selectedFields);
         }
 
@@ -61,6 +59,7 @@ class UserService {
             .countDistinct('id as count');
     }
 
+    // Lấy người dùng theo ID
     static async getById(id) {
         return db("users")
             .where("id", id)
@@ -90,48 +89,50 @@ class UserService {
     //         // role,
     //     })
     // }
+
+    // Thêm mới người dùng
     static async create({
-    first_name,
-    last_name,
-    age,
-    gender,
-    role,
-    username,
-    email,
-    hashedPassword,
-    avatar
-}) {
-    return await db.transaction(async trx => {
-        // Bước 1: Thêm vào bảng auth
-        const [authId] = await trx("auth")
-            .insert({
-                email,
-                password: hashedPassword,
-                username,
-                role,
-                created_at: new Date(),
-                updated_at: new Date()
-            })
-            .returning("id");
+        first_name,
+        last_name,
+        age,
+        gender,
+        role,
+        username,
+        email,
+        hashedPassword,
+        avatar
+    }) {
+        return await db.transaction(async trx => {
+            // Bước 1: Thêm vào bảng auth
+            const [authId] = await trx("auth")
+                .insert({
+                    email,
+                    password: hashedPassword,
+                    username,
+                    role,
+                    created_at: new Date(),
+                    updated_at: new Date()
+                })
+                .returning("id");
 
-        // Bước 2: Thêm vào bảng users, dùng cùng id
-        await trx("users")
-            .insert({
-                id: authId,
-                first_name,
-                last_name,
-                age,
-                gender,
-                avatar,
-                created_at: new Date(),
-                updated_at: new Date()
-            });
+            // Bước 2: Thêm vào bảng users, dùng cùng id
+            await trx("users")
+                .insert({
+                    id: authId,
+                    first_name,
+                    last_name,
+                    age,
+                    gender,
+                    avatar,
+                    created_at: new Date(),
+                    updated_at: new Date()
+                });
 
-        return { id: authId };
-    });
-}
+            return { id: authId };
+        });
+    }
 
-
+    // Cập nhật thông tin người dùng
     static async update({
         id,
         name,
@@ -156,18 +157,21 @@ class UserService {
             .where("id", id);
     }
 
+    // Xóa người dùng 
     static async delete(id) {
         return db("users")
             .delete()
             .where("id", id);
     }
 
+    // Tìm người dùng theo email
     static async findEmail(email) {
         return db("users")
             .where({ email })
             .first();
     }
 
+    // Tìm người dùng theo ID
     static async findById(id) {
         return db("users")
             .where({ id })

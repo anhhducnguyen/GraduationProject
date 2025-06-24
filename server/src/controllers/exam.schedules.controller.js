@@ -8,8 +8,7 @@ const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
 const { clearExamScheduleCache } = require('../utils/cache');
 
-
-// Get all exam schedules
+// Lấy danh sách lịch thi 
 const getExamSchedules = async (req, res) => {
     try {
         const filter = pick(req.query, ['name_schedule_like', 'status_like', 'start_time_like', 'end_time_like']);
@@ -27,7 +26,7 @@ const getExamSchedules = async (req, res) => {
     }
 };
 
-// Delete exam schedule by ID
+// Xóa lịch thi theo ID
 const deletedExamSchedule = async (req, res) => {
     const { id } = req.params;
     try {
@@ -44,6 +43,7 @@ const deletedExamSchedule = async (req, res) => {
     }
 };
 
+// Tạo lịch thi mới
 const createExamSchedule = async (req, res) => {
     const {
         start_time,

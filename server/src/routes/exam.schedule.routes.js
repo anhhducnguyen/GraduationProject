@@ -1,19 +1,19 @@
+/**
+ QUẢN LÝ LỊCH THI
+**/
 const express = require('express');
 const router = express.Router();
 const {
     getExamSchedule,
     getAll
 } = require('../controllers/exam.schedule.controller');
-
 const multer = require('multer');
 const xlsx = require('xlsx');
 const db = require('../../config/database');
 const fs = require('fs');
-// 
-
-
 const upload = multer({ dest: 'uploads/' });
 
+// Lấy danh sách lịch thi với cache
 router.get(
     '/',
     // authenticate,
@@ -21,6 +21,7 @@ router.get(
     getAll
 );
 
+// Hiển thị chi tiết lịch thi
 router.get(
     '/:id',
     // authenticate,
@@ -28,34 +29,7 @@ router.get(
     getExamSchedule
 );
 
-// router.post('/import', upload.single('file'), async (req, res) => {
-//   try {
-//     const workbook = xlsx.readFile(req.file.path);
-//     const sheet = workbook.Sheets[workbook.SheetNames[0]];
-//     const rows = xlsx.utils.sheet_to_json(sheet);
-//     console.log('📄 Dữ liệu Excel:', rows);
-
-//     const schedules = rows.map(row => ({
-//       start_time: new Date(row.start_time),
-//       end_time: new Date(row.end_time),
-//       name_schedule: row.name_schedule,
-//       status: row.status,
-//       room_id: row.room_id,
-//     }));
-
-//     // Validate & insert từng dòng
-//     for (const schedule of schedules) {
-//       if (!schedule.room_id) continue;
-//       await create(schedule); // hoặc service của bạn
-//     }
-
-//     res.status(200).json({ message: 'Imported successfully' });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: 'Import failed' });
-//   }
-// });
-
+// Thêm lịch thi từ file excel
 router.post('/import', upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
@@ -67,7 +41,6 @@ router.post('/import', upload.single('file'), async (req, res) => {
     const workbook = xlsx.readFile(filePath);
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const rows = xlsx.utils.sheet_to_json(sheet);
-    console.log('📄 Dữ liệu Excel:', rows);
 
     const schedules = rows.map(row => ({
       start_time: new Date(row.start_time),
@@ -90,7 +63,6 @@ router.post('/import', upload.single('file'), async (req, res) => {
       success++;
     }
 
-    // Cleanup uploaded file
     fs.unlinkSync(filePath);
 
     res.status(200).json({
@@ -103,7 +75,5 @@ router.post('/import', upload.single('file'), async (req, res) => {
     res.status(500).json({ message: 'Import failed', error: err.message });
   }
 });
-
-
 
 module.exports = router;

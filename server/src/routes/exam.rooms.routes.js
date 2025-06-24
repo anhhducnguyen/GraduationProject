@@ -1,4 +1,6 @@
-
+/**
+ QUẢN LÝ PHÒNG THI
+**/
 const express = require('express');
 const router = express.Router();
 
@@ -19,6 +21,10 @@ const {
 // router.use(authenticate);
 // const permission = authorize([ROLES.ADMIN, ROLES.TEACHER, ROLES.STUDENT]);
 
+/** 
+- Lấy danh sách phòng thi 
+- Thêm mới phòng thi
+**/
 router.route('/')
     .get(
         // permission, 
@@ -27,6 +33,11 @@ router.route('/')
         // permission, 
         createExamRoom);
 
+/**
+- Hiển thị thông tin chi tiết phòng thi theo mã phòng thi
+- Cập nhật thông tin phòng thi theo mã phòng thi
+- Xóa phòng thi theo mã phòng thi
+**/
 router.route('/:id')
     .get(
         // permission, 

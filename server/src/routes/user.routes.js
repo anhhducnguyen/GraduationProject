@@ -1,3 +1,6 @@
+/**
+ QUẢN LÝ NGƯỜI DÙNG
+**/
 const express = require('express');
 const router = express.Router();
 const Controller = require('../controllers/user.controller');
@@ -9,7 +12,7 @@ const {
 } = require("../utils/auth/index");
 const db = require('../../config/database');
 
-
+// Lấy danh sách người dùng
 router.get(
     '/', 
     // authenticate,
@@ -19,6 +22,8 @@ router.get(
     // ]), 
     Controller.getUsers
 );
+
+// Lấy danh sách sinh viên 
 router.get(
     '/students',
     // authenticate,
@@ -36,6 +41,8 @@ router.get(
         }
     }
 );
+
+// Lấy thông tin người dùng theo ID
 router.get(
     '/:id', 
     // authenticate,
@@ -44,6 +51,7 @@ router.get(
     Controller.getUser
 );
 
+// Thêm mới người dùng
 router.post(
     '/', 
     // authenticate,
@@ -54,6 +62,7 @@ router.post(
     Controller.createUser
 );
 
+// Cập nhật thông tin người dùng
 router.put(
     '/:id', 
     authenticate,
@@ -62,6 +71,8 @@ router.put(
     // checkUserExistById, 
     Controller.updateUser
 );
+
+// Xóa người dùng theo ID
 router.delete(
     '/:id', 
     // authenticate,
@@ -69,9 +80,5 @@ router.delete(
     // checkUserExistById, 
     Controller.deleteUser
 );
-
-
-
-
 
 module.exports = router;

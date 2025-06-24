@@ -9,7 +9,7 @@ const {
 const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
 
-// Get all exam rooms
+// Lấy danh sách phòng thi 
 const getExamRooms = async (req, res) => {
     try {
         const filter = pick(req.query, ['room_name', 'room_name_like', 'capacity_like', 'status']);
@@ -27,7 +27,7 @@ const getExamRooms = async (req, res) => {
     }
 };
 
-// Get exam room by ID
+// Lấy phòng thi theo ID
 const getExamRoom = async (req, res) => {
     const { id } = req.params;
     try {
@@ -41,6 +41,7 @@ const getExamRoom = async (req, res) => {
     }
 };
 
+// Tạo phòng thi mới
 const createExamRoom = async (req, res) => {
     console.log(req.body);
     const { 
@@ -62,6 +63,7 @@ const createExamRoom = async (req, res) => {
     }
 };
 
+// Cập nhật phòng thi theo ID
 const updateExamRoom = async (req, res) => {
     const { id } = req.params;
     const { 
@@ -86,7 +88,7 @@ const updateExamRoom = async (req, res) => {
     }
 };
 
-// Delete exam room by ID
+// Xóa phòng thi theo ID
 const deleteExamRoom = async (req, res) => {
     const { id } = req.params;
     try {
