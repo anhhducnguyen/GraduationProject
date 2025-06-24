@@ -60,7 +60,7 @@
   <tr>
     <td><img src="https://logowik.com/content/uploads/images/vercel1868.jpg" alt="a"  height="110" /></td>
     <td><img src="https://www.bvp.com/assets/uploads/2023/06/portfolio-render-updated.png" alt="b"  height="110" /></td>
-    <td><img src="https://www.bvp.com/assets/uploads/2023/06/portfolio-render-updated.png" alt="c"  height="110" /></td>
+    <td><img src="https://d15shllkswkct0.cloudfront.net/wp-content/blogs.dir/1/files/2022/05/Aiven-logo.jpg" alt="c"  height="110" /></td>
   </tr>
 
   <tr>
@@ -68,7 +68,7 @@
         <a href="https://logowik.com/content/uploads/images/vercel1868.jpg" target="_blank">Vercel</a>
     </td>
     <td>
-      <a href="https://www.bvp.com/assets/uploads/2023/06/portfolio-render-updated.png" target="_blank">Render</a>
+      <a href="https://github.com/user-attachments/assets/56d13bfd-ae77-4745-8cb2-7c9532576214" target="_blank">Render</a>
     </td>
     <td>
       <a href="https://d15shllkswkct0.cloudfront.net/wp-content/blogs.dir/1/files/2022/05/Aiven-logo.jpg" target="_blank">Aiven</a>
