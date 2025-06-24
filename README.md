@@ -1,10 +1,10 @@
-## 🚀 Topic: **Xây dựng hệ thống xác thực danh tính sinh viên bằng nhận diện khuôn mặt trong khảo thí**
+## 🚀 Topic: **Building a student identity authentication system using facial recognition in testing**
 
-## 🌟 Giới thiệu
+## 🌟 Introduction
 
-Đề tài thực hiện xây dụng một hệ thống xác thực danh tính sinh viên dựa trên công nghệ nhận diện khuôn mặt cho công tác khảo thí (tại đại học Phenikaa) nhằm đảm bảo tính chính xác, minh bạch và an toàn trong các kỳ thi
+The topic is to build a student identity authentication system based on facial recognition technology for testing (at Phenikaa University) to ensure accuracy, transparency and safety in exams
 
-### Bản demo, Báo cáo và Slide: 
+### Demo, Report and Slide:
 
 - [Demo](https://graduation-project-g77v.vercel.app/)
 
@@ -14,7 +14,7 @@
 
 - [Video demo RestfulAPT]()
 
-## Tác giả 
+## Author
 <table>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/f50ae9b1-d56b-4ab6-b8d5-577bffdc9f15" alt="Thành viên 1"  height="110" /></td>
@@ -27,7 +27,7 @@
     <td>
         <a href="https://github.com/anhhducnguyen" target="_blank">Nguyen Duc Anh</a>
     </td>
-    <td>Giảng viên hướng dẫn: 
+    <td>Instructor:
       <a href="https://github.com/lethunguyen" target="_blank">TS. Nguyen Le Thu</a>
     </td>
   </tr>
@@ -82,35 +82,34 @@
 </table>
 
 
-## 🛠️ Điều kiện tiên quyết
-Trước khi bắt đầu, hãy đảm bảo rằng bạn đã cài đặt các điều kiện tiên quyết sau trên hệ thống của mình:
+## 🛠️ Prerequisites
+Before you start, make sure you have the following prerequisites installed on your system:
 
 - [NodeJS](https://nodejs.org/en/download) _(version 20.18.0 or higher)_
 - [MySQL](https://www.mysql.com/downloads/) _(or any other supported database system)_
 - [Python](https://www.python.org/) _(version 3.12.0 or higher)_
 - [opencv_python](https://opencv.org/) _(version 4.10.0.84 or higher)_
-- [dlib](https://github.com/davisking/dlib) _(tại đây tôi gặp lỗi khi thử `pip install dlib`, nếu bạn gặp lỗi truy cập [Dlib_Windows_Python3.x](https://github.com/z-mahmud22/Dlib_Windows_Python3.x) để cài đặt thủ công theo hướng dẫn)_
+- [dlib](https://github.com/davisking/dlib) _(here I got an error when trying `pip install dlib`, if you get an access error [Dlib_Windows_Python3.x](https://github.com/z-mahmud22/Dlib_Windows_Python3.x) to install manually following the instructions)_
 - [face-recognition](https://github.com/ageitgey/face_recognition) _(version 1.3.0 or higher)_
 - [Silent-Face-Anti-Spoofing](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing) _(author: minivision-ai)_
 
-## 🔧 Cài đặt từng bước
-#### **Step 1**: 🚀 Cài đặt NodeJS
+## 🔧 Step-by-step installation
+#### **Step 1**: 🚀 Install NodeJS
 
-- Đảm bảo `NodeJS` đã được cài đặt. Bạn có thể kiểm tra phiên bản của chúng bằng các lệnh sau:
-  
+- Make sure `NodeJS` is installed. You can check their version with the following commands:
+
 ```bash
 node -v
 ```
 
-#### **Step 2**: 📁 Sau khi cài đặt `NodeJS`, bạn có thể tải xuống dự án:
+#### **Step 2**: 📁 After installing `NodeJS`, you can download the project:
 
 ```bash
 git clone https://github.com/anhhducnguyen/Face-Auth-Exam-System-v2.git
 ```
 
-
-#### **Step 3**: ⚙️ Cấu hình lại tệp `.env` theo thông tin sau
-- Nếu bạn muốn sử dụng `MySQL`, hãy cập nhật các biến `DB_`* trong tệp cấu hình `server\.env` như sau:
+#### **Step 3**: ⚙️ Reconfigure the `.env` file according to the following information
+- If you want to use `MySQL`, update the `DB_`* variables in the `server\.env` configuration file as follows:
   
     ```php
     DB_HOST=localhost
@@ -132,9 +131,9 @@ git clone https://github.com/anhhducnguyen/Face-Auth-Exam-System-v2.git
     ```
 
 
-#### **Step 4**: <a href="#"><img alt="MySQL" src ="https://img.shields.io/badge/MySQL-4479A1.svg?logo=MySQL&logoColor=white"></a> Tạo cơ sở dữ liệu
+#### **Step 4**: <a href="#"><img alt="MySQL" src="https://img.shields.io/badge/MySQL-4479A1.svg?logo=MySQL&logoColor=white"></a> Create the database
 
-#### **Step 5**: 🏃‍♂️ Sau khi dự án đã được tạo
+#### **Step 5**: 🏃‍♂️ Once the project has been created
 
 ```bash
 cd Face-Auth-Exam-System-v2
