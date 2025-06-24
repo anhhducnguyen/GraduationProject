@@ -6,7 +6,7 @@
 
 ### Bản demo, Báo cáo và Slide: 
 
-- [Demo]()
+- [Demo](https://graduation-project-g77v.vercel.app/)
 
 - [Report](https://drive.google.com/drive/folders/1McMyjsh_j6sM73bt2YO14lyoNT0qciUn?usp=sharing)
   
@@ -51,6 +51,27 @@
     </td>
     <td>
       <a href="https://vite.dev/guide/" target="_blank">React + TypeScript + Vite</a>
+    </td>
+  </tr>
+</table>
+
+
+<table>
+  <tr>
+    <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5tzpUX3l9HzU3Mky3pyyEOvfvELBsmn3PlQ&s" alt="a"  height="110" /></td>
+    <td><img src="https://avatars.githubusercontent.com/u/104967037?s=280&v=4" alt="b"  height="110" /></td>
+    <td><img src="https://miro.medium.com/v2/resize:fit:1400/1*poaGV4iICp06Q-yTlA2g_g.png" alt="c"  height="110" /></td>
+  </tr>
+
+  <tr>
+    <td>
+        <a href="https://logowik.com/content/uploads/images/vercel1868.jpg" target="_blank">Vercel</a>
+    </td>
+    <td>
+      <a href="https://www.bvp.com/assets/uploads/2023/06/portfolio-render-updated.png" target="_blank">Render</a>
+    </td>
+    <td>
+      <a href="https://d15shllkswkct0.cloudfront.net/wp-content/blogs.dir/1/files/2022/05/Aiven-logo.jpg" target="_blank">Aiven</a>
     </td>
   </tr>
 </table>
