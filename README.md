@@ -58,9 +58,9 @@
 
 <table>
   <tr>
-    <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5tzpUX3l9HzU3Mky3pyyEOvfvELBsmn3PlQ&s" alt="a"  height="110" /></td>
-    <td><img src="https://avatars.githubusercontent.com/u/104967037?s=280&v=4" alt="b"  height="110" /></td>
-    <td><img src="https://miro.medium.com/v2/resize:fit:1400/1*poaGV4iICp06Q-yTlA2g_g.png" alt="c"  height="110" /></td>
+    <td><img src="https://logowik.com/content/uploads/images/vercel1868.jpg" alt="a"  height="110" /></td>
+    <td><img src="https://www.bvp.com/assets/uploads/2023/06/portfolio-render-updated.png" alt="b"  height="110" /></td>
+    <td><img src="https://www.bvp.com/assets/uploads/2023/06/portfolio-render-updated.png" alt="c"  height="110" /></td>
   </tr>
 
   <tr>
