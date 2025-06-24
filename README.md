@@ -59,9 +59,10 @@
 
 <table>
   <tr>
-    <td><img src="https://logowik.com/content/uploads/images/vercel1868.jpg" alt="a"  height="110" /></td>
-    <td><img src="https://www.bvp.com/assets/uploads/2023/06/portfolio-render-updated.png" alt="b"  height="110" /></td>
-    <td><img src="https://d15shllkswkct0.cloudfront.net/wp-content/blogs.dir/1/files/2022/05/Aiven-logo.jpg" alt="c"  height="110" /></td>
+    <td><img src="https://logowik.com/content/uploads/images/vercel1868.jpg" alt="a" width="150" height="110" /></td>
+    <td><img src="https://www.bvp.com/assets/uploads/2023/06/portfolio-render-updated.png" alt="b" width="150" height="110" /></td>
+    <td><img src="https://d15shllkswkct0.cloudfront.net/wp-content/blogs.dir/1/files/2022/05/Aiven-logo.jpg" alt="c"  width="170" height="110" /></td>
+    <td><img src="https://redis.io/wp-content/uploads/2024/04/Logotype.svg?auto=webp&quality=85,75&width=120" alt="c" width="150" height="110" /></td>
   </tr>
 
   <tr>
@@ -73,6 +74,9 @@
     </td>
     <td>
       <a href="https://d15shllkswkct0.cloudfront.net/wp-content/blogs.dir/1/files/2022/05/Aiven-logo.jpg" target="_blank">Aiven</a>
+    </td>
+     <td>
+      <a href="https://redis.io/wp-content/uploads/2024/04/Logotype.svg?auto=webp&quality=85,75&width=120" target="_blank">Redis</a>
     </td>
   </tr>
 </table>
