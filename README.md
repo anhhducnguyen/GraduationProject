@@ -33,7 +33,7 @@
   </tr>
 </table>
 
-## Framework
+## Framework (With Free Tier)
 
 <table>
   <tr>
