@@ -81,6 +81,13 @@ The topic is to build a student identity authentication system based on facial r
   </tr>
 </table>
 
+## 🛠️ Architecture
+
+[Client-Server Architecture - System Design](https://www.geeksforgeeks.org/system-design/client-server-architecture-system-design/)
+
+![image](https://github.com/user-attachments/assets/2f98fd2e-1728-4298-9354-58efb40fbca9)
+
+
 
 ## 🛠️ Prerequisites
 Before you start, make sure you have the following prerequisites installed on your system:
