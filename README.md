@@ -67,16 +67,16 @@ The topic is to build a student identity authentication system based on facial r
 
   <tr>
     <td>
-        <a href="https://logowik.com/content/uploads/images/vercel1868.jpg" target="_blank">Vercel</a>
+        <a href="https://vercel.com/" target="_blank">Vercel</a>
     </td>
     <td>
-      <a href="https://github.com/user-attachments/assets/56d13bfd-ae77-4745-8cb2-7c9532576214" target="_blank">Render</a>
+      <a href="https://render.com/" target="_blank">Render</a>
     </td>
     <td>
-      <a href="https://d15shllkswkct0.cloudfront.net/wp-content/blogs.dir/1/files/2022/05/Aiven-logo.jpg" target="_blank">Aiven</a>
+      <a href="https://aiven.io/" target="_blank">Aiven</a>
     </td>
      <td>
-      <a href="https://redis.io/wp-content/uploads/2024/04/Logotype.svg?auto=webp&quality=85,75&width=120" target="_blank">Redis</a>
+      <a href="https://redis.io/" target="_blank">Redis</a>
     </td>
   </tr>
 </table>
