@@ -33,7 +33,7 @@
   </tr>
 </table>
 
-## Framework (With Free Tier)
+## Framework
 
 <table>
   <tr>
@@ -55,7 +55,7 @@
   </tr>
 </table>
 
-## Deployment Platforms
+## Deployment Platforms (With Free Tier)
 
 <table>
   <tr>
