@@ -12,7 +12,6 @@ const {
 const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
 const { clearExamScheduleCache } = require('../utils/cache');
-const db = require('../../config/database');
 
 // Lấy danh sách lịch thi 
 const getExamSchedules = async (req, res) => {
@@ -133,6 +132,8 @@ const addStudentsToExamSchedule = async (req, res) => {
     }));
 
     await addStudentsToExamScheduleService(insertData);
+
+    await clearExamScheduleCache();
 
     res.status(201).json({
       message: `Đã thêm ${insertData.length} sinh viên vào ca thi`,

@@ -9,9 +9,14 @@ import "@schedule-x/theme-default/dist/calendar.css"; // Default theme
 // import '@schedule-x/theme-shadcn/dist/index.css'; // Shadcn theme (remove or keep one)
 import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop';
 import { createEventModalPlugin } from '@schedule-x/event-modal';
-import TimeGridEvent from '../components/time-grid-event.tsx';
-import CustomEventModal from '../components/event-modal.tsx';
+// import TimeGridEvent from '../components/time-grid-event.tsx';
+// import CustomEventModal from '../components/event-modal.tsx';
+import TimeGridEvent from '../../components/time-grid-event.tsx';
+import CustomEventModal from '../../components/event-modal.tsx';
 // import Sidebar from '../components/side-bar.tsx';
+import { createCalendarControlsPlugin } from '@schedule-x/calendar-controls';
+import { useMemo } from 'react';
+
 
 // Import date-fns-tz for timezone conversion
 import { formatInTimeZone } from 'date-fns-tz';
@@ -47,6 +52,7 @@ interface ApiResponse {
 }
 
 function SchedulePage() {
+  const calendarControls = useMemo(() => createCalendarControlsPlugin(), []);
   const calendar = useCalendarApp({
     views: [
       createViewDay(),      // Correct: No arguments for default day view
@@ -60,13 +66,28 @@ function SchedulePage() {
 
     plugins: [
       createEventModalPlugin(),
-      createDragAndDropPlugin()
+      createDragAndDropPlugin(),
+      calendarControls,
     ],
-    // locale: 'vi-VN',
+    locale: 'vi-VN',
   });
 
+    // Thiết lập theme và giới hạn giờ hiển thị
   useEffect(() => {
-    fetch('/api/v1/exam-schedule')
+    calendarControls.setDayBoundaries({
+      start: '05:00',
+      end: '19:00',
+    });
+  }, [calendar]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    fetch('/api/v1/exam-schedule/sss', {
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${token}`,
+      },
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -105,8 +126,8 @@ function SchedulePage() {
             color: item.status === 'scheduled'
               ? 'bg-blue-900'
               : item.status === 'completed'
-              ? 'bg-green-500'
-              : 'bg-orange-500',
+                ? 'bg-green-500'
+                : 'bg-orange-500',
           };
         });
 
