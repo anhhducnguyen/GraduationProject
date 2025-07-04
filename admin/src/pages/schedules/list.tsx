@@ -34,7 +34,7 @@ const props: UploadProps = {
   name: 'file',
   accept: '.xlsx,.xls',
   showUploadList: false,
-  action: '/api/v1/exam-schedule/import', 
+  action: 'https://graduationproject-nx7m.onrender.com/api/v1/exam-schedule/import', 
   headers: {
     Authorization: `Bearer ${token}`, 
   },
@@ -95,7 +95,7 @@ function SchedulePage() {
       _end: range.end,
     });
 
-    fetch(`/api/v1/exam-schedule?${params.toString()}`, {
+    fetch(`https://graduationproject-nx7m.onrender.com/api/v1/exam-schedule?${params.toString()}`, {
       headers: {
         'Content-Type': 'application/json',
         "Authorization": `Bearer ${token}`,

@@ -13,16 +13,16 @@ const db = require('../../config/database');
 const fs = require('fs');
 const upload = multer({ dest: 'uploads/' });
 
-// const {
-//   authenticate,
-// } = require("../../src/utils/auth/index");
-// router.use(authenticate);
-// const permission = require("../../src/constants/permission");
+const {
+  authenticate,
+} = require("../../src/utils/auth/index");
+router.use(authenticate);
+const permission = require("../../src/constants/permission");
 
 // Lấy danh sách lịch thi với cache
 router.get(
   '/',
-  // permission,
+  permission,
   getAll
 );
 
