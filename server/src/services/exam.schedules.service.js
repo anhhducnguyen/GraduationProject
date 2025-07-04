@@ -87,6 +87,40 @@ const create = async ({
     }
 };
 
+// Cập nhật lịch thi
+const update = async (id, {
+    start_time,
+    end_time,
+    room_id,
+    status,
+    name_schedule
+}) => {
+    try {
+        const affectedRows = await db('examschedules')
+            .where({ schedule_id: id })
+            .update({
+                start_time,
+                end_time,
+                room_id,
+                status,
+                name_schedule
+            });
+
+        if (affectedRows === 0) {
+            return null; // không tìm thấy hoặc không thay đổi gì
+        }
+
+        const updatedExamSchedule = await db('examschedules')
+            .where({ schedule_id: id })
+            .first();
+
+        return updatedExamSchedule;
+    } catch (error) {
+        throw new Error('Error updating exam schedule: ' + error.message);
+    }
+};
+
+
 // Lấy danh sách sinh viên trong ca thi
 const getStudentsInExamScheduleService = async (schedule_id) => {
     try {
@@ -99,6 +133,8 @@ const getStudentsInExamScheduleService = async (schedule_id) => {
                 'users.first_name',
                 'users.last_name',
                 'exam_attendance.is_present',
+                'exam_attendance.confidence',
+                'exam_attendance.real_face',
                 'exam_attendance.updated_at'
             );
         return students;
@@ -159,6 +195,7 @@ module.exports = {
     countExamSchedules,
     deleteScheduleById,
     create,
+    update,
     getStudentsInExamScheduleService,
     filterValidStudentIds,
     filterStudentsInExam,

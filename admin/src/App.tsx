@@ -4,8 +4,6 @@
 // https://refine.dev/tutorial/authentication/data-provider-integration/?utm_source=chatgpt.com
 
 import { Authenticated, type I18nProvider, Refine } from "@refinedev/core";
-// import dataProvider from "@refinedev/simple-rest";
-
 import routerProvider, {
   CatchAllNavigate,
   NavigateToResource,
@@ -15,7 +13,6 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import {
-  // AuthPage,
   ErrorComponent,
   RefineSnackbarProvider,
   ThemedLayoutV2,
@@ -34,7 +31,6 @@ import { IoCalendar } from "react-icons/io5";
 import { MdDashboardCustomize } from "react-icons/md";
 import { BsBox2Fill } from "react-icons/bs";
 
-
 import {
   UserList,
   UserShow,
@@ -52,15 +48,9 @@ import {
 import {
   ExamScheduleList,
   ExamScheduleCreate,
+  ExamScheduleEdit,
   ExamScheduleShow,
 } from "@/pages/exam-schedules";
-
-// import {
-//   ProductCreate,
-//   ProductEdit,
-//   ProductList,
-//   ProductShow,
-// } from "@/pages/products";
 
 import SchedulePage from "@/pages/schedules/list";
 import Home from "@/pages/home/home";
@@ -94,13 +84,6 @@ function App() {
             authProvider={authProvider}
             i18nProvider={i18nProvider}
             resources={[
-              // {
-              //   name: "products",
-              //   list: "/products",
-              //   create: "/products/new",
-              //   edit: "/products/:id/edit",
-              //   show: "/products/:id",
-              // },
               {
                 name: "home",
                 list: "/home",
@@ -126,7 +109,6 @@ function App() {
                   icon: <IoCalendar />, 
                   label: "Schedules" 
                 },
-                // ...
               },
               {
                 name: "exam-rooms",
@@ -143,7 +125,7 @@ function App() {
                 name: "exam-schedules",
                 list: "/exam-schedules",
                 create: "/exam-schedules/new",
-                // show: "/exam-schedules/:id",
+                edit: "/exam-schedules/:id/edit",
                 show: "/exam-schedules/:id",
                 meta: { 
                   icon: <IoCalendar />, 
@@ -162,7 +144,6 @@ function App() {
                     <ThemedLayoutV2 
                     Header={() => <Header sticky />}
                     Title={CustomTitle}
-                    // Sider={() => null}
                     >
                       <Outlet />
                     </ThemedLayoutV2>
@@ -170,16 +151,6 @@ function App() {
                 }
               >
                 <Route index element={<NavigateToResource resource="home" />} />
-                {/* <Route
-                  index
-                  element={<NavigateToResource resource="products" />}
-                /> */}
-                {/* <Route path="/products">
-                  <Route index element={<ProductList />} />
-                  <Route path="new" element={<ProductCreate />} />
-                  <Route path=":id" element={<ProductShow />} />
-                  <Route path=":id/edit" element={<ProductEdit />} />
-                </Route> */}
                 <Route path="/home" element={<Home />} />
                 <Route path="/users">
                   <Route index element={<UserList />} />
@@ -188,10 +159,7 @@ function App() {
                   {/* <Route path="add" element={<AddStudentToExamSchedule />} /> */}
                 </Route>
 
-                {/* <Route path="/exam-schedules/:id/add-student" element={<AddStudentToExamSchedule />} /> */}
                 <Route path="add" element={<AddStudentToExamSchedule />} />
-
-
                 <Route path="/schedules" element={<SchedulePage />} />
 
                 <Route path="/exam-rooms">
@@ -205,6 +173,7 @@ function App() {
                   <Route index element={<ExamScheduleList />} />
                   <Route path="new" element={<ExamScheduleCreate />} />
                   <Route path=":id" element={<ExamScheduleShow />} />
+                  <Route path=":id/edit" element={<ExamScheduleEdit />} />
                 </Route>
 
                 <Route path="*" element={<ErrorComponent />} />

@@ -3,6 +3,7 @@ const {
     countExamSchedules,
     deleteScheduleById,
     create,
+    update,
     getStudentsInExamScheduleService,
     filterValidStudentIds,
     filterStudentsInExam,
@@ -80,6 +81,49 @@ const createExamSchedule = async (req, res) => {
     }
 };
 
+// Cập nhật thông tin lịch thi
+const updateExamSchedule = async (req, res) => {
+    const { id } = req.params;
+    const {
+        start_time,
+        end_time,
+        name_schedule,
+        status,
+        room,
+        // room_id
+    } = req.body;
+    const room_id = room?.room_id;
+
+    if (!id) {
+        return res.status(400).json({ message: "examSchedule id is required" });
+    }
+
+    if (!room_id) {
+        return res.status(400).json({ message: "room_id is required" });
+    }
+
+    try {
+        const updated = await update(id, {
+            start_time,
+            end_time,
+            name_schedule,
+            status,
+            room_id
+        });
+
+        if (!updated) {
+            return res.status(404).json({ message: "Exam schedule not found" });
+        }
+
+        await clearExamScheduleCache(); // xóa cache để lần get sau lấy dữ liệu mới
+
+        return res.json({ message: "Exam schedule updated", data: updated });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+
 // Lấy danh sach sinh viên trong ca thi
 const getStudentsInExamSchedule = async (req, res) => {
   const schedule_id = req.params.id;
@@ -92,7 +136,8 @@ const getStudentsInExamSchedule = async (req, res) => {
         firstName: student.first_name,
         lastName: student.last_name,
         status: student.is_present === 1 ? 'present' : 'absent',
-        confidence: 100, // tuỳ bạn có muốn truyền dữ liệu thật không
+        confidence: student.confidence,
+        realFace: student.real_face,
         checkInTime: student.updated_at,
       })),
     });
@@ -168,6 +213,7 @@ module.exports = {
     getExamSchedules,
     deletedExamSchedule,
     createExamSchedule,
+    updateExamSchedule,
     deleteStudentFromExamSchedule,
     getStudentsInExamSchedule,
     addStudentsToExamSchedule

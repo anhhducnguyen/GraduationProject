@@ -16,10 +16,19 @@ import 'dayjs/locale/vi';
 import 'dayjs/locale/en';
 import { useGetLocale } from "@refinedev/core";
 import { Upload } from 'antd';
-import { Student } from './types';
+// import { Student } from './types';
 import { Modal } from 'antd';
 import { PiTrashSimpleDuotone } from "react-icons/pi";
 
+
+export type Student = {
+  id: string;
+  lastName: string;
+  firstName: string;
+  status: string;
+  confidence: number;
+  checkInTime: string;
+};
 
 type Props = {
   calendarEvent: CalendarEvent;
@@ -145,17 +154,6 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       sorter: (a, b) => a.confidence - b.confidence,
     },
     {
-      title: translate("attendance.realFace", "Real Face"),
-      dataIndex: 'realFace',
-      key: 'realFace',
-      render: (value) => {
-        const isReal = value === true || value === 1 || value === "1";
-        const color = isReal ? "green" : "red";
-        const label = isReal ? translate("attendance.real", "Thật") : translate("attendance.fake", "Giả");
-        return <Tag color={color}>{label}</Tag>;
-      },
-    },
-    {
       title: translate("attendance.checkin_time", "Thời gian điểm danh"),
       dataIndex: 'checkInTime',
       key: 'checkInTime',
@@ -228,7 +226,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       try {
         const res = await fetch(`/api/v1/exam-schedules/${calendarEvent.id}/students/import-ids`, {
           method: 'POST',
-          headers: {
+          headers: { 
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${token}`,
           },
@@ -259,7 +257,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
         try {
           const res = await fetch(`/api/v1/exam-schedules/${calendarEvent.id}/students/delete`, {
             method: "POST",
-            headers: {
+            headers: { 
               "Content-Type": "application/json",
               "Authorization": `Bearer ${token}`,
             },
@@ -314,7 +312,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
           Nguyễn Văn Kim, Phạm Văn Huy
         </p>
         <Flex gap="small" wrap justify="end" className="mb-4">
-          <Button icon={<DownloadOutlined />} size={size} style={{ backgroundColor: '#1976d2', color: 'white' }} onClick={handleDownload}>
+          {/* <Button icon={<DownloadOutlined />} size={size} style={{ backgroundColor: '#1976d2', color: 'white' }} onClick={handleDownload}>
             {translate("attendance.download_list", "Tải danh sách")}
           </Button>
           <Upload
@@ -328,20 +326,10 @@ export default function CustomEventModal({ calendarEvent }: Props) {
             <Button icon={<RiFileExcel2Fill />} size={size} style={{ backgroundColor: '#1976d2', color: 'white' }}>
               {translate("attendance.import_excel", "Nhập sinh viên từ Excel")}
             </Button>
-          </Upload>
+          </Upload> */}
           <Button size={size} style={{ backgroundColor: '#1976d2', color: 'white' }}>
             {translate("attendance.start_exam", "Bắt đầu ca thi")}
           </Button>
-          {/* <Button
-            icon={<PiTrashSimpleDuotone />}
-            // style={{ backgroundColor: '#1976d2', color: 'white' }}
-            danger
-            disabled={!selectedRowKeys.length}
-            onClick={handleDeleteSelected}
-            size={size}
-          >
-            {translate("attendance.delete_selected", "Xoá sinh viên đã chọn")}
-          </Button> */}
           <Button
             icon={<PiTrashSimpleDuotone />}
             type="primary"
