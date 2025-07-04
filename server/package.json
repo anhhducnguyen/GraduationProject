@@ -37,5 +37,9 @@
     "ws": "^8.18.2",
     "xlsx": "^0.18.5",
     "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "jasmine": "^5.8.0",
+    "sinon": "^21.0.0"
   }
 }
