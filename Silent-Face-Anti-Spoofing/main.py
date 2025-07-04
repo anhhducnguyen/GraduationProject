@@ -161,7 +161,7 @@ warnings.filterwarnings('ignore')
 
 KNOWN_FACE_PATH = "./known_faces/"
 FRAME_SKIP = 5
-API_URL = "http://192.168.1.10:5000/api/v1/exam-attendance/"
+API_URL = "http://192.168.1.4:5000/api/v1/exam-attendance/"
 last_sent_time = {}
 send_lock = threading.Lock()
 
@@ -191,17 +191,41 @@ class FaceSpoofingProcessor:
         self.detector = Detection()
         self.frame_count = 0
 
-    def send_data_to_api(self, name, face_score, spoof_score):
+    # def send_data_to_api(self, name, face_score, spoof_score):
+    #     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+    #     with send_lock:
+    #         last_time = last_sent_time.get(name, 0)
+    #         if time.time() - last_time < 10:
+    #             return  # Không gửi liên tục trong thời gian ngắn
+
+    #         payload = {
+    #             "name": name,
+    #             "confidence": round(face_score, 2),
+    #             # "real_face": round(spoof_score, 2),
+    #             "real_face": bool(label == 1 and spoof_score >= 0.5),
+    #             "timestamp": timestamp
+    #         }
+
+    #         try:
+    #             response = requests.post(API_URL, json=payload)
+    #             print(f"[API] Gửi dữ liệu cho {name}: {payload} - Trạng thái: {response.status_code}")
+    #             if response.status_code == 200:
+    #                 last_sent_time[name] = time.time()
+    #             else:
+    #                 print(f"[API] Lỗi gửi dữ liệu: {response.text}")
+    #         except Exception as e:
+    #             print(f"[API] Lỗi kết nối: {e}")
+    def send_data_to_api(self, name, face_score, spoof_score, label):
         timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
         with send_lock:
             last_time = last_sent_time.get(name, 0)
             if time.time() - last_time < 10:
-                return  # Không gửi liên tục trong thời gian ngắn
+                return
 
             payload = {
                 "name": name,
                 "confidence": round(face_score, 2),
-                "real_face": round(spoof_score, 2),
+                "real_face": 1.0 if label == 1 and spoof_score >= 0.5 else 0.0,
                 "timestamp": timestamp
             }
 
@@ -214,6 +238,7 @@ class FaceSpoofingProcessor:
                     print(f"[API] Lỗi gửi dữ liệu: {response.text}")
             except Exception as e:
                 print(f"[API] Lỗi kết nối: {e}")
+
 
     def process_frame(self, frame):
         self.frame_count += 1
@@ -265,9 +290,14 @@ class FaceSpoofingProcessor:
                 result_text = f"{face_identity} | RealFace Score: {face_score:.2f} | Anti-Spoof Score: {value:.2f}"
                 print(f"[Face {i + 1}] {result_text} - BBox: x={x}, y={y}, w={w}, h={h}")
                 if face_identity != "Unknown":
-                    self.send_data_to_api(face_identity, face_score, value)
+                    # self.send_data_to_api(face_identity, face_score, value)
+                    self.send_data_to_api(face_identity, face_score, value, label)
+
             else:
                 result_text = f"{face_identity} | FakeFace Score: {value:.2f}"
+                if face_identity != "Unknown":
+                    # self.send_data_to_api(face_identity, face_score, value)
+                    self.send_data_to_api(face_identity, face_score, value, label)
                 print(f"[Face {i + 1}] {result_text} - BBox: x={x}, y={y}, w={w}, h={h}")
 
         return frame

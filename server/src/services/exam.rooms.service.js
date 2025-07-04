@@ -1,7 +1,7 @@
 const db = require('../../config/database');
 const { buildQuery } = require("../utils/queryBuilder");
 
-// Get all exam rooms
+// Lấy danh sách phòng thi
 const queryExamRoom = async (filters = {}, options = {}) => {
     const query = buildQuery(db, 'examrooms', {
         filters,
@@ -15,7 +15,7 @@ const queryExamRoom = async (filters = {}, options = {}) => {
     return await query;
 };
 
-// Get exam room by ID
+// Lấy danh sách phòng thi theo mã phòng thi
 const getExamRoomById = async (room_id) => {
     try {
         const examRoom = await db('examrooms').where({ room_id }).first();
@@ -25,7 +25,7 @@ const getExamRoomById = async (room_id) => {
     }
 };
 
-// Create new exam room
+// Thêm mới phòng thi
 const create = async ({ 
     room_name, 
     capacity, 
@@ -49,7 +49,7 @@ const create = async ({
     }
 };
 
-// Update exam room by ID
+// Cập nhật phòng thi theo mã phòng thi
 const update = async (room_id, {
     room_name, 
     capacity, 
@@ -75,7 +75,7 @@ const update = async (room_id, {
     }
 };
 
-// Delete exam room by ID
+// Xóa phòng thi theo mã phòng thi
 const deleteExamRoomById = async (room_id) => {
     try {
         const deletedExamRoom = await db('examrooms')
@@ -87,7 +87,7 @@ const deleteExamRoomById = async (room_id) => {
     }
 };
 
-// Count all exam rooms
+// Đếm tổng số phòng thi
 const countExamRooms = async () => {
     const [{ count }] = await db('examrooms').count('* as count');
     return parseInt(count);

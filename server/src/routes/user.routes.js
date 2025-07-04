@@ -1,24 +1,38 @@
+/**
+ QUẢN LÝ NGƯỜI DÙNG
+**/
 const express = require('express');
 const router = express.Router();
 const Controller = require('../controllers/user.controller');
 const upload = require("../middlewares/upload.single");
 const ROLES = require("../constants/role");
-const { 
-    authenticate, 
-    authorize 
-} = require("../utils/auth/index");
+const {
+    authenticate,
+} = require("../../src/utils/auth/index");
+router.use(authenticate);
+const permission = require("../../src/constants/permission");
+
 const db = require('../../config/database');
 
+/** 
+- Lấy danh sách người dùng
+- Thêm mới người dùng
+**/
+router.route('/')
+    .get(
+        permission,
+        Controller.getUsers
+    )
+    .post(
+        permission,
+        // validateRequest(createUserSchema), 
+        upload.single("avatar"),
+        // checkEmailExist, 
+        Controller.createUser
+    );
 
-router.get(
-    '/', 
-    // authenticate,
-    // authorize([
-    //     ROLES.ADMIN, 
-    //     ROLES.TEACHER
-    // ]), 
-    Controller.getUsers
-);
+
+// Lấy danh sách sinh viên 
 router.get(
     '/students',
     // authenticate,
@@ -26,9 +40,9 @@ router.get(
     async (req, res) => {
         try {
             const students = await db('auth')
-            .join('users', 'auth.id', 'users.id')
+                .join('users', 'auth.id', 'users.id')
 
-            .where('role', ROLES.STUDENT);
+                .where('role', ROLES.STUDENT);
             res.json(students);
         } catch (error) {
             console.error("Error fetching students:", error);
@@ -36,42 +50,28 @@ router.get(
         }
     }
 );
-router.get(
-    '/:id', 
-    // authenticate,
-    // authorize([ROLES.ADMIN, ROLES.TEACHER]), 
-    // checkUserExistById, 
-    Controller.getUser
-);
 
-router.post(
-    '/', 
-    // authenticate,
-    // authorize([ROLES.ADMIN, ROLES.TEACHER]),
-    // validateRequest(createUserSchema), 
-    upload.single("avatar"), 
-    // checkEmailExist, 
-    Controller.createUser
-);
-
-router.put(
-    '/:id', 
-    authenticate,
-    authorize([ROLES.ADMIN, ROLES.TEACHER]),
-    upload.single("avatar"),
-    // checkUserExistById, 
-    Controller.updateUser
-);
-router.delete(
-    '/:id', 
-    // authenticate,
-    // authorize([ROLES.ADMIN, ROLES.TEACHER]),
-    // checkUserExistById, 
-    Controller.deleteUser
-);
-
-
-
-
+/** 
+- Lấy thông tin người dùng theo ID
+- Cập nhật thông tin người dùng
+- Xóa người dùng theo ID
+**/
+router.route('/:id')
+    .get(
+        permission,
+        // checkUserExistById, 
+        Controller.getUser
+    )
+    .put(
+        permission,
+        upload.single("avatar"),
+        // checkUserExistById, 
+        Controller.updateUser
+    )
+    .delete(
+        permission,
+        // checkUserExistById, 
+        Controller.deleteUser
+    );
 
 module.exports = router;

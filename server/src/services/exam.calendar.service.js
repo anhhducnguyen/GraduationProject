@@ -1,5 +1,6 @@
 const db = require('../../config/database');
 
+// Lấy lịch thi theo mã lịch thi
 const getExamScheduleById = async (schedule_id) => {
     try {
         const examSchedule = await db('examschedules').where({ schedule_id }).first();
@@ -9,13 +10,10 @@ const getExamScheduleById = async (schedule_id) => {
     }
 };
 
-// Get all exam schedules by filter start_time and end_time
+// Lấy danh sách lịch thi lọc bởi start_time and end_time
 const queryExamSchedule = async (filter, options) => {
   const { sortBy = 'schedule_id:asc', limit = 100, page = 1, _start, _end } = options;
   const [sortField, sortOrder] = sortBy.split(':');
-
-  // console.log('start', _start);
-  // console.log('end', _end);
 
   const queryExamSchedule = db('examschedules')
     .join('examrooms', 'examrooms.room_id', 'examschedules.room_id')

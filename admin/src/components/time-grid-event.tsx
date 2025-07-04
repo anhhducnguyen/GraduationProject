@@ -51,7 +51,6 @@ export default function TimeGridEvent({ calendarEvent }: Props) {
   return (
     // <div className="h-full flex flex-col rounded-sm shadow-sm overflow-hidden border border-gray-300">
     <div className={`${calendarEvent.color} text-white p-0.5 text-center font-bold overflow-hidden h-full flex flex-col`}>
-      {/* Phần tiêu đề và giờ với màu nền */}
       <div className={`${calendarEvent.color} text-white px-2 pt-1 pb-0.5 text-center font-bold`}>
         <p className="text-sm truncate">{calendarEvent.title}</p>
 
@@ -60,7 +59,6 @@ export default function TimeGridEvent({ calendarEvent }: Props) {
         </div>
       </div>
 
-      {/* Phần mô tả bên dưới */}
       <div className="bg-white text-black p-2 text-xs text-center font-normal flex-grow flex flex-col justify-center items-center space-y-1">
         {calendarEvent.description && <p>{calendarEvent.description}</p>}
         {calendarEvent.room && <p>{calendarEvent.room}</p>}

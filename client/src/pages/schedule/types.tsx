@@ -36,6 +36,5 @@ export type Student = {
   firstName: string;
   status: string;
   confidence: number;
-  realFace: number;
   checkInTime: string;
 };
