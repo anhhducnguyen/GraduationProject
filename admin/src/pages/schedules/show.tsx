@@ -167,7 +167,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
     if (!calendarEvent?.id) return;
     try {
       setLoading(true);
-      const res = await fetch(`/api/v1/exam-schedules/${calendarEvent.id}/students`, {
+      const res = await fetch(`https://graduationproject-nx7m.onrender.com/api/v1/exam-schedules/${calendarEvent.id}/students`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
