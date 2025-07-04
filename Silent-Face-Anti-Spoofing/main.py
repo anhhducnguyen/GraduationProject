@@ -161,7 +161,9 @@ warnings.filterwarnings('ignore')
 
 KNOWN_FACE_PATH = "./known_faces/"
 FRAME_SKIP = 5
-API_URL = "http://192.168.1.4:5000/api/v1/exam-attendance/"
+# API_URL = "http://192.168.1.4:5000/api/v1/exam-attendance/"
+API_URL = "https://graduationproject-nx7m.onrender.com/api/v1/exam-attendance/"
+
 last_sent_time = {}
 send_lock = threading.Lock()
 
@@ -225,7 +227,7 @@ class FaceSpoofingProcessor:
             payload = {
                 "name": name,
                 "confidence": round(face_score, 2),
-                "real_face": 1.0 if label == 1 and spoof_score >= 0.5 else 0.0,
+                "real_face": 1.0 if label == 1 and spoof_score >= 0.7 else 0.0,
                 "timestamp": timestamp
             }
 
