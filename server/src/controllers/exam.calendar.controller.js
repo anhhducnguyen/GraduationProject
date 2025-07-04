@@ -20,27 +20,40 @@ const getExamSchedule = async (req, res) => {
 };
 
 // Lấy tất cả lịch thi với cache
+// const getAll = async (req, res) => {
+//   try {
+//     const filter = pick(req.query, ['status']);
+//     const options = pick(req.query, ['sortBy', 'limit', 'page', '_start', '_end']);
+
+//     const cacheKey = `examSchedules:${JSON.stringify(filter)}:${JSON.stringify(options)}`;
+
+//     const cached = await redisClient.get(cacheKey);
+//     if (cached) {
+//       return res.send(JSON.parse(cached));
+//     }
+
+//     const result = await queryExamSchedule(filter, options);
+
+//     await redisClient.setEx(cacheKey, 300, JSON.stringify(result));
+
+//     res.send(result);
+//   } catch (err) {
+//     res.status(err.statusCode || 500).send({ message: err.message });
+//   }
+// };
 const getAll = async (req, res) => {
   try {
     const filter = pick(req.query, ['status']);
     const options = pick(req.query, ['sortBy', 'limit', 'page', '_start', '_end']);
 
-    const cacheKey = `examSchedules:${JSON.stringify(filter)}:${JSON.stringify(options)}`;
-
-    const cached = await redisClient.get(cacheKey);
-    if (cached) {
-      return res.send(JSON.parse(cached));
-    }
-
     const result = await queryExamSchedule(filter, options);
-
-    await redisClient.setEx(cacheKey, 300, JSON.stringify(result));
 
     res.send(result);
   } catch (err) {
     res.status(err.statusCode || 500).send({ message: err.message });
   }
 };
+
 
 module.exports = {
     getExamSchedule,
