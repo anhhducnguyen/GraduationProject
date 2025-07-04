@@ -22,7 +22,7 @@ const permission = require("../../src/constants/permission");
 // Lấy danh sách lịch thi với cache
 router.get(
   '/',
-  permission,
+  // permission,
   getAll
 );
 
