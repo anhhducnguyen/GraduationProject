@@ -24,6 +24,7 @@ const examCalendar = require('./routes/exam.calendar.routes');
 const userRoutes = require('./routes/user.routes');
 const ExamRoomsRoutes = require("./routes/exam.rooms.routes");
 const ExamSchedulesRoutes = require("./routes/exam.schedules.routes");
+const Dashboard = require("./routes/dashboard");
 
 
 app.use(bodyParser.json());
@@ -37,5 +38,6 @@ app.use("/api/v1/exam-attendance", examAttendance);
 app.use('/api/v1/exam-schedule', examCalendar);
 app.use("/api/v1/exam-rooms", ExamRoomsRoutes);
 app.use("/api/v1/exam-schedules", ExamSchedulesRoutes);
+app.use("/api/v1/dashboard", Dashboard);
 
 module.exports = app;

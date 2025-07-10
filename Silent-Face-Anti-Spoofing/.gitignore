@@ -5,3 +5,6 @@ datasets/
 known_faces/
 myenv/
 dlib-19.24.99-cp312-cp312-win_amd64.whl
+img/
+know_face/
+imgs/
