@@ -73,4 +73,4 @@ def load_known_faces(main_dir, output_pkl="known_faces.pkl"):
     
     print(f"Dữ liệu đã được lưu vào {output_pkl}")
 
-load_known_faces("known_faces")
+load_known_faces("imgs")
