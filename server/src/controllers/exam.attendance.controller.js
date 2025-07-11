@@ -9,7 +9,8 @@ const {
     getExamAttendanceByScheduleId,
     getCurrentExamSchedule,
     checkStudentExists,
-    countExamAttendance
+    countExamAttendance,
+    getCurrentExamSchedules
 } = require('../services/exam.attendance.service');
 const pick = require('../utils/pick');
 const { activeConnections } = require('../../config/ws');
@@ -123,6 +124,80 @@ const assignStudentToExam = async (req, res) => {
     }
 };
 
+// const create = async (req, res) => {
+//     try {
+//         const { name, confidence, real_face, timestamp } = req.body;
+
+//         if (!name || confidence === undefined || !timestamp) {
+//             return res.status(400).json({ message: "Thiếu dữ liệu" });
+//         }
+
+//         const schedule_id = await getCurrentExamSchedule();
+//         console.log('Schedule ID:', schedule_id);
+
+//         if (!schedule_id) {
+//             return res.status(404).json({
+//                 message: "Không có lịch thi nào đang diễn ra tại thời điểm hiện tại"
+//             });
+//         }
+
+//         // Kiểm tra sinh viên và bản ghi điểm danh (đã được gán vào ca thi hay chưa)
+//         const [studentExists, attendanceExists] = await Promise.all([
+//             checkStudentExists(name),
+//             checkAttendance(name, schedule_id)
+//         ]);
+
+//         if (!studentExists) {
+//             console.log(`Sinh viên với ID ${name} không tồn tại trong hệ thống`);
+//             return res.status(404).json({ message: "Sinh viên không tồn tại" });
+//         }
+
+//         if (!attendanceExists) {
+//             console.log(`Sinh viên ${name} chưa được gán vào ca thi ${schedule_id}`);
+//             return res.status(403).json({ message: "Sinh viên không có trong danh sách ca thi" });
+//         }
+
+//         if (attendanceExists.is_present === 1) {
+//             console.log(`Sinh viên với ID ${name} đã điểm danh trong ca thi này`);
+//             return res.status(409).json({ message: "Sinh viên đã điểm danh trong ca thi này" });
+//         }
+
+//         await db('exam_attendance')
+//             .where({ student_id: name, schedule_id })
+//             .update({
+//                 is_present: real_face ? 1 : 0,
+//                 confidence: confidence,
+//                 real_face: real_face,
+//                 updated_at: new Date(),
+//                 violation_id: null,
+//                 reported_by: 3
+//             });
+
+//         const attendanceData = await checkAttendance(name, schedule_id);
+
+//         // Gửi cập nhật qua socket
+//         const io = getIO();
+//         io.emit("student_update", {
+//             student_id: name,
+//             is_present: real_face ? 1 : 0,
+//             timestamp,
+//             confidence,
+//         });
+
+//         return res.status(201).json({
+//             message: "Điểm danh thành công",
+//             data: attendanceData,
+//         });
+
+//     } catch (error) {
+//         console.error("Lỗi khi lưu dữ liệu:", error.message);
+//         return res.status(500).json({
+//             message: "Lỗi khi lưu dữ liệu",
+//             error: error.message
+//         });
+//     }
+// };
+
 const create = async (req, res) => {
     try {
         const { name, confidence, real_face, timestamp } = req.body;
@@ -131,38 +206,51 @@ const create = async (req, res) => {
             return res.status(400).json({ message: "Thiếu dữ liệu" });
         }
 
-        const schedule_id = await getCurrentExamSchedule();
-        console.log('Schedule ID:', schedule_id);
+        // Kiểm tra sinh viên có tồn tại không
+        const studentExists = await checkStudentExists(name);
+        if (!studentExists) {
+            console.log(`❌ Sinh viên ${name} không tồn tại.`);
+            return res.status(404).json({ message: "Sinh viên không tồn tại" });
+        }
 
-        if (!schedule_id) {
+        // Lấy tất cả các ca thi đang diễn ra
+        const schedules = await getCurrentExamSchedules();
+        if (!schedules.length) {
             return res.status(404).json({
                 message: "Không có lịch thi nào đang diễn ra tại thời điểm hiện tại"
             });
         }
 
-        // Kiểm tra sinh viên và bản ghi điểm danh (đã được gán vào ca thi hay chưa)
-        const [studentExists, attendanceExists] = await Promise.all([
-            checkStudentExists(name),
-            checkAttendance(name, schedule_id)
-        ]);
+        // Tìm ca thi mà sinh viên có trong danh sách
+        let matchedSchedule = null;
+        let attendanceExists = null;
 
-        if (!studentExists) {
-            console.log(`Sinh viên với ID ${name} không tồn tại trong hệ thống`);
-            return res.status(404).json({ message: "Sinh viên không tồn tại" });
+        for (const schedule of schedules) {
+            const attendance = await checkAttendance(name, schedule.schedule_id);
+            if (attendance) {
+                matchedSchedule = schedule;
+                attendanceExists = attendance;
+                break;
+            }
         }
 
-        if (!attendanceExists) {
-            console.log(`Sinh viên ${name} chưa được gán vào ca thi ${schedule_id}`);
-            return res.status(403).json({ message: "Sinh viên không có trong danh sách ca thi" });
+        if (!matchedSchedule) {
+            console.log(`❌ Sinh viên ${name} không có trong bất kỳ ca thi nào đang diễn ra`);
+            return res.status(403).json({
+                message: "Sinh viên không có trong danh sách ca thi đang diễn ra"
+            });
         }
 
         if (attendanceExists.is_present === 1) {
-            console.log(`Sinh viên với ID ${name} đã điểm danh trong ca thi này`);
-            return res.status(409).json({ message: "Sinh viên đã điểm danh trong ca thi này" });
+            console.log(`⚠️ Sinh viên ${name} đã điểm danh ca thi ${matchedSchedule.schedule_id}`);
+            return res.status(409).json({
+                message: "Sinh viên đã điểm danh trong ca thi này"
+            });
         }
 
+        // Tiến hành cập nhật điểm danh
         await db('exam_attendance')
-            .where({ student_id: name, schedule_id })
+            .where({ student_id: name, schedule_id: matchedSchedule.schedule_id })
             .update({
                 is_present: real_face ? 1 : 0,
                 confidence: confidence,
@@ -172,7 +260,7 @@ const create = async (req, res) => {
                 reported_by: 3
             });
 
-        const attendanceData = await checkAttendance(name, schedule_id);
+        const attendanceData = await checkAttendance(name, matchedSchedule.schedule_id);
 
         // Gửi cập nhật qua socket
         const io = getIO();
@@ -189,7 +277,7 @@ const create = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Lỗi khi lưu dữ liệu:", error.message);
+        console.error("❌ Lỗi khi lưu dữ liệu:", error.message);
         return res.status(500).json({
             message: "Lỗi khi lưu dữ liệu",
             error: error.message

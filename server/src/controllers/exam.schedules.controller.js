@@ -59,6 +59,7 @@ const createExamSchedule = async (req, res) => {
         room,
         // room_id 
     } = req.body;
+    console.log(req.body);
     const room_id = room?.room_id;
 
     if (!room_id) {

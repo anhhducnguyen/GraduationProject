@@ -180,8 +180,8 @@ import threading
 from datetime import datetime
 from insightface.app import FaceAnalysis
 
-API_URL = "https://graduationproject-nx7m.onrender.com/api/v1/exam-attendance/"
-
+API_URL = "http://localhost:5000/api/v1/exam-attendance/"
+# API_URL = "https://graduationproject-nx7m.onrender.com/api/v1/exam-attendance/"
 # ======= 1. Load FAISS index và student_ids =======
 faiss_path = "faiss_index/face_index.faiss"
 ids_path = "faiss_index/student_ids.pkl"

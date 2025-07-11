@@ -27,6 +27,8 @@ import { RiFileExcel2Fill } from 'react-icons/ri';
 
 import { Upload, message } from 'antd';
 import type { UploadProps } from 'antd';
+import { format, parseISO } from 'date-fns';
+
 
 const token = localStorage.getItem("refine-auth");
 
@@ -96,6 +98,7 @@ function SchedulePage() {
     });
 
     fetch(`https://graduationproject-nx7m.onrender.com/api/v1/exam-schedule?${params.toString()}`, {
+    // fetch(`http://localhost:5000/api/v1/exam-schedule?${params.toString()}`, {
       headers: {
         'Content-Type': 'application/json',
         "Authorization": `Bearer ${token}`,
@@ -118,8 +121,10 @@ function SchedulePage() {
         const mappedEvents: MyCalendarEvent[] = data.results.map((item: ApiEventItem) => ({
           id: item.schedule_id,
           title: item.name_schedule,
-          start: formatInTimeZone(item.start_time, vietnamTimeZone, 'yyyy-MM-dd HH:mm'),
-          end: formatInTimeZone(item.end_time, vietnamTimeZone, 'yyyy-MM-dd HH:mm'),
+          // start: formatInTimeZone(item.start_time, vietnamTimeZone, 'yyyy-MM-dd HH:mm'),
+          // end: formatInTimeZone(item.end_time, vietnamTimeZone, 'yyyy-MM-dd HH:mm'),
+          start: format(parseISO(item.start_time), 'yyyy-MM-dd HH:mm'),
+        end: format(parseISO(item.end_time), 'yyyy-MM-dd HH:mm'),
           description: item.name_schedule,
           room: item.room_name,
           status: item.status,

@@ -233,6 +233,12 @@ const getCurrentExamSchedule = async () => {
     return result?.schedule_id;
 }
 
+const getCurrentExamSchedules = async () => {
+    const now = new Date();
+    return await db('examschedules')
+        .where('start_time', '<=', now)
+        .andWhere('end_time', '>=', now);
+};
 
 const checkStudentExists = async (id) => {
         return db("auth")
@@ -251,5 +257,6 @@ module.exports = {
     getExamAttendanceByScheduleId,
     getCurrentExamSchedule,
     checkStudentExists,
-    countExamAttendance
+    countExamAttendance,
+    getCurrentExamSchedules
 };
