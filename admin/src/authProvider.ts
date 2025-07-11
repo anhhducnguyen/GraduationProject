@@ -14,8 +14,6 @@ export const authProvider: AuthBindings = {
 
       // Lưu token vào localStorage nếu đăng nhập thành công
       const { token, user } = response.data;
-      // console.log(token);
-      // console.log(user);
 
       localStorage.setItem(TOKEN_KEY, token);
       localStorage.setItem("user", JSON.stringify(user));
@@ -67,17 +65,6 @@ export const authProvider: AuthBindings = {
     return null;
   },
 
-  // getIdentity: async () => {
-  //   const token = localStorage.getItem(TOKEN_KEY);
-  //   if (token) {
-  //     return {
-  //       id: 1,
-  //       name: "John Doe",
-  //       avatar: "https://i.pravatar.cc/300",
-  //     };
-  //   }
-  //   return null;
-  // },
   getIdentity: async () => {
     const user = localStorage.getItem("user");
     if (user) {
