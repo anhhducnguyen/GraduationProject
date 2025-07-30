@@ -148,12 +148,23 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       title: translate("attendance.realFace", "Real Face"),
       dataIndex: 'realFace',
       key: 'realFace',
+      // render: (value) => {
+      //   const isReal = value === true || value === 1 || value === "1";
+      //   const color = isReal ? "green" : "red";
+      //   const label = isReal ? translate("attendance.real", "Thật") : translate("attendance.fake", "Giả");
+      //   return <Tag color={color}>{label}</Tag>;
+      // },
       render: (value) => {
+        if (value === null || value === undefined) {
+          return null; 
+        }
+
         const isReal = value === true || value === 1 || value === "1";
         const color = isReal ? "green" : "red";
         const label = isReal ? translate("attendance.real", "Thật") : translate("attendance.fake", "Giả");
         return <Tag color={color}>{label}</Tag>;
       },
+
     },
     {
       title: translate("attendance.checkin_time", "Thời gian điểm danh"),
@@ -167,7 +178,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
     if (!calendarEvent?.id) return;
     try {
       setLoading(true);
-      const res = await fetch(`https://graduationproject-nx7m.onrender.com/api/v1/exam-schedules/${calendarEvent.id}/students`, {
+      const res = await fetch(`http://localhost:5000/api/v1/exam-schedules/${calendarEvent.id}/students`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -226,7 +237,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       const studentIds: string[] = jsonData.map((row) => row['Mã số'] || row['id']).filter(Boolean);
 
       try {
-        const res = await fetch(`https://graduationproject-nx7m.onrender.com/api/v1/exam-schedules/${calendarEvent.id}/students/import-ids`, {
+        const res = await fetch(`http://localhost:5000/api/v1/exam-schedules/${calendarEvent.id}/students/import-ids`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -257,7 +268,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       cancelText: translate("attendance.cancel", "Huỷ"),
       onOk: async () => {
         try {
-          const res = await fetch(`https://graduationproject-nx7m.onrender.com/api/v1/exam-schedules/${calendarEvent.id}/students/delete`, {
+          const res = await fetch(`http://localhost:5000/api/v1/exam-schedules/${calendarEvent.id}/students/delete`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

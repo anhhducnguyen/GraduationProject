@@ -7,7 +7,7 @@ import axios from 'axios';
 export const authProvider: AuthBindings = {
   login: async ({ email, password }) => {
     try {
-      const response = await axios.post("https://graduationproject-nx7m.onrender.com/auth/login", {
+      const response = await axios.post("http://localhost:5000/auth/login", {
         email,
         password,
       });
@@ -84,7 +84,7 @@ export const authProvider: AuthBindings = {
   },
   forgotPassword: async ({ email }) => {
     try {
-      const response = await axios.post("https://graduationproject-nx7m.onrender.com/auth/reset-password", {
+      const response = await axios.post("http://localhost:5000/auth/reset-password", {
         email,
       });
 
