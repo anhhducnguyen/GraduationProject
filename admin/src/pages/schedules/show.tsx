@@ -128,20 +128,6 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       dataIndex: 'firstName',
       key: 'firstName',
     },
-    // {
-    //   title: translate("attendance.status", "Trạng thái"),
-    //   dataIndex: 'status',
-    //   key: 'status',
-    //   render: (text) => {
-    //     const color = text === "present" ? "green" : "red";
-    //     return <Tag color={color}>{translate(`attendance.${text}`, text)}</Tag>;
-    //   },
-    //   filters: [
-    //     { text: translate("attendance.present"), value: "present" },
-    //     { text: translate("attendance.absent"), value: "absent" },
-    //   ],
-    //   onFilter: (value, record) => record.status === value,
-    // },
     {
       title: translate("attendance.status", "Trạng thái"),
       dataIndex: "status",
@@ -187,12 +173,6 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       title: translate("attendance.realFace", "Real Face"),
       dataIndex: 'realFace',
       key: 'realFace',
-      // render: (value) => {
-      //   const isReal = value === true || value === 1 || value === "1";
-      //   const color = isReal ? "green" : "red";
-      //   const label = isReal ? translate("attendance.real", "Thật") : translate("attendance.fake", "Giả");
-      //   return <Tag color={color}>{label}</Tag>;
-      // },
       render: (value) => {
         if (value === null || value === undefined) {
           return null;
@@ -287,7 +267,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
 
         if (!res.ok) throw new Error('Lỗi khi gửi danh sách mã số sinh viên');
 
-        fetchStudents(); // Tải lại danh sách sinh viên sau khi import
+        fetchStudents(); 
       } catch (error) {
         console.error("Lỗi khi import Excel:", error);
       }
@@ -379,19 +359,6 @@ export default function CustomEventModal({ calendarEvent }: Props) {
               {translate("attendance.import_excel", "Nhập sinh viên từ Excel")}
             </Button>
           </Upload>
-          {/* <Button size={size} style={{ backgroundColor: '#1976d2', color: 'white' }}>
-            {translate("attendance.start_exam", "Bắt đầu ca thi")}
-          </Button> */}
-          {/* <Button
-            icon={<PiTrashSimpleDuotone />}
-            // style={{ backgroundColor: '#1976d2', color: 'white' }}
-            danger
-            disabled={!selectedRowKeys.length}
-            onClick={handleDeleteSelected}
-            size={size}
-          >
-            {translate("attendance.delete_selected", "Xoá sinh viên đã chọn")}
-          </Button> */}
           <Button
             icon={<PiTrashSimpleDuotone />}
             type="primary"

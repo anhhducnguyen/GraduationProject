@@ -77,9 +77,6 @@ export const RoomCreate: React.FC = () => {
               error={!!errors?.status}
               helperText={errors?.status?.message}
             >
-              {/* <MenuItem value="schedule">{translate("rooms.status.schedule")}</MenuItem>
-              <MenuItem value="complete">{translate("rooms.status.complete")}</MenuItem>
-              <MenuItem value="cancel">{translate("rooms.status.cancel")}</MenuItem> */}
               <MenuItem value="available">
                 {translate("rooms.status.available", "Phòng trống")}
               </MenuItem>

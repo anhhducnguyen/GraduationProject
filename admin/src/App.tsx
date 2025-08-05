@@ -1,8 +1,3 @@
-// https://github.com/DuowngM/shopee/blob/main/server/src/categories/dto/categories.dto.ts
-// https://github.com/typicode/json-server?tab=readme-ov-file
-// https://refine.dev/docs/ui-integrations/material-ui/hooks/use-data-grid/#dataprovidername
-// https://refine.dev/tutorial/authentication/data-provider-integration/?utm_source=chatgpt.com
-
 import { Authenticated, type I18nProvider, Refine } from "@refinedev/core";
 import routerProvider, {
   CatchAllNavigate,
@@ -32,7 +27,6 @@ import { MdDashboardCustomize } from "react-icons/md";
 import { BsBox2Fill } from "react-icons/bs";
 import { GiArtificialIntelligence } from "react-icons/gi";
 
-
 import {
   UserList,
   UserShow,
@@ -54,8 +48,8 @@ import {
   ExamScheduleShow,
 } from "@/pages/exam-schedules";
 
+import { FaList } from "react-icons/fa";
 import { FakeFacesList } from "@/pages/fake-faces";
-
 import SchedulePage from "@/pages/schedules/list";
 import Home from "@/pages/home/home";
 import { CustomTitle } from "@/components/CustomTitle";
@@ -78,12 +72,8 @@ function App() {
         <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
         <RefineSnackbarProvider>
           <Refine
-            // accessControlProvider={accessControlProvider}
-            // dataProvider={dataProvider}
-            // dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
             dataProvider={dataProvider("http://localhost:5000/api/v1")}
             // dataProvider={dataProvider("https://graduationproject-nx7m.onrender.com/api/v1")}
-            // dataProvider={dataProvider("/api/v1")}
             notificationProvider={useNotificationProvider}
             routerProvider={routerProvider}
             authProvider={authProvider}
@@ -94,7 +84,6 @@ function App() {
                 list: "/home",
                 meta: { 
                   icon: <MdDashboardCustomize />,
-                  // label: "Trang chủ"
                 },
               },
               {
@@ -104,7 +93,6 @@ function App() {
                 create: "/users/new",
                 meta: { 
                   icon: <HiUserGroup />, 
-                  // label: "Người dùng" 
                 },
               },
               {
@@ -112,7 +100,6 @@ function App() {
                 list: "/schedules",
                 meta: { 
                   icon: <IoCalendar />, 
-                  // label: "Lịch thi trực quan" 
                 },
               },
               {
@@ -120,7 +107,6 @@ function App() {
                 list: "/fake-faces",
                 meta: { 
                   icon: <GiArtificialIntelligence />, 
-                  // label: "Khuôn mặt giả mạo" 
                 },
               },
               {
@@ -131,7 +117,6 @@ function App() {
                 show: "/exam-rooms/:id",
                 meta: { 
                   icon: <BsBox2Fill />, 
-                  // label: "Phòng thi" 
                 },
               },
               {
@@ -141,8 +126,7 @@ function App() {
                 edit: "/exam-schedules/:id/edit",
                 show: "/exam-schedules/:id",
                 meta: { 
-                  icon: <IoCalendar />, 
-                  // label: "Danh sách lịch thi" 
+                  icon: <FaList />, 
                 },
               },
             ]}

@@ -10,7 +10,7 @@ import {
   TextFieldComponent as TextField,
 } from "@refinedev/mui";
 
-import type { User } from "./types"; // bạn nên định nghĩa User type tương tự như ở phần Create
+import type { User } from "./types"; 
 
 export const UserShow: React.FC = () => {
   const translate = useTranslate();
