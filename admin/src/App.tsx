@@ -30,6 +30,8 @@ import { HiUserGroup } from "react-icons/hi2";
 import { IoCalendar } from "react-icons/io5";
 import { MdDashboardCustomize } from "react-icons/md";
 import { BsBox2Fill } from "react-icons/bs";
+import { GiArtificialIntelligence } from "react-icons/gi";
+
 
 import {
   UserList,
@@ -51,6 +53,8 @@ import {
   ExamScheduleEdit,
   ExamScheduleShow,
 } from "@/pages/exam-schedules";
+
+import { FakeFacesList } from "@/pages/fake-faces";
 
 import SchedulePage from "@/pages/schedules/list";
 import Home from "@/pages/home/home";
@@ -90,7 +94,7 @@ function App() {
                 list: "/home",
                 meta: { 
                   icon: <MdDashboardCustomize />,
-                  label: "Dashboard"
+                  // label: "Trang chủ"
                 },
               },
               {
@@ -100,7 +104,7 @@ function App() {
                 create: "/users/new",
                 meta: { 
                   icon: <HiUserGroup />, 
-                  label: "Users" 
+                  // label: "Người dùng" 
                 },
               },
               {
@@ -108,7 +112,15 @@ function App() {
                 list: "/schedules",
                 meta: { 
                   icon: <IoCalendar />, 
-                  label: "Schedules" 
+                  // label: "Lịch thi trực quan" 
+                },
+              },
+              {
+                name: "fake-faces",
+                list: "/fake-faces",
+                meta: { 
+                  icon: <GiArtificialIntelligence />, 
+                  // label: "Khuôn mặt giả mạo" 
                 },
               },
               {
@@ -119,7 +131,7 @@ function App() {
                 show: "/exam-rooms/:id",
                 meta: { 
                   icon: <BsBox2Fill />, 
-                  label: "Exam Rooms" 
+                  // label: "Phòng thi" 
                 },
               },
               {
@@ -130,7 +142,7 @@ function App() {
                 show: "/exam-schedules/:id",
                 meta: { 
                   icon: <IoCalendar />, 
-                  label: "Exam Schedules" 
+                  // label: "Danh sách lịch thi" 
                 },
               },
             ]}
@@ -169,6 +181,8 @@ function App() {
                   <Route path="new" element={<RoomCreate />} />
                   <Route path=":id/edit" element={<RoomEdit />} />
                 </Route>
+
+                <Route path="/fake-faces" element={<FakeFacesList />} />
 
                 <Route path="/exam-schedules">
                   <Route index element={<ExamScheduleList />} />

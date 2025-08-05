@@ -1,11 +1,112 @@
 {
-  "form": {
-    "required": "Trường này là bắt buộc",
-    "select_gender": "-- Chọn giới tính --",
-    "choose_image": "Chọn ảnh đại diện từ máy",
-    "change_image": "Đổi ảnh"
+  "pages": {
+    "login": {
+      "title": "Đăng nhập vào tài khoản của bạn",
+      "signin": "Đăng nhập",
+      "signup": "Đăng ký",
+      "divider": "hoặc",
+      "fields": {
+        "email": "Email",
+        "password": "Mật khẩu"
+      },
+      "errors": {
+        "validEmail": "Địa chỉ email không hợp lệ"
+      },
+      "buttons": {
+        "submit": "Đăng nhập",
+        "forgotPassword": "Quên mật khẩu?",
+        "noAccount": "Bạn chưa có tài khoản?",
+        "rememberMe": "Ghi nhớ đăng nhập"
+      }
+    },
+    "forgotPassword": {
+      "title": "Bạn đã quên mật khẩu?",
+      "fields": {
+        "email": "Email"
+      },
+      "errors": {
+        "validEmail": "Địa chỉ email không hợp lệ"
+      },
+      "buttons": {
+        "submit": "Gửi hướng dẫn đặt lại mật khẩu"
+      }
+    },
+    "register": {
+      "title": "Đăng ký tài khoản của bạn",
+      "fields": {
+        "email": "Email",
+        "password": "Mật khẩu"
+      },
+      "errors": {
+        "validEmail": "Địa chỉ email không hợp lệ"
+      },
+      "buttons": {
+        "submit": "Đăng ký",
+        "haveAccount": "Đã có tài khoản?"
+      }
+    },
+    "updatePassword": {
+      "title": "Cập nhật mật khẩu",
+      "fields": {
+        "password": "Mật khẩu mới",
+        "confirmPassword": "Xác nhận mật khẩu mới"
+      },
+      "errors": {
+        "confirmPasswordNotMatch": "Mật khẩu không khớp"
+      },
+      "buttons": {
+        "submit": "Cập nhật"
+      }
+    },
+    "error": {
+      "info": "Bạn đã quên thêm component {{action}} vào {{resource}}.",
+      "404": "Rất tiếc, trang này không tồn tại.",
+      "resource404": "Bạn đã tạo resource {{resource}} chưa?",
+      "backHome": "Trở về trang chủ"
+    }
+  },
+  "actions": {
+    "list": "Danh sách",
+    "create": "Tạo mới",
+    "edit": "Chỉnh sửa",
+    "show": "Xem chi tiết",
+    "delete": "Xóa",
+    "cancel": "Hủy bỏ"
+  },
+  "buttons": {
+    "create": "Thêm mới",
+    "save": "Lưu",
+    "logout": "Đăng xuất",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận xóa?",
+    "filter": "Lọc",
+    "clear": "Xóa bộ lọc",
+    "refresh": "Làm mới",
+    "show": "Xem",
+    "undo": "Hoàn tác",
+    "import": "Nhập khẩu",
+    "export": "Xuất khẩu",
+    "clone": "Nhân bản",
+    "accept": "Chấp nhận",
+    "acceptAll": "Chấp nhận tất cả",
+    "reject": "Từ chối",
+    "rejectAll": "Từ chối tất cả",
+    "nextStep": "Bước tiếp theo",
+    "previousStep": "Bước trước"
+  },
+  "home": {
+    "home": "Trang chủ"
   },
   "users": {
+    "users": "Người dùng",
+    "resourceLabel": "Người dùng",
+    "titles": {
+      "edit": "Chỉnh sửa thông tin người dùng",
+      "list": "Người dùng",
+      "show": "Thông tin người dùng"
+    },
     "fields": {
       "id": "ID",
       "first_name": "Tên",
@@ -21,27 +122,14 @@
       "female": "Nữ"
     }
   },
-  "rooms": {
-    "fields": {
-      "id": "Mã phòng",
-      "room_name": "Tên phòng",
-      "capacity": "Sức chứa",
-      "location": "Vị trí",
-      "status": "Trạng thái"
-    },
-    "status": {
-      "available": "Phòng trống",
-      "occupied": "Đang sử dụng",
-      "unavailable": "Không sử dụng"
-    }
-  },
   "schedules": {
+    "schedules": "Lịch thi trực quan",
     "buttons": {
       "add": "Thêm lịch thi"
     },
     "import_excel": "Nhập lịch thi từ Excel",
     "fields": {
-      "id": "Mã lịch thi",
+      "id": "ID",
       "name_schedule": "Tên lịch thi",
       "start_time": "Thời gian bắt đầu",
       "end_time": "Thời gian kết thúc",
@@ -53,6 +141,47 @@
       "completed": "Đã hoàn thành",
       "cancelled": "Đã hủy"
     }
+  },
+  "fake-faces": {
+    "fake-faces": "Khuôn mặt giả mạo"
+  },
+  "exam-rooms": {
+    "exam-rooms": "Phòng thi",
+    "resourceLabel": "Phòng thi",
+    "titles": {
+      "edit": "Chỉnh sửa thông tin phòng thi",
+      "list": "Phòng thi",
+      "show": "Thông tin phòng thi"
+    }
+  },
+  "exam-schedules": {
+    "exam-schedules": "Danh sách lịch thi",
+    "resourceLabel": "Lịch thi",
+    "titles": {
+      "edit": "Chỉnh sửa thông tin lịch thi",
+      "list": "Lịch thi",
+      "show": "Thông tin lịch thi"
+    }
+  },
+  "rooms": {
+    "fields": {
+      "id": "ID",
+      "room_name": "Tên phòng",
+      "capacity": "Sức chứa",
+      "location": "Vị trí",
+      "status": "Trạng thái"
+    },
+    "status": {
+      "available": "Phòng trống",
+      "occupied": "Đang sử dụng",
+      "unavailable": "Không sử dụng"
+    }
+  },
+  "table": {
+    "actions": "Hành động"
+  },
+  "search": {
+    "placeholder": "Tìm kiếm..."
   },
   "attendance": {
     "index": "STT",
@@ -82,11 +211,5 @@
     "confirm_delete_message": "Bạn có chắc chắn muốn xoá {{count}} sinh viên khỏi ca thi không?",
     "delete": "Xoá",
     "cancel": "Hủy"
-  },
-  "table": {
-    "actions": "Hành động"
-  },
-  "search": {
-    "placeholder": "Tìm kiếm..."
   }
 }

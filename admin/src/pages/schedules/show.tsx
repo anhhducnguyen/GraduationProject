@@ -19,6 +19,10 @@ import { Upload } from 'antd';
 import { Student } from './types';
 import { Modal } from 'antd';
 import { PiTrashSimpleDuotone } from "react-icons/pi";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
 
 
 type Props = {
@@ -124,13 +128,48 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       dataIndex: 'firstName',
       key: 'firstName',
     },
+    // {
+    //   title: translate("attendance.status", "Trạng thái"),
+    //   dataIndex: 'status',
+    //   key: 'status',
+    //   render: (text) => {
+    //     const color = text === "present" ? "green" : "red";
+    //     return <Tag color={color}>{translate(`attendance.${text}`, text)}</Tag>;
+    //   },
+    //   filters: [
+    //     { text: translate("attendance.present"), value: "present" },
+    //     { text: translate("attendance.absent"), value: "absent" },
+    //   ],
+    //   onFilter: (value, record) => record.status === value,
+    // },
     {
       title: translate("attendance.status", "Trạng thái"),
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: "status",
+      key: "status",
       render: (text) => {
-        const color = text === "present" ? "green" : "red";
-        return <Tag color={color}>{translate(`attendance.${text}`, text)}</Tag>;
+        let color = "default";
+        let icon = null;
+        let label = translate(`attendance.${text}`, text);
+
+        switch (text) {
+          case "present":
+            color = "green";
+            icon = <CheckCircleOutlined />;
+            break;
+          case "absent":
+            color = "red";
+            icon = <CloseCircleOutlined />;
+            break;
+          default:
+            color = "default";
+            label = text;
+        }
+
+        return (
+          <Tag color={color} icon={icon}>
+            {label}
+          </Tag>
+        );
       },
       filters: [
         { text: translate("attendance.present"), value: "present" },
@@ -156,7 +195,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       // },
       render: (value) => {
         if (value === null || value === undefined) {
-          return null; 
+          return null;
         }
 
         const isReal = value === true || value === 1 || value === "1";
@@ -340,9 +379,9 @@ export default function CustomEventModal({ calendarEvent }: Props) {
               {translate("attendance.import_excel", "Nhập sinh viên từ Excel")}
             </Button>
           </Upload>
-          <Button size={size} style={{ backgroundColor: '#1976d2', color: 'white' }}>
+          {/* <Button size={size} style={{ backgroundColor: '#1976d2', color: 'white' }}>
             {translate("attendance.start_exam", "Bắt đầu ca thi")}
-          </Button>
+          </Button> */}
           {/* <Button
             icon={<PiTrashSimpleDuotone />}
             // style={{ backgroundColor: '#1976d2', color: 'white' }}

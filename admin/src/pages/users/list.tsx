@@ -1,82 +1,6 @@
-// import { useMemo } from "react";
-// import {
-//   useGetLocale,
-//   useList,
-//   useTranslate,
-// } from "@refinedev/core";
-// import { DataGrid, type GridColDef } from "@mui/x-data-grid";
-// import {
-//   DeleteButton,
-//   EditButton,
-//   List,
-//   NumberField,
-//   ShowButton,
-//   useDataGrid,
-// } from "@refinedev/mui";
-
-// // Define the product type with the category field
-// type User = {
-//   id: string;
-//   first_name: string;
-// };
-
-// export const UserList = () => {
-//   const { dataGridProps } = useDataGrid<User>(); // Use the Product type
-
-//   const locale = useGetLocale()();
-//   const translate = useTranslate();
-
-
-//   const columns = useMemo<GridColDef[]>(
-//     () => [
-//       {
-//         field: "id",
-//         flex: 1,
-//         headerName: translate("users.fields.id"),
-//         minWidth: 300,
-//       },
-//       {
-//         field: "first_name",
-//         flex: 1,
-//         headerName: translate("users.fields.firstName"),
-//         minWidth: 300,
-//       },
-//       {
-//         field: "actions",
-//         headerName: translate("table.actions"),
-//         sortable: false,
-//         display: "flex",
-//         renderCell: function render({ row }) {
-//           return (
-//             <>
-//               <ShowButton hideText recordItemId={row.id} />
-//               <EditButton hideText recordItemId={row.id} />
-//               <DeleteButton hideText recordItemId={row.id} />
-//             </>
-//           );
-//         },
-//         align: "center",
-//         headerAlign: "center",
-//         minWidth: 80,
-//       },
-//     ],
-//     [
-//       // categoryLoading, 
-//       // categoryData, 
-//       locale, translate]
-//   );
-
-//   return (
-//     <List>
-//       <DataGrid {...dataGridProps} columns={columns} />
-//     </List>
-//   );
-// };
-
-
-
-
 import { useMemo } from "react";
+import { Chip } from "@mui/material";
+import { Table, Tag, Button, Flex, Tooltip, Input, Space } from 'antd';
 import {
   useGetLocale,
   useTranslate,
@@ -133,28 +57,39 @@ export const UserList = () => {
         headerName: translate("users.fields.first_name") || "First Name",
         minWidth: 150,
       },
-      // {
-      //   field: "age",
-      //   flex: 1,
-      //   headerName: translate("users.fields.age") || "Age",
-      //   minWidth: 100,
-      //   type: "number",
-      // },
       {
         field: "role",
         flex: 1,
-        headerName: translate("users.fields.role") || "Role",
         minWidth: 120,
+        headerName: translate("users.fields.role") || "Role",
+        renderCell: ({ value }) => {
+          let color: "red" | "blue" | "green" | "default" = "default";
+          let label = value;
+
+          switch (value) {
+            case "admin":
+              color = "red";
+              label = translate("users.roles.admin", "Admin");
+              break;
+            case "teacher":
+              color = "blue";
+              label = translate("users.roles.teacher", "Teacher");
+              break;
+            case "student":
+              color = "green";
+              label = translate("users.roles.student", "Student");
+              break;
+            default:
+              label = value;
+          }
+
+          return <Tag color={color}>{label}</Tag>;
+        },
       },
-      // {
-      //   field: "gender",
-      //   flex: 1,
-      //   headerName: translate("users.fields.gender") || "Gender",
-      //   minWidth: 120,
-      // },
+
       {
         field: "actions",
-        type: "actions", // <-- thêm dòng này
+        type: "actions",
         headerName: translate("table.actions") || "Actions",
         sortable: false,
         renderCell: ({ row }) => (
