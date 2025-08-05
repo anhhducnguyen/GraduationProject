@@ -54,7 +54,10 @@ export const ExamScheduleCreate: React.FC = () => {
 
     const roomMap = useMemo(() => {
         const map: Record<number, string> = {};
-        roomData?.data?.forEach((room) => {
+        
+        roomData?.data
+        ?.filter((room) => room.status === "available")
+        ?.forEach((room) => {
             map[room.room_id] = room.room_name;
         });
         return map;

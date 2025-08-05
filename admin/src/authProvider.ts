@@ -27,7 +27,7 @@ export const authProvider: AuthBindings = {
         success: false,
         error: {
           name: "LoginError",
-          message: "Invalid email or password",
+          message: "Sai email hoặc mật khẩu. Vui lòng thử lại.",
         },
       };
     }

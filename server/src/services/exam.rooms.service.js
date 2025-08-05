@@ -78,6 +78,8 @@ const update = async (room_id, {
 // Xóa phòng thi theo mã phòng thi
 const deleteExamRoomById = async (room_id) => {
     try {
+        await db('examschedules').where({ room_id }).del();
+        
         const deletedExamRoom = await db('examrooms')
             .where({ room_id })
             .del();

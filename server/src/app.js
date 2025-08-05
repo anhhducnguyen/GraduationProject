@@ -7,6 +7,9 @@ const dotenv = require("dotenv");
 const passport = require("../config/passport");
 const session = require("express-session");
 const sessionMiddleware = require('../config/session');
+const startMQTT = require('./mqtt/mqttClient');
+
+startMQTT();
 
 const cors = require('cors');
 app.use(cors());

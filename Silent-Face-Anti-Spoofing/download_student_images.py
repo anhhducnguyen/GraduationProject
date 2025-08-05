@@ -14,7 +14,7 @@ nest_asyncio.apply()
 # Đường dẫn API
 BASE_URL = 'https://ctsv.phenikaa-uni.edu.vn/api/v1/ctsv_pdt_storage/avatar/'
 
-# Tắt xác minh SSL (⚠️ Chỉ nên dùng nếu là server nội bộ/self-signed)
+# Tắt xác minh SSL (Chỉ nên dùng nếu là server nội bộ/self-signed)
 ssl_context = ssl.create_default_context()
 ssl_context.check_hostname = False
 ssl_context.verify_mode = ssl.CERT_NONE
@@ -58,7 +58,7 @@ async def fetch_images(session, student_id):
                 print(f"Lỗi truy cập thư mục {student_url}: {response.status}")
                 return student_id, []
     except Exception as e:
-        print(f"❌ Lỗi kết nối {student_url}: {e}")
+        print(f"Lỗi kết nối {student_url}: {e}")
         return student_id, []
 
 # Tải ảnh và lưu về thư mục theo student_id
@@ -73,16 +73,16 @@ async def download_image(session, student_id, img_url):
                 file_path = os.path.join(folder_path, filename)
                 with open(file_path, 'wb') as f:
                     f.write(await resp.read())
-                print(f"✅ Đã tải: {file_path}")
+                print(f"Đã tải: {file_path}")
             else:
-                print(f"⚠️ Không tải được {img_url} - Status: {resp.status}")
+                print(f"Không tải được {img_url} - Status: {resp.status}")
     except Exception as e:
-        print(f"❌ Lỗi khi tải ảnh {img_url}: {e}")
+        print(f"Lỗi khi tải ảnh {img_url}: {e}")
 
 async def main():
     directories = await fetch_directories()
 
-    # 🔢 Chỉ lấy 100 sinh viên đầu tiên
+    # Chỉ lấy 100 sinh viên đầu tiên
     # directories = directories[:100]
     directories = directories[100:200]
 
@@ -105,7 +105,7 @@ async def main():
 
         await asyncio.gather(*download_tasks)
 
-    print(f"\n🎉 Đã hoàn tất tải ảnh của {len(directories)} sinh viên đầu tiên.")
+    print(f"\n Đã hoàn tất tải ảnh của {len(directories)} sinh viên đầu tiên.")
 
 # Chạy
 if __name__ == "__main__":

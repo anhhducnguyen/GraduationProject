@@ -31,8 +31,6 @@ router.post("/login", (req, res, next) => {
   const message = info?.message || "Authentication failed";
   return res.status(401).json({ message });
 }
-
-
     return res.json({ 
       token: data.token,
       user: data.user

@@ -23,7 +23,7 @@ insert_query = """
 """
 
 # ========== Tạo model 1 lần ==========
-app = FaceAnalysis(name='buffalo_s', providers=['CPUExecutionProvider'])
+app = FaceAnalysis(name='buffalo_sc', providers=['CPUExecutionProvider'])
 app.prepare(ctx_id=0)
 
 # ========== Hàm xử lý 1 thư mục ==========
@@ -52,11 +52,11 @@ def process_student_folder(folder_path):
             print(f"✅ {student_id} saved from {filename}")
             return 1  # Thành công
 
-    print(f"⚠️ {student_id} không có ảnh hợp lệ.")
+    print(f"⚠️ {student_id} no valid photo.")
     return 0  # Thất bại
 
 # ========== Chạy song song ==========
-ROOT_FOLDER = "E:/do_an_end/auth-service/Silent-Face-Anti-Spoofing/know_face"  # Thay bằng đường dẫn của bạn
+ROOT_FOLDER = "E:/do_an_end/auth-service/Silent-Face-Anti-Spoofing/K15-CNTT4"  # Thay bằng đường dẫn của bạn
 folders = [os.path.join(ROOT_FOLDER, d) for d in os.listdir(ROOT_FOLDER)
            if os.path.isdir(os.path.join(ROOT_FOLDER, d))]
 
@@ -66,7 +66,7 @@ with ThreadPoolExecutor(max_workers=8) as executor:  # Sửa số luồng nếu 
     for future in as_completed(futures):
         total_success += future.result()
 
-print(f"\n🎉 Đã xử lý xong {total_success}/{len(folders)} sinh viên thành công.")
+print(f"\n🎉 Processed {total_success}/{len(folders)} students successfully.")
 
 cursor.close()
 conn.close()

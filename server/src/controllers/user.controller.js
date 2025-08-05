@@ -78,7 +78,7 @@ class UserController extends BaseController {
       const data = await Service.getById(req.params.id);
 
       if (!data || data.length === 0) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "Người dùng không tồn tại" });
       }
 
       return res.json({
@@ -126,7 +126,7 @@ class UserController extends BaseController {
         avatar
       });
 
-      return BaseController.successResponse(res, data, 'Create successfully', 201);
+      return BaseController.successResponse(res, data, 'Tạo người dùng thành công', 201);
     } catch (error) {
       console.error("Error creating user:", error);
       return BaseController.errorResponse(res, error);
@@ -160,7 +160,7 @@ class UserController extends BaseController {
         avatar
       });
 
-      return BaseController.successResponse(res, data, 'Update successfully');
+      return BaseController.successResponse(res, data, 'Cập nhật thành công');
     } catch (error) {
       return BaseController.errorResponse(res, error);
     }
@@ -172,7 +172,7 @@ class UserController extends BaseController {
       let id = req.params.id;
       const data = await Service.delete(id);
 
-      return BaseController.successResponse(res, data, 'Delete successfully');
+      return BaseController.successResponse(res, data, 'Xóa người dùng thành công');
     } catch (error) {
       return BaseController.errorResponse(res, error);
     }

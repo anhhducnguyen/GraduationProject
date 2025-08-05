@@ -30,9 +30,9 @@
       "status": "Trạng thái"
     },
     "status": {
-      "schedule": "Đã lên lịch",
-      "complete": "Hoàn thành",
-      "cancel": "Đã hủy"
+      "available": "Phòng trống",
+      "occupied": "Đang sử dụng",
+      "unavailable": "Không sử dụng"
     }
   },
   "schedules": {

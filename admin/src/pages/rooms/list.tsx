@@ -16,7 +16,7 @@ import {
   useDataGrid,
 } from "@refinedev/mui";
 import { Chip } from "@mui/material";
-import type { ExamRoom } from "./types"; 
+import type { ExamRoom } from "./types";
 
 export const ExamRoomList = () => {
   const { dataGridProps } = useDataGrid<ExamRoom>();
@@ -59,20 +59,37 @@ export const ExamRoomList = () => {
           let color: "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" = "default";
           let label = value;
 
+          // switch (value) {
+          //   case "schedule":
+          //     color = "info";
+          //     label = translate("schedules.status.scheduled", "Scheduled");
+          //     break;
+          //   case "complete":
+          //     color = "success";
+          //     label = translate("schedules.status.completed", "Completed");
+          //     break;
+          //   case "cancel":
+          //     color = "error";
+          //     label = translate("schedules.status.cancelled", "Cancelled");
+          //     break;
+          // }
           switch (value) {
-            case "schedule":
-              color = "info";
-              label = translate("schedules.status.scheduled", "Scheduled");
-              break;
-            case "complete":
+            case "available":
               color = "success";
-              label = translate("schedules.status.completed", "Completed");
+              label = translate("rooms.status.available", "Phòng trống");
               break;
-            case "cancel":
+            case "scheduled":
+              color = "warning";
+              label = translate("rooms.status.scheduled", "Đã đặt lịch");
+              break;
+            case "in_use":
               color = "error";
-              label = translate("schedules.status.cancelled", "Cancelled");
+              label = translate("rooms.status.in_use", "Đang thi");
               break;
+            default:
+              label = value;
           }
+
           return <Chip label={label} color={color} size="small" />;
         },
       },

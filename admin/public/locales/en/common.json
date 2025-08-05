@@ -30,9 +30,9 @@
       "status": "Status"
     },
     "status": {
-      "schedule": "Scheduled",
-      "complete": "Completed",
-      "cancel": "Cancelled"
+      "available": "Available",
+      "occupied": "Occupied",
+      "unavailable": "Unavailable"
     }
   },
   "schedules": {

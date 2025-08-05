@@ -78,6 +78,10 @@ const create = async ({
             name_schedule
         });
 
+        await db("examrooms")
+            .where({ room_id })
+            .update({ status: "scheduled" });
+
         const newExamSchedule = await db('examschedules')
             .where({ schedule_id })
             .first();

@@ -45,4 +45,4 @@ faiss.write_index(index, "faiss_index/face_index.faiss")
 with open("faiss_index/student_ids.pkl", "wb") as f:
     pickle.dump(student_ids, f)
 
-print(f"✅ FAISS index đã lưu. Tổng số vector: {index.ntotal}")
+print(f"FAISS index saved. Total vectors: {index.ntotal}")
