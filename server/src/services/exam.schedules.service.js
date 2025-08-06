@@ -1,5 +1,12 @@
 const db = require('../../config/database');
 const { buildQuery } = require("../utils/queryBuilder");
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 
 // Lấy danh sách lịch thi
 const queryExamSchedules = async (filters = {}, options = {}) => {
@@ -90,6 +97,47 @@ const create = async ({
         throw new Error('Error creating exam schedule: ' + error.message);
     }
 };
+
+// const LOCAL_TZ = 'Asia/Ho_Chi_Minh';
+
+// const create = async ({
+//     start_time,
+//     end_time,
+//     room_id,
+//     status,
+//     name_schedule
+// }) => {
+//     try {
+//         // Chuyển từ giờ VN sang UTC trước khi lưu
+//         const startUTC = dayjs.tz(start_time, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
+//         const endUTC = dayjs.tz(end_time, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
+
+//         const [schedule_id] = await db('examschedules').insert({
+//             start_time: startUTC,
+//             end_time: endUTC,
+//             room_id,
+//             status,
+//             name_schedule
+//         });
+
+//         await db("examrooms")
+//             .where({ room_id })
+//             .update({ status: "scheduled" });
+
+//         const newExamSchedule = await db('examschedules')
+//             .where({ schedule_id })
+//             .first();
+
+//         // Nếu muốn trả về luôn thời gian dạng giờ VN thì convert ngược lại
+//         newExamSchedule.start_time = dayjs.utc(newExamSchedule.start_time).tz(LOCAL_TZ).format('YYYY-MM-DD HH:mm:ss');
+//         newExamSchedule.end_time = dayjs.utc(newExamSchedule.end_time).tz(LOCAL_TZ).format('YYYY-MM-DD HH:mm:ss');
+
+//         return newExamSchedule;
+//     } catch (error) {
+//         throw new Error('Error creating exam schedule: ' + error.message);
+//     }
+// };
+
 
 // Cập nhật lịch thi
 const update = async (id, {

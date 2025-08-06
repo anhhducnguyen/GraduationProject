@@ -74,7 +74,7 @@ function SchedulePage() {
       createDragAndDropPlugin(),
       calendarControls,
     ],
-    // locale: 'vi-VN',
+    locale: 'vi-VN',
   });
 
   // Thiết lập theme và giới hạn giờ hiển thị
