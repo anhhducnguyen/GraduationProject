@@ -1,7 +1,6 @@
 const db = require('../../config/database');
 const dayjs = require('dayjs');
 const { buildQuery } = require("../utils/queryBuilder");
-const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
 
@@ -243,7 +242,7 @@ const getCurrentExamSchedule = async () => {
 //         .andWhere('end_time', '>=', now);
 // };
 
-const getCurrentSchedules = async () => {
+const getCurrentExamSchedules = async () => {
     try {
         // 1. Lấy thời gian hiện tại dưới dạng UTC.
         // dayjs().utc() sẽ lấy khoảnh khắc hiện tại và biểu diễn nó ở múi giờ UTC.

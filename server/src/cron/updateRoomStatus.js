@@ -2,14 +2,13 @@ const cron = require('node-cron');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const timezone = require('dayjs/plugin/timezone');
-const db = require('../../config/database'); 
+const db = require('../../config/database');
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const LOCAL_TZ = 'Asia/Ho_Chi_Minh';
 
-// Hàm cập nhật trạng thái phòng
 const updateRoomStatuses = async () => {
     const nowVN = dayjs().tz(LOCAL_TZ);
 
@@ -41,4 +40,9 @@ const updateRoomStatuses = async () => {
     }
 };
 
-cron.schedule('* * * * *', updateRoomStatuses);
+// Hàm để khởi động cron
+const startRoomStatusCron = () => {
+    cron.schedule('* * * * *', updateRoomStatuses);
+};
+
+module.exports = startRoomStatusCron;
