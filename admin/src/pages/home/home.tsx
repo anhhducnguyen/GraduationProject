@@ -12,6 +12,9 @@ import {
 
 import axios from "@/utils/axios"; // axios đã cấu hình baseURL
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+
 const Home = () => {
   const [stats, setStats] = useState({
     fakeFaceTotal: 0,
@@ -23,7 +26,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/overview");
+        const response = await axios.get(`${API_URL}/api/v1/dashboard/overview`);
         const result = response.data.data;
 
         setStats({

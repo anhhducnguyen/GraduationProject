@@ -1,26 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Spin, Pagination } from 'antd';
 
-interface FakeFace {
-  url: string;
-  public_id: string;
-  created_at: string;
-  width: number;
-  height: number;
-  format: string;
-}
+import { FakeFace, ApiResponse } from './types'
 
-interface ApiResponse {
-  success: boolean;
-  message: string;
-  data: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-    urls: FakeFace[];
-  };
-}
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 
 export const FakeFacesList: React.FC = () => {
   const [faces, setFaces] = useState<FakeFace[]>([]);
@@ -31,7 +15,7 @@ export const FakeFacesList: React.FC = () => {
   const fetchFakeFaces = async (page: number) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/v1/fake-faces?page=${page}&limit=6`);
+      const res = await fetch(`${API_URL}/api/v1/fake-faces?page=${page}&limit=6`);
       const data: ApiResponse = await res.json();
       setFaces(data.data.urls);
       setTotalPages(data.data.totalPages);

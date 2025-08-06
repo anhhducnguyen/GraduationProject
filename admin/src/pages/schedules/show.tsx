@@ -24,6 +24,7 @@ import {
   CloseCircleOutlined,
 } from "@ant-design/icons";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 type Props = {
   calendarEvent: CalendarEvent;
@@ -199,7 +200,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
     if (!calendarEvent?.id) return;
     try {
       setLoading(true);
-      const res = await fetch(`http://localhost:5000/api/v1/exam-schedules/${calendarEvent.id}/students`, {
+      const res = await fetch(`${API_URL}/api/v1/exam-schedules/${calendarEvent.id}/students`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -258,7 +259,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       const studentIds: string[] = jsonData.map((row) => row['Mã số'] || row['id']).filter(Boolean);
 
       try {
-        const res = await fetch(`http://localhost:5000/api/v1/exam-schedules/${calendarEvent.id}/students/import-ids`, {
+        const res = await fetch(`${API_URL}/api/v1/exam-schedules/${calendarEvent.id}/students/import-ids`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -289,7 +290,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       cancelText: translate("attendance.cancel", "Huỷ"),
       onOk: async () => {
         try {
-          const res = await fetch(`http://localhost:5000/api/v1/exam-schedules/${calendarEvent.id}/students/delete`, {
+          const res = await fetch(`${API_URL}/api/v1/exam-schedules/${calendarEvent.id}/students/delete`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

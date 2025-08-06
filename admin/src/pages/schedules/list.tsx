@@ -29,6 +29,7 @@ import { Upload, message } from 'antd';
 import type { UploadProps } from 'antd';
 import { format, parseISO } from 'date-fns';
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const token = localStorage.getItem("refine-auth");
 
@@ -36,7 +37,7 @@ const props: UploadProps = {
   name: 'file',
   accept: '.xlsx,.xls',
   showUploadList: false,
-  action: 'http://localhost:5000/api/v1/exam-schedule/import', 
+  action: `${API_URL}/api/v1/exam-schedule/import`, 
   headers: {
     Authorization: `Bearer ${token}`, 
   },
@@ -97,8 +98,7 @@ function SchedulePage() {
       _end: range.end,
     });
 
-    fetch(`http://localhost:5000/api/v1/exam-schedule?${params.toString()}`, {
-    // fetch(`http://localhost:5000/api/v1/exam-schedule?${params.toString()}`, {
+    fetch(`${API_URL}/api/v1/exam-schedule?${params.toString()}`, {
       headers: {
         'Content-Type': 'application/json',
         "Authorization": `Bearer ${token}`,
@@ -121,8 +121,6 @@ function SchedulePage() {
         const mappedEvents: MyCalendarEvent[] = data.results.map((item: ApiEventItem) => ({
           id: item.schedule_id,
           title: item.name_schedule,
-          // start: formatInTimeZone(item.start_time, vietnamTimeZone, 'yyyy-MM-dd HH:mm'),
-          // end: formatInTimeZone(item.end_time, vietnamTimeZone, 'yyyy-MM-dd HH:mm'),
           start: format(parseISO(item.start_time), 'yyyy-MM-dd HH:mm'),
         end: format(parseISO(item.end_time), 'yyyy-MM-dd HH:mm'),
           description: item.name_schedule,
