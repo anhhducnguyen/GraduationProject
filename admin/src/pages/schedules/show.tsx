@@ -189,7 +189,9 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       title: translate("attendance.checkin_time", "Thời gian điểm danh"),
       dataIndex: 'checkInTime',
       key: 'checkInTime',
-      render: (text) => dayjs(text).format('HH:mm:ss DD/MM/YYYY'),
+      width: 110,
+      align: 'right',
+      render: (text) => dayjs(text).format('HH:mm:ss'),
     },
   ];
 

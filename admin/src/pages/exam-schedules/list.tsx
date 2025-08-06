@@ -120,33 +120,6 @@ export const ExamScheduleList = () => {
       renderCell: ({ value }) =>
         dayjs(value).locale(locale ?? "en").format("dddd, DD/MM/YYYY HH:mm"),
     },
-    // {
-    //   field: "status",
-    //   headerName: translate("schedules.fields.status"),
-    //   flex: 1,
-    //   minWidth: 120,
-    //   renderCell: ({ value }) => {
-    //     let color: "blue" | "green" | "red" | "default" = "default";
-    //     let label = value;
-
-    //     switch (value) {
-    //       case "scheduled":
-    //         color = "blue";
-    //         label = translate("schedules.status.scheduled", "Scheduled");
-    //         break;
-    //       case "completed":
-    //         color = "green";
-    //         label = translate("schedules.status.completed", "Completed");
-    //         break;
-    //       case "cancelled":
-    //         color = "red";
-    //         label = translate("schedules.status.cancelled", "Cancelled");
-    //         break;
-    //     }
-
-    //     return <Tag color={color}>{label}</Tag>;
-    //   },
-    // },
     {
       field: "status",
       headerName: translate("schedules.fields.status"),

@@ -30,6 +30,7 @@ import { GiArtificialIntelligence } from "react-icons/gi";
 import {
   UserList,
   UserShow,
+  UserEdit,
   UserCreate,
   AddStudentToExamSchedule,
 } from "@/pages/users";
@@ -90,6 +91,7 @@ function App() {
                 name: "users",
                 list: "/users",
                 show: "/users/:id",
+                edit: "/users/:id/edit",
                 create: "/users/new",
                 meta: { 
                   icon: <HiUserGroup />, 
@@ -153,6 +155,7 @@ function App() {
                   <Route index element={<UserList />} />
                   <Route path=":id" element={<UserShow />} />
                   <Route path="new" element={<UserCreate />} />
+                  <Route path=":id/edit" element={<UserEdit/>} />
                   {/* <Route path="add" element={<AddStudentToExamSchedule />} /> */}
                 </Route>
 

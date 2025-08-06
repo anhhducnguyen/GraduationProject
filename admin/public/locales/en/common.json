@@ -74,7 +74,7 @@
     "cancel": "Cancel"
   },
   "buttons": {
-    "create": "Add new",
+    "create": "Create",
     "save": "Save",
     "logout": "Logout",
     "delete": "Delete",
@@ -103,9 +103,10 @@
     "users": "Users",
     "resourceLabel": "Users",
     "titles": {
-      "edit": "Edit User Information",
+      "create": "Add new user",
+      "edit": "Edit user information",
       "list": "Users",
-      "show": "User Details"
+      "show": "User details"
     },
     "fields": {
       "id": "ID",
@@ -115,11 +116,18 @@
       "gender": "Gender",
       "avatar": "Avatar",
       "email": "Email",
+      "password": "Password",
+      "username": "Username",
       "role": "Role"
     },
     "gender": {
       "male": "Male",
       "female": "Female"
+    },
+    "roles": {
+      "student": "Student",
+      "admin": "Administrator",
+      "teacher": "Teacher"
     }
   },
   "schedules": {

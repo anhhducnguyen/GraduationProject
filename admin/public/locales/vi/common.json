@@ -103,6 +103,7 @@
     "users": "Người dùng",
     "resourceLabel": "Người dùng",
     "titles": {
+      "create": "Thêm mới người dùng",
       "edit": "Chỉnh sửa thông tin người dùng",
       "list": "Người dùng",
       "show": "Thông tin người dùng"
@@ -115,11 +116,18 @@
       "gender": "Giới tính",
       "avatar": "Ảnh đại diện",
       "email": "Email",
+      "password": "Mật khẩu",
+      "username": "Tài khoản",
       "role": "Vai trò"
     },
     "gender": {
       "male": "Nam",
       "female": "Nữ"
+    },
+    "roles": {
+      "student": "Học sinh",
+      "admin": "Quản trị viên",
+      "teacher": "Giáo viên"
     }
   },
   "schedules": {
@@ -129,7 +137,7 @@
     },
     "import_excel": "Nhập lịch thi từ Excel",
     "fields": {
-      "id": "ID",
+      "id": "Mã lịch thi",
       "name_schedule": "Tên lịch thi",
       "start_time": "Thời gian bắt đầu",
       "end_time": "Thời gian kết thúc",
@@ -185,7 +193,7 @@
   },
   "attendance": {
     "index": "STT",
-    "student_id": "Mã số",
+    "student_id": "Mã sinh viên",
     "last_name": "Họ đệm",
     "first_name": "Tên",
     "status": "Trạng thái",

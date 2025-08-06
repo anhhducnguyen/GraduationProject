@@ -1,51 +1,37 @@
 import React, { useEffect, useMemo } from "react";
-import { useShow, useTranslate } from "@refinedev/core";
+import { useShow, useTranslate, useGetLocale } from "@refinedev/core";
+import { Show } from "@refinedev/mui";
 import {
-  Show,
-} from "@refinedev/mui";
-import {
-  Chip,
   Typography,
   Divider,
   Skeleton,
   Stack,
   Button,
   Grid,
+  Box,
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { format } from "date-fns";
+import { Tag } from "antd";
+import {
+  CalendarOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
+import dayjs from "dayjs";
+import { vi } from "date-fns/locale";
 
-type Room = {
-  room_id: number;
-  room_name: string;
-  capacity: number;
-};
-
-type Student = {
-  student_id: number;
-  first_name: string;
-  last_name: string;
-  is_present: number;
-  updated_at: string;
-};
-
-type ExamSchedule = {
-  schedule_id: number;
-  name_schedule: string;
-  status: string;
-  start_time: string;
-  end_time: string;
-  room?: Room;
-  students?: Student[];
-};
+import type { ExamSchedule } from './types'
 
 export const ExamScheduleShow: React.FC = () => {
   const translate = useTranslate();
+  const locale = useGetLocale()();
+  const isVi = locale === "vi";
+  const t = (en: string, viText: string) => (isVi ? viText : en);
 
   const {
     query: { data, isLoading, isFetching, refetch },
   } = useShow<ExamSchedule>();
-
   const schedule = data?.data;
 
   useEffect(() => {
@@ -53,156 +39,170 @@ export const ExamScheduleShow: React.FC = () => {
     return () => clearInterval(interval);
   }, [refetch]);
 
-  const renderPresenceChip = (value: number) => {
-    const isPresent = Boolean(value);
+  const renderDate = (value: string) => {
+    const date = new Date(value);
     return (
-      <Chip
-        label={
-          isPresent
-            ? translate("students.status.present", "Present")
-            : translate("students.status.absent", "Absent")
-        }
-        color={isPresent ? "success" : "error"}
-        size="small"
-        variant="outlined"
-      />
+      <Typography variant="body2">
+        {format(date, isVi ? "EEEE, dd/MM/yyyy 'lúc' HH:mm" : "EEE/dd/yyyy HH:mm", {
+          locale: isVi ? vi : undefined,
+        })}
+      </Typography>
     );
   };
 
-  // Sửa hàm renderDate để hiển thị theo format mong muốn
-  const renderDate = (value: string) => {
-    // Format: Thứ viết tắt (3 ký tự)/Ngày/4 số năm Giờ:Phút
-    // VD: Fri/08/2025 09:00
-    return value ? format(new Date(value), "EEE/dd/yyyy HH:mm") : "-";
-  };
-
-  const renderStatusChip = (value: string | undefined) => {
+  const renderStatusTag = (value: string | undefined) => {
     if (!value) return <Skeleton height="20px" width="100px" />;
-
-    let color:
-      | "default"
-      | "primary"
-      | "secondary"
-      | "error"
-      | "info"
-      | "success"
-      | "warning" = "default";
+    let color: "blue" | "green" | "red" | "default" = "default";
     let label = value;
+    let icon = null;
 
     switch (value) {
       case "scheduled":
-        color = "info";
-        label = translate("schedules.status.scheduled", "Scheduled");
+        color = "blue";
+        label = t("Scheduled", "Đã lên lịch");
+        icon = <CalendarOutlined />;
         break;
       case "completed":
-        color = "success";
-        label = translate("schedules.status.completed", "Completed");
+        color = "green";
+        label = t("Completed", "Đã hoàn thành");
+        icon = <CheckCircleOutlined />;
         break;
       case "cancelled":
-        color = "error";
-        label = translate("schedules.status.cancelled", "Cancelled");
+        color = "red";
+        label = t("Cancelled", "Đã hủy");
+        icon = <CloseCircleOutlined />;
         break;
+      default:
+        label = value;
     }
 
-    return <Chip label={label} color={color} size="small" variant="outlined" />;
+    return <Tag color={color} icon={icon}>{label}</Tag>;
   };
 
   const studentColumns: GridColDef[] = useMemo(
     () => [
       {
         field: "student_id",
-        headerName: translate("students.fields.student_id", "Student ID"),
+        headerName: t("Student ID", "Mã SV"),
         flex: 1,
       },
       {
         field: "last_name",
-        headerName: translate("users.fields.last_name", "Last Name"),
+        headerName: t("Last Name", "Họ"),
         flex: 1.5,
       },
       {
         field: "first_name",
-        headerName: translate("users.fields.first_name", "First Name"),
+        headerName: t("First Name", "Tên"),
         flex: 1.5,
       },
       {
         field: "is_present",
-        headerName: translate("students.fields.is_present", "Present"),
+        headerName: t("Present", "Có mặt"),
         flex: 1,
         minWidth: 120,
-        renderCell: ({ value }) => renderPresenceChip(value),
+        renderCell: ({ value }) => {
+          let color: "green" | "red" | "default" = "default";
+          let label = value;
+          let icon = null;
+
+          switch (value) {
+            case 1:
+              color = "green";
+              label = t("Present", "Có mặt");
+              icon = <CheckCircleOutlined />;
+              break;
+            case 0:
+              color = "red";
+              label = t("Absent", "Vắng mặt");
+              icon = <CloseCircleOutlined />;
+              break;
+            default:
+              label = String(value);
+          }
+
+          return <Tag color={color} icon={icon}>{label}</Tag>;
+        },
       },
+      // {
+      //   field: "confidence",
+      //   headerName: t("Confidence", "Độ chính xác (%)"),
+      //   flex: 1,
+      //   minWidth: 120,
+      //   align: 'right',
+      //   renderCell: ({ value }) => `${value?.toFixed?.(2) ?? '-'}%`,
+      // },
+      // {
+      //   field: "realFace",
+      //   headerName: t("Real Face", "Real Face"),
+      //   flex: 1,
+      //   minWidth: 100,
+      //   renderCell: ({ value }) => {
+      //     if (value === null || value === undefined) return "-";
+      //     const isReal = value === true || value === 1 || value === "1";
+      //     const color = isReal ? "green" : "red";
+      //     const label = isReal ? t("Real", "Thật") : t("Fake", "Giả");
+      //     return <Tag color={color}>{label}</Tag>;
+      //   },
+      // },
+
+
       {
         field: "updated_at",
-        headerName: translate("students.fields.updated_at", "Last Updated"),
+        headerName: t("Last Updated", "Cập nhật lần cuối"),
         flex: 2,
-        renderCell: ({ value }) => renderDate(value),
+        // renderCell: ({ value }) => renderDate(value),
+        renderCell: ({ value }) =>
+          dayjs(value).locale(locale ?? "en").format("dddd, DD/MM/YYYY HH:mm"),
       },
     ],
-    [translate]
+    [translate, locale]
   );
+
+  const renderRow = (label: string, value: React.ReactNode) => (
+  <Box display="flex" gap={1} mb={1}>
+    <Typography fontWeight="bold" minWidth={160}>
+      {label}
+    </Typography>
+    <Box>
+      {value !== undefined ? value : <Skeleton width="100px" />}
+    </Box>
+  </Box>
+);
+
 
   return (
     <Show isLoading={isLoading}>
       <Stack gap={2}>
-        <Grid container spacing={2}>
-          {([
-            ["Schedule ID", schedule?.schedule_id],
-            ["Schedule Name", schedule?.name_schedule],
-            ["Status", renderStatusChip(schedule?.status)],
-            [
-              "Start Time",
-              schedule?.start_time ? (
-                <Typography>{renderDate(schedule.start_time)}</Typography>
-              ) : (
-                <Skeleton height="20px" width="100px" />
-              ),
-            ],
-            [
-              "End Time",
-              schedule?.end_time ? (
-                <Typography>{renderDate(schedule.end_time)}</Typography>
-              ) : (
-                <Skeleton height="20px" width="100px" />
-              ),
-            ],
-            ["Room Name", schedule?.room?.room_name],
-            ["Capacity", schedule?.room?.capacity],
-          ] as [string, React.ReactNode][]).map(([label, value]) => (
-            <React.Fragment key={label}>
-              <Grid item xs={4} sm={3}>
-                <Typography fontWeight="bold">{label}</Typography>
-              </Grid>
-              <Grid item xs={8} sm={9}>
-                {value !== undefined ? (
-                  typeof value === "string" || typeof value === "number" ? (
-                    <Typography>{value}</Typography>
-                  ) : (
-                    value
-                  )
-                ) : (
-                  <Skeleton height="20px" width="200px" />
-                )}
-              </Grid>
-            </React.Fragment>
-          ))}
+        <Grid container spacing={1}>
+          {/* Cột 1 */}
+          <Grid item xs={12} md={4}>
+            {renderRow(t("Schedule ID", "Mã lịch"), schedule?.schedule_id)}
+            {renderRow(t("Schedule Name", "Tên lịch"), schedule?.name_schedule)}
+          </Grid>
+
+          {/* Cột 2 */}
+          <Grid item xs={12} md={4}>
+            {renderRow(t("Room Name", "Tên phòng"), schedule?.room?.room_name)}
+            {renderRow(t("Capacity", "Sức chứa"), schedule?.room?.capacity)}
+          </Grid>
+
+          {/* Cột 3 */}
+          <Grid item xs={12} md={4}>
+            {renderRow(t("Start Time", "Bắt đầu"), schedule?.start_time ? renderDate(schedule.start_time) : undefined)}
+            {renderRow(t("End Time", "Kết thúc"), schedule?.end_time ? renderDate(schedule.end_time) : undefined)}
+            {renderRow(t("Status", "Trạng thái"), renderStatusTag(schedule?.status))}
+          </Grid>
         </Grid>
 
         <Divider />
 
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Typography variant="h6" fontWeight="bold">
-            Student List
+            {t("Student List", "Danh sách sinh viên")}
           </Typography>
-          <Button
-            variant="outlined"
-            onClick={() => refetch()}
-            disabled={isFetching}
-          >
-            {isFetching ? "Refreshing..." : "Refresh"}
+          <Button variant="outlined" onClick={() => refetch()} disabled={isFetching}>
+            {isFetching ? t("Refreshing...", "Đang làm mới...") : t("Refresh", "Làm mới")}
           </Button>
         </Stack>
 
@@ -219,11 +219,9 @@ export const ExamScheduleShow: React.FC = () => {
             disableRowSelectionOnClick
           />
         ) : (
-          <Typography>No students found for this schedule.</Typography>
+          <Typography>{t("No students found for this schedule.", "Không có sinh viên nào trong lịch thi này.")}</Typography>
         )}
       </Stack>
     </Show>
   );
 };
-
-

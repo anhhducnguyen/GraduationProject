@@ -49,7 +49,7 @@ export const FakeFacesList: React.FC = () => {
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center">
-        <Spin size="large" tip="Đang tải dữ liệu..." />
+        <Spin size="large"/>
       </div>
     );
   }

@@ -18,20 +18,7 @@ import { Create } from "@refinedev/mui";
 import { useTheme } from "@mui/material/styles";
 import React, { useState } from "react";
 import { Controller } from "react-hook-form";
-
-
-type User = {
-  id?: string;
-  first_name: string;
-  last_name: string;
-  age: number;
-  gender: string;
-  avatar?: string;
-  email: string;
-  username: string;
-  password: string;
-  role: string;
-};
+import { User } from "./types";
 
 export const UserCreate: React.FC = () => {
   const translate = useTranslate();
@@ -57,7 +44,7 @@ export const UserCreate: React.FC = () => {
     if (file) {
       const fileUrl = URL.createObjectURL(file);
       setAvatarPreview(fileUrl);
-      setValue("avatar", file.name); 
+      setValue("avatar", file.name);
     }
   };
 
@@ -74,7 +61,7 @@ export const UserCreate: React.FC = () => {
           helperText={errors?.first_name?.message}
           margin="normal"
           fullWidth
-          label="First Name"
+          label={translate("users.fields.first_name")}
         />
 
         <TextField
@@ -83,7 +70,7 @@ export const UserCreate: React.FC = () => {
           helperText={errors?.last_name?.message}
           margin="normal"
           fullWidth
-          label="Last Name"
+          label={translate("users.fields.last_name")}
         />
 
         <TextField
@@ -97,20 +84,22 @@ export const UserCreate: React.FC = () => {
           margin="normal"
           fullWidth
           type="number"
-          label="Age"
-        />
+          label={translate("users.fields.age")}
 
+        />
         <FormControl fullWidth margin="normal" error={!!errors?.gender}>
-          <InputLabel id="gender-label">Gender</InputLabel>
+          <InputLabel id="gender-label">{translate("users.fields.gender")}</InputLabel>
           <Select
             labelId="gender-label"
             defaultValue=""
-            {...register("gender", { required: "Required" })}
-            label="Gender"
+            {...register("gender", { required: `${translate("users.fields.gender")} là bắt buộc` })}
+            label={translate("users.fields.gender")}
           >
-            <MenuItem value=""><em>Choose...</em></MenuItem>
-            <MenuItem value="male">Male</MenuItem>
-            <MenuItem value="female">Female</MenuItem>
+            <MenuItem value="">
+              <em>{translate("users.fields.gender")}...</em>
+            </MenuItem>
+            <MenuItem value="male">{translate("users.gender.male")}</MenuItem>
+            <MenuItem value="female">{translate("users.gender.female")}</MenuItem>
           </Select>
           <FormHelperText>{errors?.gender?.message}</FormHelperText>
         </FormControl>
@@ -122,7 +111,7 @@ export const UserCreate: React.FC = () => {
           helperText={errors?.email?.message}
           margin="normal"
           fullWidth
-          label="Email"
+          label={translate("users.fields.email")}
           type="email"
         />
 
@@ -132,7 +121,7 @@ export const UserCreate: React.FC = () => {
           helperText={errors?.username?.message}
           margin="normal"
           fullWidth
-          label="Username"
+          label={translate("users.fields.username")}
         />
 
         <TextField
@@ -148,32 +137,33 @@ export const UserCreate: React.FC = () => {
           margin="normal"
           fullWidth
           type="password"
-          label="Password"
+          label={translate("users.fields.password")}
         />
 
         <FormControl fullWidth margin="normal" error={!!errors?.role}>
-          <InputLabel id="role-label">Role</InputLabel>
+          <InputLabel id="role-label">{translate("users.fields.role")}</InputLabel>
           <Controller
             name="role"
             control={control}
-            rules={{ required: "Required" }}
+            rules={{ required: `${translate("users.fields.role")} là bắt buộc` }}
             render={({ field }) => (
               <Select
                 {...field}
                 labelId="role-label"
-                label="Role"
-                defaultValue="student"
+                label={translate("users.fields.role")}
+                defaultValue=""
               >
-                <MenuItem value=""><em>Choose...</em></MenuItem>
-                <MenuItem value="student">Student</MenuItem>
-                <MenuItem value="admin">Admin</MenuItem>
-                <MenuItem value="teacher">Teacher</MenuItem>
+                <MenuItem value="">
+                  <em>{translate("users.fields.role")}...</em>
+                </MenuItem>
+                <MenuItem value="student">{translate("users.roles.student")}</MenuItem>
+                <MenuItem value="admin">{translate("users.roles.admin")}</MenuItem>
+                <MenuItem value="teacher">{translate("users.roles.teacher")}</MenuItem>
               </Select>
             )}
           />
           <FormHelperText>{errors?.role?.message}</FormHelperText>
         </FormControl>
-
 
         {/* Avatar Upload */}
         <Box mt={2}>
@@ -217,3 +207,4 @@ export const UserCreate: React.FC = () => {
     </Create>
   );
 };
+

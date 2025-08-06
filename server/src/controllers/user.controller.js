@@ -90,6 +90,10 @@ class UserController extends BaseController {
         avatar: data[0].avatar,
         created_at: data[0].created_at,
         updated_at: data[0].updated_at,
+
+        email: data[0].email,
+        username: data[0].username,
+        role: data[0].role,
       });
     } catch (error) {
       return BaseController.errorResponse(res, error);

@@ -33,7 +33,7 @@ class UserService {
             query.where(builder => {
                 builder
                     .where('name', 'like', `%${search}%`)
-                    .orWhere('email', 'like', `%${search}%`); 
+                    .orWhere('email', 'like', `%${search}%`);
             });
         }
 
@@ -45,7 +45,7 @@ class UserService {
         }
 
         if (fields) {
-            const selectedFields = fields.split(','); 
+            const selectedFields = fields.split(',');
             query.select(selectedFields);
         }
 
@@ -60,10 +60,23 @@ class UserService {
     }
 
     // Lấy người dùng theo ID
+    // static async getById(id) {
+    //     return db("users")
+    //         .join("auth", "users.id", "auth.id")
+    //         .where("id", id)
+    //         .select("*");
+    // }
+
     static async getById(id) {
         return db("users")
-            .where("id", id)
-            .select("*");
+            .join("auth", "users.id", "auth.id") // Nối theo khóa chính
+            .where("users.id", id) // Tránh ambiguous
+            .select(
+                "users.*",
+                "auth.email as email",
+                "auth.username as username",
+                "auth.role as role"
+            )
     }
 
     // static async create({
