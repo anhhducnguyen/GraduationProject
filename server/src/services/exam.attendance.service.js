@@ -270,34 +270,23 @@ const getCurrentExamSchedule = async () => {
 
 const getCurrentExamSchedules = async () => {
     try {
-        // 1. Lấy thời điểm hiện tại ở UTC (giống format của dữ liệu trong DB)
-        const nowUTC = dayjs().utc().format('YYYY-MM-DD HH:mm:ss');
+        const nowInVietnam = dayjs().tz('Asia/Ho_Chi_Minh'); // Giờ Việt Nam
+        const nowInUTC = nowInVietnam.utc().format('YYYY-MM-DD HH:mm:ss'); // Chuyển sang UTC để so sánh với DB
 
-        console.log(`🕒 Truy vấn lịch thi đang diễn ra tại thời điểm (UTC): ${nowUTC}`);
+        console.log(`Giờ VN hiện tại: ${nowInVietnam.format('YYYY-MM-DD HH:mm:ss')}`);
+        console.log(`Tương đương UTC: ${nowInUTC}`);
 
-        // 2. Truy vấn các lịch thi có thời gian phù hợp và trạng thái còn hiệu lực
-        const currentSchedules = await db('examschedules as s')
-            .leftJoin('examrooms as r', 's.room_id', 'r.room_id') // nếu muốn kèm phòng
-            .select(
-                's.schedule_id',
-                's.name_schedule',
-                's.start_time',
-                's.end_time',
-                's.room_id',
-                's.status',
-                'r.name as room_name' // nếu bạn có cột "name" trong bảng examrooms
-            )
-            .where('s.start_time', '<=', nowUTC)
-            .andWhere('s.end_time', '>=', nowUTC)
-            .andWhereIn('s.status', ['scheduled', 'in_progress']) // lấy cả 2 loại hợp lệ
+        const currentSchedules = await db('examschedules')
+            .where('start_time', '<=', nowInUTC)
+            .andWhere('end_time', '>=', nowInUTC)
+            .whereIn('status', ['scheduled', 'in_progress']); // chỉ lấy ca thi đang chuẩn bị hoặc đang diễn ra
 
         return currentSchedules;
-
     } catch (error) {
-        console.error('❌ Lỗi khi truy vấn lịch thi đang diễn ra:', error.message);
-        throw new Error('Error fetching current exam schedules');
+        throw new Error('Lỗi khi lấy ca thi hiện tại: ' + error.message);
     }
 };
+
 
 const checkStudentExists = async (id) => {
         return db("auth")
