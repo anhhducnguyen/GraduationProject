@@ -1,12 +1,9 @@
 const db = require('../../config/database');
 const dayjs = require('dayjs');
 const { buildQuery } = require("../utils/queryBuilder");
-const dayjs = require("dayjs");
-const utc = require("dayjs/plugin/utc");
-const timezone = require("dayjs/plugin/timezone");
-
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
-dayjs.extend(timezone);
 
 const queryExamAttendance= async (filters = {}, options = {}) => {
     const query = buildQuery(db, 'exam_attendance', {
@@ -246,15 +243,30 @@ const getCurrentExamSchedule = async () => {
 //         .andWhere('end_time', '>=', now);
 // };
 
-const LOCAL_TZ = "Asia/Ho_Chi_Minh";
+const getCurrentSchedules = async () => {
+    try {
+        // 1. Lấy thời gian hiện tại dưới dạng UTC.
+        // dayjs().utc() sẽ lấy khoảnh khắc hiện tại và biểu diễn nó ở múi giờ UTC.
+        const nowInUTC = dayjs().utc().format('YYYY-MM-DD HH:mm:ss');
 
-const getCurrentExamSchedules = async () => {
-    // Lấy giờ hiện tại ở VN → chuyển sang UTC
-    const nowUTC = dayjs().tz(LOCAL_TZ).utc().format("YYYY-MM-DD HH:mm:ss");
+        console.log(`Querying for schedules active at (UTC): ${nowInUTC}`);
 
-    return await db("examschedules")
-        .where("start_time", "<=", nowUTC)
-        .andWhere("end_time", ">=", nowUTC);
+        // 2. Truy vấn cơ sở dữ liệu.
+        // Tìm các lịch thi có start_time trước hoặc bằng thời điểm hiện tại (UTC)
+        // và end_time sau hoặc bằng thời điểm hiện tại (UTC).
+        const currentSchedules = await db('examschedules')
+            .where('start_time', '<=', nowInUTC)
+            .andWhere('end_time', '>=', nowInUTC)
+            .andWhere('status', 'scheduled'); // Thêm điều kiện này để chắc chắn chỉ lấy các ca thi đã được lên lịch
+
+        // 3. Trả về kết quả.
+        // Dữ liệu thời gian trong `currentSchedules` vẫn là UTC.
+        // Hãy để frontend xử lý việc chuyển đổi sang giờ Việt Nam để hiển thị.
+        return currentSchedules;
+
+    } catch (error) {
+        throw new Error('Error fetching current exam schedules: ' + error.message);
+    }
 };
 
 const checkStudentExists = async (id) => {
