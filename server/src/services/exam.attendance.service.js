@@ -1,6 +1,12 @@
 const db = require('../../config/database');
 const dayjs = require('dayjs');
 const { buildQuery } = require("../utils/queryBuilder");
+const dayjs = require("dayjs");
+const utc = require("dayjs/plugin/utc");
+const timezone = require("dayjs/plugin/timezone");
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const queryExamAttendance= async (filters = {}, options = {}) => {
     const query = buildQuery(db, 'exam_attendance', {
@@ -233,11 +239,22 @@ const getCurrentExamSchedule = async () => {
     return result?.schedule_id;
 }
 
+// const getCurrentExamSchedules = async () => {
+//     const now = new Date();
+//     return await db('examschedules')
+//         .where('start_time', '<=', now)
+//         .andWhere('end_time', '>=', now);
+// };
+
+const LOCAL_TZ = "Asia/Ho_Chi_Minh";
+
 const getCurrentExamSchedules = async () => {
-    const now = new Date();
-    return await db('examschedules')
-        .where('start_time', '<=', now)
-        .andWhere('end_time', '>=', now);
+    // Lấy giờ hiện tại ở VN → chuyển sang UTC
+    const nowUTC = dayjs().tz(LOCAL_TZ).utc().format("YYYY-MM-DD HH:mm:ss");
+
+    return await db("examschedules")
+        .where("start_time", "<=", nowUTC)
+        .andWhere("end_time", ">=", nowUTC);
 };
 
 const checkStudentExists = async (id) => {
