@@ -17,6 +17,7 @@ import {
   CalendarOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
+  HourglassOutlined
 } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { vi } from "date-fns/locale";
@@ -52,7 +53,7 @@ export const ExamScheduleShow: React.FC = () => {
 
   const renderStatusTag = (value: string | undefined) => {
     if (!value) return <Skeleton height="20px" width="100px" />;
-    let color: "blue" | "green" | "red" | "default" = "default";
+    let color: "blue" | "green" | "red" | "orange" | "default" = "default";
     let label = value;
     let icon = null;
 
@@ -71,6 +72,11 @@ export const ExamScheduleShow: React.FC = () => {
         color = "red";
         label = t("Cancelled", "Đã hủy");
         icon = <CloseCircleOutlined />;
+        break;
+      case "in_progress":
+        color = "orange";
+        label = t("schedules.status.in_progress", "Đang diễn ra");
+        icon = <HourglassOutlined />;
         break;
       default:
         label = value;

@@ -1,4 +1,5 @@
-require('../src/cron/updateRoomStatus');
+const startRoomStatusCron = require('../src/cron/updateRoomStatus');
+startRoomStatusCron();
 const startScheduleStatusCron = require('../src/cron/updateScheduleStatus');
 startScheduleStatusCron();
 const app = require("./app");
