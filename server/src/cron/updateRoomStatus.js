@@ -51,10 +51,14 @@ const cron = require('node-cron');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const timezone = require('dayjs/plugin/timezone');
-const db = require('../../config/database');
+const isBetween = require('dayjs/plugin/isBetween'); // ✅ đúng tên gói chính thức
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.extend(isBetween);
+
+const db = require('../../config/database');
+
 
 const LOCAL_TZ = 'Asia/Ho_Chi_Minh';
 
