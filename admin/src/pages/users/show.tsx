@@ -27,7 +27,7 @@ export const UserShow: React.FC = () => {
           {translate("users.fields.id")}
         </Typography>
         {user ? (
-          <NumberField value={user.id} />
+          <NumberField value={user.id ?? 0} />
         ) : (
           <Skeleton height="20px" width="200px" />
         )}
@@ -36,7 +36,7 @@ export const UserShow: React.FC = () => {
           {translate("users.fields.first_name")}
         </Typography>
         {user ? (
-          <TextField value={user.first_name} />
+          <TextField value={user.first_name ?? ""} />
         ) : (
           <Skeleton height="20px" width="200px" />
         )}
