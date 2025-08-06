@@ -30,9 +30,13 @@ cloudinary.config(
     secure=True
 )
 
-MQTT_BROKER = "localhost"  # hoặc IP broker nếu dùng máy khác
+# MQTT_BROKER = "localhost"  # hoặc IP broker nếu dùng máy khác
+# MQTT_PORT = 1883
+# MQTT_TOPIC = "exam/attendance"
+MQTT_BROKER = "broker.hivemq.com"
 MQTT_PORT = 1883
 MQTT_TOPIC = "exam/attendance"
+
 
 mqtt_client = mqtt.Client()
 mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
