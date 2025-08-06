@@ -135,7 +135,7 @@ export const ExamScheduleList = () => {
       minWidth: 180,
       renderCell: ({ value }) =>
         dayjs.utc(value).tz("Asia/Ho_Chi_Minh").locale(locale ?? "en").format("dddd, DD/MM/YYYY HH:mm"),
-    }
+    },
 
     {
       field: "status",
