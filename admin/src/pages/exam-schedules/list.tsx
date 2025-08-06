@@ -29,7 +29,9 @@ import {
   CalendarOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
+  LoadingOutlined
 } from "@ant-design/icons";
+
 
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -143,7 +145,7 @@ export const ExamScheduleList = () => {
       flex: 1,
       minWidth: 120,
       renderCell: ({ value }) => {
-        let color: "blue" | "green" | "red" | "default" = "default";
+        let color: "blue" | "green" | "red" | "default" | "orange" = "default";
         let label = value;
         let icon = null;
 
@@ -163,14 +165,20 @@ export const ExamScheduleList = () => {
             label = translate("schedules.status.cancelled", "Đã hủy");
             icon = <CloseCircleOutlined />;
             break;
+          case "in_progress":
+            color = "orange";
+            label = translate("schedules.status.in_progress", "Đang diễn ra");
+            icon = <LoadingOutlined />;
+            break;
           default:
             label = value;
         }
 
         return (
-          <Tag color={color} icon={icon}>
+          <span style={{ display: "flex", alignItems: "center", gap: 6, color }}>
+            {icon}
             {label}
-          </Tag>
+          </span>
         );
       },
     },
