@@ -38,12 +38,12 @@ const deletedExamSchedule = async (req, res) => {
     try {
         const deletedExamSchedule = await deleteScheduleById(id);
         if (!deletedExamSchedule) {
-            return res.status(404).json({ message: 'Exam schedule not found' });
+            return res.status(404).json({ message: 'Lịch thi không tồn tại' });
         }
 
         await clearExamScheduleCache();
 
-        return res.status(200).json({ message: 'Exam schedule deleted successfully' });
+        return res.status(200).json({ message: 'Lịch thi đã được xóa thành công' });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -59,7 +59,7 @@ const createExamSchedule = async (req, res) => {
         room,
         // room_id 
     } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     const room_id = room?.room_id;
 
     if (!room_id) {
@@ -82,7 +82,54 @@ const createExamSchedule = async (req, res) => {
     }
 };
 
-// Cập nhật thông tin lịch thi
+// // Cập nhật thông tin lịch thi
+// const updateExamSchedule = async (req, res) => {
+//     const { id } = req.params;
+//     const {
+//         start_time,
+//         end_time,
+//         name_schedule,
+//         status,
+//         room,
+//         // room_id
+//     } = req.body;
+//     const room_id = room?.room_id;
+
+//     if (!id) {
+//         return res.status(400).json({ message: "examSchedule id is required" });
+//     }
+
+//     if (!room_id) {
+//         return res.status(400).json({ message: "room_id is required" });
+//     }
+
+//     try {
+//         const updated = await update(id, {
+//             start_time,
+//             end_time,
+//             name_schedule,
+//             status,
+//             room_id
+//         });
+
+//         if (!updated) {
+//             return res.status(404).json({ message: "Exam schedule not found" });
+//         }
+
+//         await clearExamScheduleCache(); // xóa cache để lần get sau lấy dữ liệu mới
+
+//         return res.json({ message: "Exam schedule updated", data: updated });
+//     } catch (error) {
+//         return res.status(500).json({ message: error.message });
+//     }
+// };
+
+const formatDateTime = (input) => {
+    const date = new Date(input);
+    if (isNaN(date)) return null;
+    return date.toISOString().slice(0, 19).replace('T', ' ');
+};
+
 const updateExamSchedule = async (req, res) => {
     const { id } = req.params;
     const {
@@ -91,34 +138,41 @@ const updateExamSchedule = async (req, res) => {
         name_schedule,
         status,
         room,
-        // room_id
     } = req.body;
     const room_id = room?.room_id;
 
     if (!id) {
-        return res.status(400).json({ message: "examSchedule id is required" });
+        return res.status(400).json({ message: "Mã lịch thi là bắt buộc" });
     }
 
     if (!room_id) {
-        return res.status(400).json({ message: "room_id is required" });
+        return res.status(400).json({ message: "Mã phòng là bắt buộc" });
+    }
+
+    // Format lại ngày giờ
+    const formattedStart = formatDateTime(start_time);
+    const formattedEnd = formatDateTime(end_time);
+
+    if (!formattedStart || !formattedEnd) {
+        return res.status(400).json({ message: "Định dạng ngày không hợp lệ" });
     }
 
     try {
         const updated = await update(id, {
-            start_time,
-            end_time,
+            start_time: formattedStart,
+            end_time: formattedEnd,
             name_schedule,
             status,
             room_id
         });
 
         if (!updated) {
-            return res.status(404).json({ message: "Exam schedule not found" });
+            return res.status(404).json({ message: "Lịch thi không tồn tại" });
         }
 
         await clearExamScheduleCache(); // xóa cache để lần get sau lấy dữ liệu mới
 
-        return res.json({ message: "Exam schedule updated", data: updated });
+        return res.json({ message: "Lịch thi đã được cập nhật", data: updated });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -183,7 +237,7 @@ const addStudentsToExamSchedule = async (req, res) => {
 
     res.status(201).json({
       message: `Đã thêm ${insertData.length} sinh viên vào ca thi`,
-      invalidIds: studentIds.filter(id => !validUserIds.includes(id)), // optional: báo id không tồn tại
+      invalidIds: studentIds.filter(id => !validUserIds.includes(id)), 
     });
   } catch (error) {
     console.error('Lỗi khi thêm sinh viên vào ca thi:', error);

@@ -41,6 +41,9 @@ router.route('/:id')
         .put(
             // permission, 
             updateExamSchedule)
+        .patch(
+            // permission, 
+            updateExamSchedule)
     .delete(
         // permission, 
         deletedExamSchedule);

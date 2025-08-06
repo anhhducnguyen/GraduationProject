@@ -1,14 +1,23 @@
-export interface ExamRoom {
+export type Room = {
   room_id: number;
   room_name: string;
-}
+  capacity: number;
+};
 
-export interface ExamSchedule {
+export type Student = {
+  student_id: number;
+  first_name: string;
+  last_name: string;
+  is_present: number;
+  updated_at: string;
+};
+
+export type ExamSchedule = {
   schedule_id: number;
   name_schedule: string;
-  start_time: string;   // ISO 8601 datetime string, e.g. "2025-05-23T09:00:00Z"
+  status: string;
+  start_time: string;
   end_time: string;
-  room_id: number;
-  status: "scheduled" | "completed" | "cancelled"; // Optional: use union type for better safety
-  created_by?: string | null;
-}
+  room?: Room;
+  students?: Student[];
+};

@@ -1,8 +1,3 @@
-// https://github.com/DuowngM/shopee/blob/main/server/src/categories/dto/categories.dto.ts
-// https://github.com/typicode/json-server?tab=readme-ov-file
-// https://refine.dev/docs/ui-integrations/material-ui/hooks/use-data-grid/#dataprovidername
-// https://refine.dev/tutorial/authentication/data-provider-integration/?utm_source=chatgpt.com
-
 import { Authenticated, type I18nProvider, Refine } from "@refinedev/core";
 import routerProvider, {
   CatchAllNavigate,
@@ -30,10 +25,12 @@ import { HiUserGroup } from "react-icons/hi2";
 import { IoCalendar } from "react-icons/io5";
 import { MdDashboardCustomize } from "react-icons/md";
 import { BsBox2Fill } from "react-icons/bs";
+import { GiArtificialIntelligence } from "react-icons/gi";
 
 import {
   UserList,
   UserShow,
+  UserEdit,
   UserCreate,
   AddStudentToExamSchedule,
 } from "@/pages/users";
@@ -52,6 +49,8 @@ import {
   ExamScheduleShow,
 } from "@/pages/exam-schedules";
 
+import { FaList } from "react-icons/fa";
+import { FakeFacesList } from "@/pages/fake-faces";
 import SchedulePage from "@/pages/schedules/list";
 import Home from "@/pages/home/home";
 import { CustomTitle } from "@/components/CustomTitle";
@@ -74,12 +73,8 @@ function App() {
         <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
         <RefineSnackbarProvider>
           <Refine
-            // accessControlProvider={accessControlProvider}
-            // dataProvider={dataProvider}
-            // dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
-            // dataProvider={dataProvider("http://localhost:5000/api/v1")}
-            dataProvider={dataProvider("https://graduationproject-nx7m.onrender.com/api/v1")}
-            // dataProvider={dataProvider("/api/v1")}
+            dataProvider={dataProvider("http://localhost:5000/api/v1")}
+            // dataProvider={dataProvider("https://graduationproject-nx7m.onrender.com/api/v1")}
             notificationProvider={useNotificationProvider}
             routerProvider={routerProvider}
             authProvider={authProvider}
@@ -90,17 +85,16 @@ function App() {
                 list: "/home",
                 meta: { 
                   icon: <MdDashboardCustomize />,
-                  label: "Dashboard"
                 },
               },
               {
                 name: "users",
                 list: "/users",
                 show: "/users/:id",
+                edit: "/users/:id/edit",
                 create: "/users/new",
                 meta: { 
                   icon: <HiUserGroup />, 
-                  label: "Users" 
                 },
               },
               {
@@ -108,7 +102,13 @@ function App() {
                 list: "/schedules",
                 meta: { 
                   icon: <IoCalendar />, 
-                  label: "Schedules" 
+                },
+              },
+              {
+                name: "fake-faces",
+                list: "/fake-faces",
+                meta: { 
+                  icon: <GiArtificialIntelligence />, 
                 },
               },
               {
@@ -119,7 +119,6 @@ function App() {
                 show: "/exam-rooms/:id",
                 meta: { 
                   icon: <BsBox2Fill />, 
-                  label: "Exam Rooms" 
                 },
               },
               {
@@ -129,8 +128,7 @@ function App() {
                 edit: "/exam-schedules/:id/edit",
                 show: "/exam-schedules/:id",
                 meta: { 
-                  icon: <IoCalendar />, 
-                  label: "Exam Schedules" 
+                  icon: <FaList />, 
                 },
               },
             ]}
@@ -157,6 +155,7 @@ function App() {
                   <Route index element={<UserList />} />
                   <Route path=":id" element={<UserShow />} />
                   <Route path="new" element={<UserCreate />} />
+                  <Route path=":id/edit" element={<UserEdit/>} />
                   {/* <Route path="add" element={<AddStudentToExamSchedule />} /> */}
                 </Route>
 
@@ -169,6 +168,8 @@ function App() {
                   <Route path="new" element={<RoomCreate />} />
                   <Route path=":id/edit" element={<RoomEdit />} />
                 </Route>
+
+                <Route path="/fake-faces" element={<FakeFacesList />} />
 
                 <Route path="/exam-schedules">
                   <Route index element={<ExamScheduleList />} />

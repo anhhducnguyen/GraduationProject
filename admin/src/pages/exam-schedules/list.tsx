@@ -23,6 +23,14 @@ import {
   Paper,
   useTheme,
 } from "@mui/material";
+import { Table, Tag, Button, Flex, Tooltip, Input, Space } from 'antd';
+
+import {
+  CalendarOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
+
 
 type ExamSchedule = {
   schedule_id: number;
@@ -118,26 +126,38 @@ export const ExamScheduleList = () => {
       flex: 1,
       minWidth: 120,
       renderCell: ({ value }) => {
-        let color: "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" = "default";
+        let color: "blue" | "green" | "red" | "default" = "default";
         let label = value;
+        let icon = null;
 
         switch (value) {
           case "scheduled":
-            color = "info";
-            label = translate("schedules.status.scheduled", "Scheduled");
+            color = "blue";
+            label = translate("schedules.status.scheduled", "Đã lên lịch");
+            icon = <CalendarOutlined />;
             break;
           case "completed":
-            color = "success";
-            label = translate("schedules.status.completed", "Completed");
+            color = "green";
+            label = translate("schedules.status.completed", "Đã hoàn thành");
+            icon = <CheckCircleOutlined />;
             break;
           case "cancelled":
-            color = "error";
-            label = translate("schedules.status.cancelled", "Cancelled");
+            color = "red";
+            label = translate("schedules.status.cancelled", "Đã hủy");
+            icon = <CloseCircleOutlined />;
             break;
+          default:
+            label = value;
         }
-        return <Chip label={label} color={color} size="small" variant="outlined" />;
+
+        return (
+          <Tag color={color} icon={icon}>
+            {label}
+          </Tag>
+        );
       },
     },
+
     {
       field: "actions",
       headerName: translate("table.actions"),

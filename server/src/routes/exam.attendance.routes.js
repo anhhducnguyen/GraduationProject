@@ -12,34 +12,36 @@ const {
     getExamAttendances
   } = require('../controllers/exam.attendance.controller');
   
+// Lấy danh sách điểm danh thi  
 router.get(
     '/', 
-    // getAll
     getExamAttendances
 );
 
-router.put("/", updateE);
+// router.put("/", updateE);
 
+// Lấy điểm danh thi theo ID
 router.get(
     '/:scheduleId', 
-    // getById
     getByScheduleId
 );
 
+// Thêm sinh viên vào lịch thi
 router.post(
     '/assign', 
     assignStudentToExam
 );
 
+// Thực hiện điểm danh thi
 router.post(
     '/',
     create
 );
 
-router.put(
-    '/:id',
-    updateE
-);
+// router.put(
+//     '/:id',
+//     updateE
+// );
 
 router.delete(
     '/:id',

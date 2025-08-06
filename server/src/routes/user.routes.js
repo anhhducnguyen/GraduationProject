@@ -68,6 +68,12 @@ router.route('/:id')
         // checkUserExistById, 
         Controller.updateUser
     )
+    .patch(
+        permission,
+        upload.single("avatar"),
+        // checkUserExistById, 
+        Controller.updateUser
+    )
     .delete(
         permission,
         // checkUserExistById, 

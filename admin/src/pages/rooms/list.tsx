@@ -11,12 +11,16 @@ import {
   DeleteButton,
   EditButton,
   List,
-  NumberField,
   ShowButton,
   useDataGrid,
 } from "@refinedev/mui";
-import { Chip } from "@mui/material";
-import type { ExamRoom } from "./types"; 
+import type { ExamRoom } from "./types";
+import {
+  CheckCircleOutlined,
+  CalendarOutlined,
+  ClockCircleOutlined,
+} from "@ant-design/icons";
+import { Tag } from 'antd';
 
 export const ExamRoomList = () => {
   const { dataGridProps } = useDataGrid<ExamRoom>();
@@ -52,28 +56,35 @@ export const ExamRoomList = () => {
       },
       {
         field: "status",
-        headerName: translate("schedules.fields.status"),
+        headerName: translate("rooms.fields.status", "Trạng thái"),
         flex: 1,
-        minWidth: 120,
+        minWidth: 20,
         renderCell: ({ value }) => {
-          let color: "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" = "default";
+          let color: "green" | "blue" | "red" | "default" = "default";
           let label = value;
+          let icon = null;
 
           switch (value) {
-            case "schedule":
-              color = "info";
-              label = translate("schedules.status.scheduled", "Scheduled");
+            case "available":
+              color = "green";
+              label = translate("rooms.status.available", "Phòng trống");
+              icon = <CheckCircleOutlined />;
               break;
-            case "complete":
-              color = "success";
-              label = translate("schedules.status.completed", "Completed");
+            case "scheduled":
+              color = "blue";
+              label = translate("rooms.status.scheduled", "Đã đặt lịch");
+              icon = <CalendarOutlined />;
               break;
-            case "cancel":
-              color = "error";
-              label = translate("schedules.status.cancelled", "Cancelled");
+            case "in_use":
+              color = "red";
+              label = translate("rooms.status.in_use", "Đang thi");
+              icon = <ClockCircleOutlined />;
               break;
+            default:
+              label = value;
           }
-          return <Chip label={label} color={color} size="small" />;
+
+          return <Tag color={color} icon={icon}>{label}</Tag>;
         },
       },
       {
@@ -92,7 +103,7 @@ export const ExamRoomList = () => {
         },
         align: "center",
         headerAlign: "center",
-        minWidth: 80,
+        minWidth: 180,
       },
     ],
     [locale, translate],

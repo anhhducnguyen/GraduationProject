@@ -1,4 +1,5 @@
 import type { AuthBindings } from "@refinedev/core";
+import { jwtDecode } from "jwt-decode";
 
 export const TOKEN_KEY = "refine-auth";
 import axios from 'axios';
@@ -7,7 +8,7 @@ import axios from 'axios';
 export const authProvider: AuthBindings = {
   login: async ({ email, password }) => {
     try {
-      const response = await axios.post("https://graduationproject-nx7m.onrender.com/auth/login", {
+      const response = await axios.post("http://localhost:5000/auth/login", {
         email,
         password,
       });
@@ -27,7 +28,7 @@ export const authProvider: AuthBindings = {
         success: false,
         error: {
           name: "LoginError",
-          message: "Invalid email or password",
+          message: "Sai email hoặc mật khẩu. Vui lòng thử lại.",
         },
       };
     }
@@ -41,19 +42,83 @@ export const authProvider: AuthBindings = {
       redirectTo: "/login",
     };
   },
+  // check: async () => {
+  //   const token = localStorage.getItem(TOKEN_KEY);
+  //   if (token) {
+  //     return {
+  //       authenticated: true,
+  //     };
+  //   }
+
+  //   return {
+  //     authenticated: false,
+  //     redirectTo: "/login",
+  //   };
+  // },
+  //  check: async () => {
+  //   const token = localStorage.getItem(TOKEN_KEY);
+  //   if (token) {
+  //     return {
+  //       authenticated: true,
+  //     };
+  //   }
+
+  //   return {
+  //     authenticated: false,
+  //     error: {
+  //       message: "Check failed",
+  //       name: "Token not found",
+  //     },
+  //     logout: true,
+  //     redirectTo: "/login",
+  //   };
+  // },
   check: async () => {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (token) {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) {
+    return {
+      authenticated: false,
+      logout: true,
+      redirectTo: "/login",
+    };
+  }
+
+  try {
+    const decoded: { exp: number } = jwtDecode(token);
+
+    // Kiểm tra thời gian hết hạn (exp là Unix timestamp tính bằng giây)
+    const isExpired = decoded.exp * 1000 < Date.now();
+
+    if (isExpired) {
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem("user");
+
       return {
-        authenticated: true,
+        authenticated: false,
+        logout: true,
+        redirectTo: "/login",
+        error: {
+          message: "Phiên đăng nhập đã hết hạn",
+          name: "TokenExpiredError",
+        },
       };
     }
 
     return {
-      authenticated: false,
-      redirectTo: "/login",
+      authenticated: true,
     };
-  },
+  } catch (error) {
+    return {
+      authenticated: false,
+      logout: true,
+      redirectTo: "/login",
+      error: {
+        message: "Token không hợp lệ",
+        name: "InvalidTokenError",
+      },
+    };
+  }
+},
   // getPermissions: async () => null,
   getPermissions: async () => {
     const user = localStorage.getItem("user");
@@ -78,13 +143,22 @@ export const authProvider: AuthBindings = {
     return null;
   },
 
+  // onError: async (error) => {
+  //   console.error(error);
+  //   return { error };
+  // },
   onError: async (error) => {
-    console.error(error);
+    if (error.response?.status === 401) {
+      return {
+        logout: true,
+      };
+    }
+
     return { error };
   },
   forgotPassword: async ({ email }) => {
     try {
-      const response = await axios.post("https://graduationproject-nx7m.onrender.com/auth/reset-password", {
+      const response = await axios.post("http://localhost:5000/auth/reset-password", {
         email,
       });
 

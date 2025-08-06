@@ -1,328 +1,249 @@
-# import os
-# import cv2
-# import numpy as np
-# import time
-# import warnings
-# import face_recognition
-# import pickle
 
-# from src.anti_spoof_predict import AntiSpoofPredict, Detection
-# from src.generate_patches import CropImage
-# from src.utility import parse_model_name
-# import threading
-
-# warnings.filterwarnings('ignore')
-
-# KNOWN_FACE_PATH = "./known_faces/"
-# FRAME_SKIP = 5  # Số frame bỏ qua trước khi kiểm tra
-
-# API_URL = "http://192.168.1.4:5000/api/v1/exam-attendance/"
-# last_sent_time = {}
-# send_lock = threading.Lock()
-
-# # Load known faces from pickle
-# def load_known_faces(pkl_file="known_faces.pkl"):
-#     with open(pkl_file, "rb") as f:
-#         known_faces = pickle.load(f)
-
-#     known_face_encodings = []
-#     known_face_names = []
-
-#     for name, encodings in known_faces.items():
-#         known_face_encodings.extend(encodings)
-#         known_face_names.extend([name] * len(encodings))
-
-#     return known_face_encodings, known_face_names
-
-
-# def check_image(image):
-#     height, width, channel = image.shape
-#     desired_width = int(height * 3 / 4)
-#     if width != desired_width:
-#         image = cv2.resize(image, (desired_width, height))
-#     return True
-
-
-# class FaceSpoofingProcessor:
-#     def __init__(self, model_dir, device_id, known_encodings, known_names):
-#         self.model_dir = model_dir
-#         self.device_id = device_id
-#         self.known_encodings = known_encodings
-#         self.known_names = known_names
-#         self.model_test = AntiSpoofPredict(device_id)
-#         self.image_cropper = CropImage()
-#         self.detector = Detection()
-#         self.frame_count = 0
-
-#     def process_frame(self, frame):
-#         self.frame_count += 1
-
-#         # Chỉ xử lý mỗi 5 frame
-#         if self.frame_count % FRAME_SKIP != 0:
-#             return frame  # Không thay đổi frame, không xử lý gì cả
-
-#         image_bboxes = self.detector.get_bboxes(frame)
-#         test_speed_total = 0
-
-#         for i, image_bbox in enumerate(image_bboxes):
-#             x, y, w, h = image_bbox
-#             if x < 0 or y < 0 or w <= 0 or h <= 0:
-#                 continue
-
-#             face_image = frame[y:y + h, x:x + w]
-#             if face_image.size == 0:
-#                 continue
-
-#             rgb_face = cv2.cvtColor(face_image, cv2.COLOR_BGR2RGB)
-#             encoding = face_recognition.face_encodings(rgb_face)
-
-#             face_identity = "Unknown"
-#             face_score = 0.0
-
-#             if len(encoding) > 0:
-#                 matches = face_recognition.compare_faces(self.known_encodings, encoding[0], tolerance=0.5)
-#                 face_distances = face_recognition.face_distance(self.known_encodings, encoding[0])
-#                 best_match_index = np.argmin(face_distances)
-#                 if matches[best_match_index]:
-#                     face_identity = self.known_names[best_match_index]
-#                     face_score = 1 - face_distances[best_match_index]
-
-#             prediction = np.zeros((1, 3))
-#             test_speed = 0
-
-#             for model_name in os.listdir(self.model_dir):
-#                 h_input, w_input, model_type, scale = parse_model_name(model_name)
-#                 param = {
-#                     "org_img": frame,
-#                     "bbox": image_bbox,
-#                     "scale": scale,
-#                     "out_w": w_input,
-#                     "out_h": h_input,
-#                     "crop": True,
-#                 }
-#                 if scale is None:
-#                     param["crop"] = False
-#                 img = self.image_cropper.crop(**param)
-#                 start = time.time()
-#                 prediction += self.model_test.predict(img, os.path.join(self.model_dir, model_name))
-#                 test_speed += time.time() - start
-
-#             test_speed_total += test_speed
-#             label = np.argmax(prediction)
-#             value = prediction[0][label] / 2
-#             if label == 1:
-#                 result_text = f"{face_identity} | RealFace Score: {face_score:.2f} | Anti-Spoof Score: {value:.2f}"
-#             else:
-#                 result_text = f"{face_identity} | FakeFace Score: {value:.2f}"
-
-#             print(f"[Face {i + 1}] {result_text} - Time: {test_speed:.2f}s - BBox: x={x}, y={y}, w={w}, h={h}")
-
-#         return frame
-
-
-# # ==== Example Main Loop ====
-# if __name__ == "__main__":
-#     model_dir = "./resources/anti_spoof_models"
-#     device_id = 0
-#     known_encodings, known_names = load_known_faces()
-
-#     cap = cv2.VideoCapture(0)
-#     processor = FaceSpoofingProcessor(model_dir, device_id, known_encodings, known_names)
-
-#     while True:
-#         ret, frame = cap.read()
-#         if not ret:
-#             break
-
-#         frame = processor.process_frame(frame)
-#         cv2.imshow("Face Spoofing Detection", frame)
-
-#         if cv2.waitKey(1) & 0xFF == ord('q'):
-#             break
-
-#     cap.release()
-#     cv2.destroyAllWindows()
-
-import os
+import time
 import cv2
 import numpy as np
-import time
-import warnings
-import face_recognition
+import faiss
 import pickle
+import os
+import warnings
 import requests
 import threading
-
-from src.anti_spoof_predict import AntiSpoofPredict, Detection
+import cloudinary
+import cloudinary.uploader
+import queue
+from datetime import datetime
+from insightface.app import FaceAnalysis
+from src.anti_spoof_predict import AntiSpoofPredict
 from src.generate_patches import CropImage
 from src.utility import parse_model_name
 
 warnings.filterwarnings('ignore')
 
-KNOWN_FACE_PATH = "./known_faces/"
-FRAME_SKIP = 5
-# API_URL = "http://192.168.1.4:5000/api/v1/exam-attendance/"
-API_URL = "https://graduationproject-nx7m.onrender.com/api/v1/exam-attendance/"
+# ====== Cloudinary config ======
+cloudinary.config(
+    cloud_name="dvc80qdie",
+    api_key="221435714784277",
+    api_secret="Zar2Kh6w0VBWp0rpQ5VYE-sbREI",
+    secure=True
+)
 
-last_sent_time = {}
+# ====== Config ======
+MODEL_DIR = "./resources/anti_spoof_models"
+MODEL_NAME = "2.7_80x80_MiniFASNetV2.pth"
+DEVICE_ID = 0
+FAISS_PATH = "faiss_index/face_index.faiss"
+IDS_PATH = "faiss_index/student_ids.pkl"
+FAISS_THRESHOLD = 1.2
+API_URL = "http://localhost:5000/api/v1/exam-attendance/"
+
+
+# ====== Init models ======
+model_test = AntiSpoofPredict(DEVICE_ID)
+image_cropper = CropImage()
+h_input, w_input, model_type, scale = parse_model_name(MODEL_NAME)
+
+print("📂 Đang tải FAISS index và student_ids...")
+index = faiss.read_index(FAISS_PATH)
+with open(IDS_PATH, "rb") as f:
+    student_ids = pickle.load(f)
+print(f"✅ Đã load FAISS index ({index.ntotal} vectors)")
+
+app = FaceAnalysis(name='buffalo_sc', providers=['CPUExecutionProvider'])
+app.prepare(ctx_id=0, det_size=(320, 320))
+
+# ====== Send batch thread ======
+send_buffer = []
 send_lock = threading.Lock()
+send_interval = 3
 
-# Load known faces from pickle
-def load_known_faces(pkl_file="known_faces.pkl"):
-    with open(pkl_file, "rb") as f:
-        known_faces = pickle.load(f)
-
-    known_face_encodings = []
-    known_face_names = []
-
-    for name, encodings in known_faces.items():
-        known_face_encodings.extend(encodings)
-        known_face_names.extend([name] * len(encodings))
-
-    return known_face_encodings, known_face_names
-
-
-class FaceSpoofingProcessor:
-    def __init__(self, model_dir, device_id, known_encodings, known_names):
-        self.model_dir = model_dir
-        self.device_id = device_id
-        self.known_encodings = known_encodings
-        self.known_names = known_names
-        self.model_test = AntiSpoofPredict(device_id)
-        self.image_cropper = CropImage()
-        self.detector = Detection()
-        self.frame_count = 0
-
-    # def send_data_to_api(self, name, face_score, spoof_score):
-    #     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-    #     with send_lock:
-    #         last_time = last_sent_time.get(name, 0)
-    #         if time.time() - last_time < 10:
-    #             return  # Không gửi liên tục trong thời gian ngắn
-
-    #         payload = {
-    #             "name": name,
-    #             "confidence": round(face_score, 2),
-    #             # "real_face": round(spoof_score, 2),
-    #             "real_face": bool(label == 1 and spoof_score >= 0.5),
-    #             "timestamp": timestamp
-    #         }
-
-    #         try:
-    #             response = requests.post(API_URL, json=payload)
-    #             print(f"[API] Gửi dữ liệu cho {name}: {payload} - Trạng thái: {response.status_code}")
-    #             if response.status_code == 200:
-    #                 last_sent_time[name] = time.time()
-    #             else:
-    #                 print(f"[API] Lỗi gửi dữ liệu: {response.text}")
-    #         except Exception as e:
-    #             print(f"[API] Lỗi kết nối: {e}")
-    def send_data_to_api(self, name, face_score, spoof_score, label):
-        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-        with send_lock:
-            last_time = last_sent_time.get(name, 0)
-            if time.time() - last_time < 10:
-                return
-
-            payload = {
-                "name": name,
-                "confidence": round(face_score, 2),
-                "real_face": 1.0 if label == 1 and spoof_score >= 0.7 else 0.0,
-                "timestamp": timestamp
-            }
-
-            try:
-                response = requests.post(API_URL, json=payload)
-                print(f"[API] Gửi dữ liệu cho {name}: {payload} - Trạng thái: {response.status_code}")
-                if response.status_code == 200:
-                    last_sent_time[name] = time.time()
-                else:
-                    print(f"[API] Lỗi gửi dữ liệu: {response.text}")
-            except Exception as e:
-                print(f"[API] Lỗi kết nối: {e}")
-
-
-    def process_frame(self, frame):
-        self.frame_count += 1
-        if self.frame_count % FRAME_SKIP != 0:
-            return frame
-
-        image_bboxes = self.detector.get_bboxes(frame)
-        for i, image_bbox in enumerate(image_bboxes):
-            x, y, w, h = image_bbox
-            if x < 0 or y < 0 or w <= 0 or h <= 0:
-                continue
-
-            face_image = frame[y:y + h, x:x + w]
-            if face_image.size == 0:
-                continue
-
-            rgb_face = cv2.cvtColor(face_image, cv2.COLOR_BGR2RGB)
-            encoding = face_recognition.face_encodings(rgb_face)
-
-            face_identity = "Unknown"
-            face_score = 0.0
-
-            if len(encoding) > 0:
-                matches = face_recognition.compare_faces(self.known_encodings, encoding[0], tolerance=0.5)
-                face_distances = face_recognition.face_distance(self.known_encodings, encoding[0])
-                best_match_index = np.argmin(face_distances)
-                if matches[best_match_index]:
-                    face_identity = self.known_names[best_match_index]
-                    face_score = 1 - face_distances[best_match_index]
-
-            prediction = np.zeros((1, 3))
-            for model_name in os.listdir(self.model_dir):
-                h_input, w_input, model_type, scale = parse_model_name(model_name)
-                param = {
-                    "org_img": frame,
-                    "bbox": image_bbox,
-                    "scale": scale,
-                    "out_w": w_input,
-                    "out_h": h_input,
-                    "crop": True if scale else False,
-                }
-                img = self.image_cropper.crop(**param)
-                prediction += self.model_test.predict(img, os.path.join(self.model_dir, model_name))
-
-            label = np.argmax(prediction)
-            value = prediction[0][label] / 2
-
-            if label == 1:
-                result_text = f"{face_identity} | RealFace Score: {face_score:.2f} | Anti-Spoof Score: {value:.2f}"
-                print(f"[Face {i + 1}] {result_text} - BBox: x={x}, y={y}, w={w}, h={h}")
-                if face_identity != "Unknown":
-                    # self.send_data_to_api(face_identity, face_score, value)
-                    self.send_data_to_api(face_identity, face_score, value, label)
-
-            else:
-                result_text = f"{face_identity} | FakeFace Score: {value:.2f}"
-                if face_identity != "Unknown":
-                    # self.send_data_to_api(face_identity, face_score, value)
-                    self.send_data_to_api(face_identity, face_score, value, label)
-                print(f"[Face {i + 1}] {result_text} - BBox: x={x}, y={y}, w={w}, h={h}")
-
-        return frame
-
-
-if __name__ == "__main__":
-    model_dir = "./resources/anti_spoof_models"
-    device_id = 0
-    known_encodings, known_names = load_known_faces()
-
-    cap = cv2.VideoCapture(0)
-    processor = FaceSpoofingProcessor(model_dir, device_id, known_encodings, known_names)
-
+def send_data_batch():
     while True:
-        ret, frame = cap.read()
-        if not ret:
+        time.sleep(send_interval)
+        with send_lock:
+            buffer_copy = send_buffer.copy()
+            send_buffer.clear()
+
+        for record in buffer_copy:
+            try:
+                response = requests.post(API_URL, json=record)
+                if response.status_code in [200, 201]:
+                    print(f"✅ Gửi thành công: {record['name']} lúc {record['timestamp']}")
+                else:
+                    print(f"❌ Lỗi gửi: {response.status_code} - {response.text}")
+            except Exception as e:
+                print(f"⚠️ Gửi lỗi: {e}")
+
+threading.Thread(target=send_data_batch, daemon=True).start()
+
+# ====== Upload fake face to Cloudinary ======
+# def upload_fake_face_to_cloudinary(frame, bbox):
+#     x1, y1, x2, y2 = bbox
+#     cropped_face = frame[y1:y2, x1:x2]
+#     _, img_encoded = cv2.imencode('.jpg', cropped_face)
+#     response = cloudinary.uploader.upload(
+#         img_encoded.tobytes(),
+#         folder="fake_faces",
+#         public_id=f"fakeface_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+#         resource_type="image"
+#     )
+#     print(f"☁️ Fake face đã upload: {response.get('secure_url')}")
+#     return response.get("secure_url")
+
+def upload_fake_face_to_cloudinary(frame, bbox):
+    # Gửi toàn bộ khung hình (frame), không crop
+    _, img_encoded = cv2.imencode('.jpg', frame)
+
+    response = cloudinary.uploader.upload(
+        img_encoded.tobytes(),
+        folder="fake_faces_fullframe",
+        public_id=f"fakeframe_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+        resource_type="image"
+    )
+    print(f"☁️ Ảnh toàn khung chứa fake face đã upload: {response.get('secure_url')}")
+    return response.get("secure_url")
+
+
+# ====== Fake face queue + thread ======
+fake_face_queue = queue.Queue()
+
+def fake_face_uploader():
+    while True:
+        frame, bbox = fake_face_queue.get()
+        if frame is None:
             break
+        try:
+            upload_fake_face_to_cloudinary(frame, bbox)
+        except Exception as e:
+            print("❌ Lỗi khi upload ảnh fake:", e)
 
-        frame = processor.process_frame(frame)
-        cv2.imshow("Face Spoofing Detection", frame)
+threading.Thread(target=fake_face_uploader, daemon=True).start()
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+# ====== Anti-spoofing ======
+def is_real_face(frame, bbox):
+    image_bbox = [bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1]]
+    param = {
+        "org_img": frame,
+        "bbox": image_bbox,
+        "scale": scale,
+        "out_w": w_input,
+        "out_h": h_input,
+        "crop": True if scale is not None else False,
+    }
+    spoof_input = image_cropper.crop(**param)
+    prediction = model_test.predict(spoof_input, os.path.join(MODEL_DIR, MODEL_NAME))
+    label = np.argmax(prediction)
+    confidence = prediction[0][label] / 2
+    return label == 1, confidence
 
-    cap.release()
-    cv2.destroyAllWindows()
+# ====== Face recognition ======
+def recognize_face(face_embedding):
+    embedding = face_embedding.astype(np.float32).reshape(1, -1)
+    embedding /= np.linalg.norm(embedding)
+    D, I = index.search(embedding, 1)
+    distance = float(D[0][0])
+    idx = int(I[0][0])
+    if distance < FAISS_THRESHOLD:
+        return student_ids[idx], distance
+    return "Unknown", distance
+
+# ====== Draw label ======
+def draw_label(frame, bbox, label_text, color):
+    cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[2], bbox[3]), color, 2)
+    cv2.putText(frame, label_text, (bbox[0], bbox[1] - 10),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
+
+# ====== Camera ======
+cap = cv2.VideoCapture(0)
+if not cap.isOpened():
+    print("❌ Không mở được webcam.")
+    exit()
+
+print("📷 Nhận diện realtime (ấn 'q' để thoát)")
+
+frame_count = 0
+face_count = 0
+total_elapsed_time = 0.0
+total_face_time = 0.0
+last_spoof_check = 0
+spoof_result = None
+
+last_fake_upload_time = 0
+fake_upload_interval = 10  # giây, khoảng cách giữa các lần gửi fake face
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("⚠️ Lỗi khi đọc webcam.")
+        break
+
+    frame_start_time = time.perf_counter()
+    faces = app.get(frame)
+    face_count += len(faces)
+
+    for face in faces:
+        bbox = face.bbox.astype(int)
+
+        if time.time() - last_spoof_check > 2:
+            is_real, confidence = is_real_face(frame, bbox)
+            spoof_result = (is_real, confidence)
+            last_spoof_check = time.time()
+
+        is_real, confidence = spoof_result if spoof_result else (False, 0.0)
+
+        face_start_time = time.perf_counter()
+
+        if is_real:
+            identity, dist = recognize_face(face.embedding)
+            label_text = f"{identity} ({dist:.2f})"
+            color = (0, 255, 0)
+
+            if identity != "Unknown":
+                payload = {
+                    "name": identity,
+                    "confidence": round(dist, 2),
+                    "real_face": 1.0,
+                    "timestamp": datetime.now().isoformat()
+                }
+                with send_lock:
+                    send_buffer.append(payload)
+        else:
+            label_text = f"Fake Face ({confidence:.2f})"
+            color = (0, 0, 255)
+
+            # 🧵 Gửi ảnh fake vào queue xử lý upload riêng
+            # fake_face_queue.put((frame.copy(), bbox))
+            current_time = time.time()
+            if current_time - last_fake_upload_time > fake_upload_interval:
+                fake_face_queue.put((frame.copy(), bbox))
+                last_fake_upload_time = current_time
+
+        draw_label(frame, bbox, label_text, color)
+
+        face_time = time.perf_counter() - face_start_time
+        total_face_time += face_time
+
+    frame_count += 1
+    elapsed = time.perf_counter() - frame_start_time
+    total_elapsed_time += elapsed
+
+    fps = f"FPS: {1 / elapsed:.2f}"
+    cv2.putText(frame, fps, (10, 30),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
+
+    cv2.imshow("Anti-Spoof + Face Recognition", frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# ====== Cleanup ======
+cap.release()
+cv2.destroyAllWindows()
+fake_face_queue.put((None, None))  # kết thúc thread upload nếu cần
+
+# ====== Stats ======
+print("\n===== THỐNG KÊ HIỆU SUẤT =====")
+print(f"Tổng số khung hình:        {frame_count}")
+print(f"Tổng số khuôn mặt:         {face_count}")
+print(f"Thời gian chạy (giây):     {total_elapsed_time:.2f}s")
+print(f"FPS trung bình:            {frame_count / total_elapsed_time:.2f}")
+if face_count > 0:
+    print(f"Thời gian trung bình/face: {total_face_time / face_count:.4f} giây")

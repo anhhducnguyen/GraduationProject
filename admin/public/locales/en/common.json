@@ -1,11 +1,113 @@
 {
-  "form": {
-    "required": "This field is required",
-    "select_gender": "-- Select gender --",
-    "choose_image": "Choose an avatar from your device",
-    "change_image": "Change image"
+  "pages": {
+    "login": {
+      "title": "Sign in to your account",
+      "signin": "Sign In",
+      "signup": "Sign Up",
+      "divider": "or",
+      "fields": {
+        "email": "Email",
+        "password": "Password"
+      },
+      "errors": {
+        "validEmail": "Invalid email address"
+      },
+      "buttons": {
+        "submit": "Sign In",
+        "forgotPassword": "Forgot password?",
+        "noAccount": "Don't have an account?",
+        "rememberMe": "Remember me"
+      }
+    },
+    "forgotPassword": {
+      "title": "Forgot your password?",
+      "fields": {
+        "email": "Email"
+      },
+      "errors": {
+        "validEmail": "Invalid email address"
+      },
+      "buttons": {
+        "submit": "Send reset instructions"
+      }
+    },
+    "register": {
+      "title": "Register your account",
+      "fields": {
+        "email": "Email",
+        "password": "Password"
+      },
+      "errors": {
+        "validEmail": "Invalid email address"
+      },
+      "buttons": {
+        "submit": "Register",
+        "haveAccount": "Already have an account?"
+      }
+    },
+    "updatePassword": {
+      "title": "Update Password",
+      "fields": {
+        "password": "New Password",
+        "confirmPassword": "Confirm New Password"
+      },
+      "errors": {
+        "confirmPasswordNotMatch": "Passwords do not match"
+      },
+      "buttons": {
+        "submit": "Update"
+      }
+    },
+    "error": {
+      "info": "You forgot to add the {{action}} component to {{resource}}.",
+      "404": "Sorry, this page does not exist.",
+      "resource404": "Have you created the {{resource}} resource?",
+      "backHome": "Back to Home"
+    }
+  },
+  "actions": {
+    "list": "List",
+    "create": "Create",
+    "edit": "Edit",
+    "show": "View details",
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
+  "buttons": {
+    "create": "Create",
+    "save": "Save",
+    "logout": "Logout",
+    "delete": "Delete",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "confirm": "Confirm deletion?",
+    "filter": "Filter",
+    "clear": "Clear filters",
+    "refresh": "Refresh",
+    "show": "View",
+    "undo": "Undo",
+    "import": "Import",
+    "export": "Export",
+    "clone": "Clone",
+    "accept": "Accept",
+    "acceptAll": "Accept All",
+    "reject": "Reject",
+    "rejectAll": "Reject All",
+    "nextStep": "Next Step",
+    "previousStep": "Previous Step"
+  },
+  "home": {
+    "home": "Dashboard"
   },
   "users": {
+    "users": "Users",
+    "resourceLabel": "Users",
+    "titles": {
+      "create": "Add new user",
+      "edit": "Edit user information",
+      "list": "Users",
+      "show": "User details"
+    },
     "fields": {
       "id": "ID",
       "first_name": "First Name",
@@ -14,34 +116,28 @@
       "gender": "Gender",
       "avatar": "Avatar",
       "email": "Email",
+      "password": "Password",
+      "username": "Username",
       "role": "Role"
     },
     "gender": {
       "male": "Male",
       "female": "Female"
-    }
-  },
-  "rooms": {
-    "fields": {
-      "id": "Room ID",
-      "room_name": "Room Name",
-      "capacity": "Capacity",
-      "location": "Location",
-      "status": "Status"
     },
-    "status": {
-      "schedule": "Scheduled",
-      "complete": "Completed",
-      "cancel": "Cancelled"
+    "roles": {
+      "student": "Student",
+      "admin": "Administrator",
+      "teacher": "Teacher"
     }
   },
   "schedules": {
+    "schedules": "Visual Exam Schedules",
     "buttons": {
       "add": "Add Schedule"
     },
     "import_excel": "Import Schedule from Excel",
     "fields": {
-      "id": "Schedule ID",
+      "id": "ID",
       "name_schedule": "Schedule Name",
       "start_time": "Start Time",
       "end_time": "End Time",
@@ -53,6 +149,47 @@
       "completed": "Completed",
       "cancelled": "Cancelled"
     }
+  },
+  "fake-faces": {
+    "fake-faces": "Fake Faces"
+  },
+  "exam-rooms": {
+    "exam-rooms": "Exam Rooms",
+    "resourceLabel": "Exam Rooms",
+    "titles": {
+      "edit": "Edit Exam Room Information",
+      "list": "Exam Rooms",
+      "show": "Exam Room Details"
+    }
+  },
+  "rooms": {
+    "fields": {
+      "id": "ID",
+      "room_name": "Room Name",
+      "capacity": "Capacity",
+      "location": "Location",
+      "status": "Status"
+    },
+    "status": {
+      "available": "Available",
+      "occupied": "Occupied",
+      "unavailable": "Unavailable"
+    }
+  },
+  "exam-schedules": {
+    "exam-schedules": "Exam Schedule List",
+    "resourceLabel": "Exam Schedules",
+    "titles": {
+      "edit": "Edit Exam Schedule Information",
+      "list": "Exam Schedules",
+      "show": "Exam Schedule Details"
+    }
+  },
+  "table": {
+    "actions": "Actions"
+  },
+  "search": {
+    "placeholder": "Search..."
   },
   "attendance": {
     "index": "No.",
@@ -82,11 +219,5 @@
     "confirm_delete_message": "Are you sure you want to delete {{count}} students from the exam?",
     "delete": "Delete",
     "cancel": "Cancel"
-  },
-  "table": {
-    "actions": "Actions"
-  },
-  "search": {
-    "placeholder": "Search..."
   }
 }

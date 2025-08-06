@@ -1,0 +1,3 @@
+mosquitto_sub -t "exam/attendance"
+python register_face_image.py
+python .\extract_face_embeddings.py

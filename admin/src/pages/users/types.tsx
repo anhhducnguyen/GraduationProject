@@ -1,12 +1,12 @@
-// types.ts
-
-export interface User {
-  id: number;
+export type User = {
+  id?: string;
   first_name: string;
   last_name: string;
   age: number;
-  gender: "male" | "female" | "other";
+  gender: string;
   avatar?: string;
-  created_at?: string;
-  updated_at?: string;
-}
+  email: string;
+  username: string;
+  password: string;
+  role: string;
+};

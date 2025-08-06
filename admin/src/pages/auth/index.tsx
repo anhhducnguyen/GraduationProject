@@ -2,10 +2,10 @@ import * as React from "react";
 import { AuthPage as MUIAuthPage, type AuthProps } from "@refinedev/mui";
 import { Link } from "react-router";
 import Box from "@mui/material/Box";
-import {
-  FinefoodsLogoIcon,
-  FinefoodsLogoText,
-} from "../../components/icons/finefoods-logo";
+// import {
+//   FinefoodsLogoIcon,
+//   FinefoodsLogoText,
+// } from "../../components/icons/finefoods-logo";
 
 const authWrapperProps = {
   // style: {
@@ -26,7 +26,7 @@ const renderAuthContent = (content: React.ReactNode) => {
           gap="12px"
           marginBottom="16px"
         >
-          <FinefoodsLogoIcon
+          {/* <FinefoodsLogoIcon
             style={{
               width: 64,
               height: 64,
@@ -39,7 +39,7 @@ const renderAuthContent = (content: React.ReactNode) => {
               width: "300px",
               height: "auto",
             }}
-          />
+          /> */}
         </Box>
       </Link>
       {content}

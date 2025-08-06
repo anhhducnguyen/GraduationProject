@@ -10,7 +10,7 @@ import {
   TextFieldComponent as TextField,
 } from "@refinedev/mui";
 
-import type { User } from "./types"; // bạn nên định nghĩa User type tương tự như ở phần Create
+import type { User } from "./types";
 
 export const UserShow: React.FC = () => {
   const translate = useTranslate();
@@ -67,21 +67,6 @@ export const UserShow: React.FC = () => {
         ) : (
           <Skeleton height="20px" width="200px" />
         )}
-
-        {/* <Typography variant="body1" fontWeight="bold">
-          {translate("users.fields.avatar")}
-        </Typography>
-        {user?.avatar ? (
-          <img
-            src={user.avatar}
-            alt={`${user.first_name} ${user.last_name}`}
-            style={{ maxWidth: "200px", borderRadius: "8px" }}
-          />
-        ) : isLoading ? (
-          <Skeleton height="120px" width="200px" />
-        ) : (
-          <TextField value="No avatar" />
-        )} */}
       </Stack>
     </Show>
   );

@@ -8,6 +8,8 @@ import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useDataGrid } from "@refinedev/mui";
+import { useList } from "@refinedev/core";
+
 
 type ExamSchedule = {
     schedule_id: number;
@@ -43,18 +45,34 @@ export const ExamScheduleCreate: React.FC = () => {
         ),
     ];
 
+    // const {
+    //     data: roomData,
+    //     isLoading: roomLoading,
+    // } = useMany({
+    //     resource: "exam-rooms",
+    //     ids: roomIds,
+    //     queryOptions: { enabled: roomIds.length > 0 },
+    // });
     const {
         data: roomData,
         isLoading: roomLoading,
-    } = useMany({
+    } = useList({
         resource: "exam-rooms",
-        ids: roomIds,
-        queryOptions: { enabled: roomIds.length > 0 },
+        filters: [
+            {
+                field: "status",
+                operator: "eq",
+                value: "available",
+            },
+        ],
     });
 
     const roomMap = useMemo(() => {
         const map: Record<number, string> = {};
-        roomData?.data?.forEach((room) => {
+        
+        roomData?.data
+        ?.filter((room) => room.status === "available")
+        ?.forEach((room) => {
             map[room.room_id] = room.room_name;
         });
         return map;

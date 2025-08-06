@@ -17,10 +17,10 @@ const register = async (req, res) => {
 
     await createAccount(email, hashedPassword);  
 
-    res.json({ message: "User registered successfully" });
+    res.json({ message: "Đăng ký người dùng thành công" });
   } catch (error) {
-    console.error("Error in register:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Lỗi đăng ký:", error);
+    res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -30,10 +30,10 @@ const logout = (req, res, next) => {
     if (err) return next(err);
 
     req.session.destroy((err) => {
-      if (err) return res.status(500).json({ message: "Logout failed" });
+      if (err) return res.status(500).json({ message: "Đăng xuất không thành công" });
 
       res.clearCookie("connect.sid");
-      res.json({ message: "Logout successful" });
+      res.json({ message: "Đăng xuất thành công" });
     });
   });
 };
@@ -86,14 +86,14 @@ const getProfile = async (req, res) => {
     const user = await findById(userId);  
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "Người dùng không tồn tại" });
     }
 
     delete user.password;
-    res.json({ message: "User info", user });
+    res.json({ message: "Thông tin người dùng", user });
   } catch (err) {
-    console.error("Error in getProfile:", err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Lỗi trong getProfile:", err);
+    res.status(500).json({ message: "Lỗi server" });
   }
 };
 

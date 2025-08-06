@@ -33,7 +33,7 @@ const getExamRoom = async (req, res) => {
     try {
         const examRoom = await getExamRoomById(id);
         if (!examRoom) {
-            return res.status(404).json({ message: 'Exam room not found' });
+            return res.status(404).json({ message: 'Phòng thi không tồn tại' });
         }
         return res.status(200).json(examRoom);
     } catch (error) {
@@ -80,7 +80,7 @@ const updateExamRoom = async (req, res) => {
             status 
         });
         if (!updatedExamRoom) {
-            return res.status(404).json({ message: 'Exam room not found' });
+            return res.status(404).json({ message: 'Phòng thi không tồn tại' });
         }
         return res.status(200).json(updatedExamRoom);
     } catch (error) {
@@ -94,9 +94,9 @@ const deleteExamRoom = async (req, res) => {
     try {
         const deletedExamRoom = await deleteExamRoomById(id);
         if (!deletedExamRoom) {
-            return res.status(404).json({ message: 'Exam room not found' });
+            return res.status(404).json({ message: 'Phòng thi không tồn tại' });
         }
-        return res.status(200).json({ message: 'Exam room deleted successfully' });
+        return res.status(200).json({ message: 'Phòng thi đã được xóa thành công' });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

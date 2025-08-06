@@ -19,6 +19,10 @@ import { Upload } from 'antd';
 import { Student } from './types';
 import { Modal } from 'antd';
 import { PiTrashSimpleDuotone } from "react-icons/pi";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
 
 
 type Props = {
@@ -126,11 +130,32 @@ export default function CustomEventModal({ calendarEvent }: Props) {
     },
     {
       title: translate("attendance.status", "Trạng thái"),
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: "status",
+      key: "status",
       render: (text) => {
-        const color = text === "present" ? "green" : "red";
-        return <Tag color={color}>{translate(`attendance.${text}`, text)}</Tag>;
+        let color = "default";
+        let icon = null;
+        let label = translate(`attendance.${text}`, text);
+
+        switch (text) {
+          case "present":
+            color = "green";
+            icon = <CheckCircleOutlined />;
+            break;
+          case "absent":
+            color = "red";
+            icon = <CloseCircleOutlined />;
+            break;
+          default:
+            color = "default";
+            label = text;
+        }
+
+        return (
+          <Tag color={color} icon={icon}>
+            {label}
+          </Tag>
+        );
       },
       filters: [
         { text: translate("attendance.present"), value: "present" },
@@ -149,17 +174,24 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       dataIndex: 'realFace',
       key: 'realFace',
       render: (value) => {
+        if (value === null || value === undefined) {
+          return null;
+        }
+
         const isReal = value === true || value === 1 || value === "1";
         const color = isReal ? "green" : "red";
         const label = isReal ? translate("attendance.real", "Thật") : translate("attendance.fake", "Giả");
         return <Tag color={color}>{label}</Tag>;
       },
+
     },
     {
       title: translate("attendance.checkin_time", "Thời gian điểm danh"),
       dataIndex: 'checkInTime',
       key: 'checkInTime',
-      render: (text) => dayjs(text).format('HH:mm:ss DD/MM/YYYY'),
+      width: 110,
+      align: 'right',
+      render: (text) => dayjs(text).format('HH:mm:ss'),
     },
   ];
 
@@ -167,7 +199,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
     if (!calendarEvent?.id) return;
     try {
       setLoading(true);
-      const res = await fetch(`https://graduationproject-nx7m.onrender.com/api/v1/exam-schedules/${calendarEvent.id}/students`, {
+      const res = await fetch(`http://localhost:5000/api/v1/exam-schedules/${calendarEvent.id}/students`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -226,7 +258,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       const studentIds: string[] = jsonData.map((row) => row['Mã số'] || row['id']).filter(Boolean);
 
       try {
-        const res = await fetch(`https://graduationproject-nx7m.onrender.com/api/v1/exam-schedules/${calendarEvent.id}/students/import-ids`, {
+        const res = await fetch(`http://localhost:5000/api/v1/exam-schedules/${calendarEvent.id}/students/import-ids`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -237,7 +269,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
 
         if (!res.ok) throw new Error('Lỗi khi gửi danh sách mã số sinh viên');
 
-        fetchStudents(); // Tải lại danh sách sinh viên sau khi import
+        fetchStudents(); 
       } catch (error) {
         console.error("Lỗi khi import Excel:", error);
       }
@@ -257,7 +289,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
       cancelText: translate("attendance.cancel", "Huỷ"),
       onOk: async () => {
         try {
-          const res = await fetch(`https://graduationproject-nx7m.onrender.com/api/v1/exam-schedules/${calendarEvent.id}/students/delete`, {
+          const res = await fetch(`http://localhost:5000/api/v1/exam-schedules/${calendarEvent.id}/students/delete`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -329,19 +361,6 @@ export default function CustomEventModal({ calendarEvent }: Props) {
               {translate("attendance.import_excel", "Nhập sinh viên từ Excel")}
             </Button>
           </Upload>
-          <Button size={size} style={{ backgroundColor: '#1976d2', color: 'white' }}>
-            {translate("attendance.start_exam", "Bắt đầu ca thi")}
-          </Button>
-          {/* <Button
-            icon={<PiTrashSimpleDuotone />}
-            // style={{ backgroundColor: '#1976d2', color: 'white' }}
-            danger
-            disabled={!selectedRowKeys.length}
-            onClick={handleDeleteSelected}
-            size={size}
-          >
-            {translate("attendance.delete_selected", "Xoá sinh viên đã chọn")}
-          </Button> */}
           <Button
             icon={<PiTrashSimpleDuotone />}
             type="primary"
