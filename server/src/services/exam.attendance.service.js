@@ -242,29 +242,60 @@ const getCurrentExamSchedule = async () => {
 //         .andWhere('end_time', '>=', now);
 // };
 
+// const getCurrentExamSchedules = async () => {
+//     try {
+//         // 1. Lấy thời gian hiện tại dưới dạng UTC.
+//         // dayjs().utc() sẽ lấy khoảnh khắc hiện tại và biểu diễn nó ở múi giờ UTC.
+//         const nowInUTC = dayjs().utc().format('YYYY-MM-DD HH:mm:ss');
+
+//         console.log(`Querying for schedules active at (UTC): ${nowInUTC}`);
+
+//         // 2. Truy vấn cơ sở dữ liệu.
+//         // Tìm các lịch thi có start_time trước hoặc bằng thời điểm hiện tại (UTC)
+//         // và end_time sau hoặc bằng thời điểm hiện tại (UTC).
+//         const currentSchedules = await db('examschedules')
+//             .where('start_time', '<=', nowInUTC)
+//             .andWhere('end_time', '>=', nowInUTC)
+//             .andWhere('status', 'scheduled'); // Thêm điều kiện này để chắc chắn chỉ lấy các ca thi đã được lên lịch
+
+//         // 3. Trả về kết quả.
+//         // Dữ liệu thời gian trong `currentSchedules` vẫn là UTC.
+//         // Hãy để frontend xử lý việc chuyển đổi sang giờ Việt Nam để hiển thị.
+//         return currentSchedules;
+
+//     } catch (error) {
+//         throw new Error('Error fetching current exam schedules: ' + error.message);
+//     }
+// };
+
 const getCurrentExamSchedules = async () => {
     try {
-        // 1. Lấy thời gian hiện tại dưới dạng UTC.
-        // dayjs().utc() sẽ lấy khoảnh khắc hiện tại và biểu diễn nó ở múi giờ UTC.
-        const nowInUTC = dayjs().utc().format('YYYY-MM-DD HH:mm:ss');
+        // 1. Lấy thời điểm hiện tại ở UTC (giống format của dữ liệu trong DB)
+        const nowUTC = dayjs().utc().format('YYYY-MM-DD HH:mm:ss');
 
-        console.log(`Querying for schedules active at (UTC): ${nowInUTC}`);
+        console.log(`🕒 Truy vấn lịch thi đang diễn ra tại thời điểm (UTC): ${nowUTC}`);
 
-        // 2. Truy vấn cơ sở dữ liệu.
-        // Tìm các lịch thi có start_time trước hoặc bằng thời điểm hiện tại (UTC)
-        // và end_time sau hoặc bằng thời điểm hiện tại (UTC).
-        const currentSchedules = await db('examschedules')
-            .where('start_time', '<=', nowInUTC)
-            .andWhere('end_time', '>=', nowInUTC)
-            .andWhere('status', 'scheduled'); // Thêm điều kiện này để chắc chắn chỉ lấy các ca thi đã được lên lịch
+        // 2. Truy vấn các lịch thi có thời gian phù hợp và trạng thái còn hiệu lực
+        const currentSchedules = await db('examschedules as s')
+            .leftJoin('examrooms as r', 's.room_id', 'r.room_id') // nếu muốn kèm phòng
+            .select(
+                's.schedule_id',
+                's.name_schedule',
+                's.start_time',
+                's.end_time',
+                's.room_id',
+                's.status',
+                'r.name as room_name' // nếu bạn có cột "name" trong bảng examrooms
+            )
+            .where('s.start_time', '<=', nowUTC)
+            .andWhere('s.end_time', '>=', nowUTC)
+            .andWhereIn('s.status', ['scheduled', 'in_progress']) // lấy cả 2 loại hợp lệ
 
-        // 3. Trả về kết quả.
-        // Dữ liệu thời gian trong `currentSchedules` vẫn là UTC.
-        // Hãy để frontend xử lý việc chuyển đổi sang giờ Việt Nam để hiển thị.
         return currentSchedules;
 
     } catch (error) {
-        throw new Error('Error fetching current exam schedules: ' + error.message);
+        console.error('❌ Lỗi khi truy vấn lịch thi đang diễn ra:', error.message);
+        throw new Error('Error fetching current exam schedules');
     }
 };
 
