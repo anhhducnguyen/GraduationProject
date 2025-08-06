@@ -5,24 +5,6 @@ const Services = require("../src/services/auth.service");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 require("dotenv").config();
 
-// passport.use(new LocalStrategy(
-//   { usernameField: "email" },
-//   async function (email, password, done) {
-//     try {
-//       const user = await Services.findOne({ email: email });
-//       if (!user) return done(null, false, { message: "User not found" });
-
-//       const isMatch = await bcrypt.compare(password, user.password);
-//       if (!isMatch) return done(null, false, { message: "Incorrect password" });
-
-//       delete user.password;
-//       return done(null, user);
-//     } catch (err) {
-//       return done(err);
-//     }
-//   }
-// ));
-
 const jwt = require("jsonwebtoken");
 
 passport.use(new LocalStrategy(
@@ -35,9 +17,11 @@ passport.use(new LocalStrategy(
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) return done(null, false, { message: "Incorrect password" });
 
-      // ✅ Không serializeUser, mà trả về token
+      // Không serializeUser, mà trả về token
       const payload = { id: user.id, email: user.email, role: user.role };
-      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "3h" });
+      // const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "3h" });
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "15m" });
+
 
       return done(null, { 
         token,

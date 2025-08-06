@@ -56,6 +56,8 @@ import Home from "@/pages/home/home";
 import { CustomTitle } from "@/components/CustomTitle";
 import { AuthPage } from "@/pages/auth/index";
 
+const API_URL = `${import.meta.env.VITE_API_BASE}/api/v1`;
+
 function App() {
   const { t, i18n } = useTranslation();
   const i18nProvider: I18nProvider = {
@@ -73,7 +75,8 @@ function App() {
         <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
         <RefineSnackbarProvider>
           <Refine
-            dataProvider={dataProvider("http://localhost:5000/api/v1")}
+            dataProvider={dataProvider(API_URL)}
+            // dataProvider={dataProvider("http://localhost:5000/api/v1")}
             // dataProvider={dataProvider("https://graduationproject-nx7m.onrender.com/api/v1")}
             notificationProvider={useNotificationProvider}
             routerProvider={routerProvider}
