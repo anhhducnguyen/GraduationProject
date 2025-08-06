@@ -1,4 +1,6 @@
 require('../src/cron/updateRoomStatus');
+const startScheduleStatusCron = require('../src/cron/updateScheduleStatus');
+startScheduleStatusCron();
 const app = require("./app");
 const PORT = 5000;
 const YAML = require('yamljs');
