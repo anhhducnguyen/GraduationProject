@@ -31,6 +31,14 @@ import {
   CloseCircleOutlined,
 } from "@ant-design/icons";
 
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import "dayjs/locale/vi";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+
 
 type ExamSchedule = {
   schedule_id: number;
@@ -112,14 +120,23 @@ export const ExamScheduleList = () => {
           : translate("form.unknown", "Unknown");
       },
     },
+    // {
+    //   field: "start_time",
+    //   headerName: translate("schedules.fields.start_time"),
+    //   flex: 1.5,
+    //   minWidth: 180,
+    //   renderCell: ({ value }) =>
+    //     dayjs(value).locale(locale ?? "en").format("dddd, DD/MM/YYYY HH:mm"),
+    // },
     {
       field: "start_time",
       headerName: translate("schedules.fields.start_time"),
       flex: 1.5,
       minWidth: 180,
       renderCell: ({ value }) =>
-        dayjs(value).locale(locale ?? "en").format("dddd, DD/MM/YYYY HH:mm"),
-    },
+        dayjs.utc(value).tz("Asia/Ho_Chi_Minh").locale(locale ?? "en").format("dddd, DD/MM/YYYY HH:mm"),
+    }
+
     {
       field: "status",
       headerName: translate("schedules.fields.status"),
