@@ -15,11 +15,11 @@ const db = require('../../config/database');
 const validate = require('../middlewares/validate');
 const scheduleSchema = require('../middlewares/examSchedule.validation');
 
-// const {
-//     authenticate,
-// } = require("../../src/utils/auth/index");
-// router.use(authenticate);
-// const permission = require("../../src/constants/permission");
+const {
+    authenticate,
+} = require("../../src/utils/auth/index");
+router.use(authenticate);
+const permission = require("../../src/constants/permission");
 
 /**
 - Lấy danh sách lịch thi
@@ -27,11 +27,11 @@ const scheduleSchema = require('../middlewares/examSchedule.validation');
 **/
 router.route('/')
     .get(
-        // permission, 
+        permission, 
         getExamSchedules)
     .post(
-        // permission, 
-        validate(scheduleSchema),
+        permission, 
+        // validate(scheduleSchema),
         createExamSchedule);
 
 /**
@@ -42,13 +42,13 @@ router.route('/')
 router.route('/:id')
     //     .get(permission, getExamRoom)
         .put(
-            // permission, 
+            permission, 
             updateExamSchedule)
         .patch(
-            // permission, 
+            permission, 
             updateExamSchedule)
     .delete(
-        // permission, 
+        permission, 
         deletedExamSchedule);
 
 router.get('/:id', async (req, res) => {
