@@ -86,6 +86,25 @@ const queryExamSchedule = async (filter, options) => {
 
 //   return { inserted, skipped };
 // };
+function excelDateToJSDate(serial) {
+  const utc_days = Math.floor(serial - 25569);
+  const utc_value = utc_days * 86400; // seconds
+  const date_info = new Date(utc_value * 1000);
+
+  const fractional_day = serial - Math.floor(serial) + 0.0000001;
+  let total_seconds = Math.floor(86400 * fractional_day);
+
+  const seconds = total_seconds % 60;
+  total_seconds -= seconds;
+  const hours = Math.floor(total_seconds / (60 * 60));
+  const minutes = Math.floor((total_seconds - hours * 3600) / 60);
+
+  date_info.setHours(hours);
+  date_info.setMinutes(minutes);
+  date_info.setSeconds(seconds);
+
+  return date_info;
+}
 
 const importFromExcel = async (filePath) => {
   const workbook = xlsx.readFile(filePath);
@@ -96,21 +115,25 @@ const importFromExcel = async (filePath) => {
   let skipped = 0;
 
   for (const row of rows) {
-    const { start_time, end_time, name_schedule, status, room_id } = row;
+    const { start_time, end_time, name_schedule, room_id } = row;
 
     if (!start_time || !end_time || !name_schedule || !room_id) {
       skipped++;
       continue;
     }
 
-    // Chuyển từ giờ VN sang UTC trước khi lưu
-    const startUTC = dayjs.tz(start_time, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
-    const endUTC = dayjs.tz(end_time, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
+    // Convert serial to Date if needed
+    const startJS = typeof start_time === 'number' ? excelDateToJSDate(start_time) : new Date(start_time);
+    const endJS = typeof end_time === 'number' ? excelDateToJSDate(end_time) : new Date(end_time);
 
-    // Tính trạng thái theo thời điểm hiện tại
+    // Chuyển giờ Việt Nam → UTC
+    const startUTC = dayjs.tz(startJS, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
+    const endUTC = dayjs.tz(endJS, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
+
+    // Tính trạng thái hiện tại
     const nowVN = dayjs().tz(LOCAL_TZ);
-    const startVN = dayjs.tz(start_time, LOCAL_TZ);
-    const endVN = dayjs.tz(end_time, LOCAL_TZ);
+    const startVN = dayjs.tz(startJS, LOCAL_TZ);
+    const endVN = dayjs.tz(endJS, LOCAL_TZ);
 
     let computedStatus;
     if (nowVN.isBefore(startVN)) {
@@ -133,7 +156,7 @@ const importFromExcel = async (filePath) => {
       inserted++;
     } catch (error) {
       skipped++;
-      console.error(`❌ Lỗi khi chèn: ${error.message}`);
+      console.error(`❌ Lỗi khi chèn lịch thi '${name_schedule}': ${error.message}`);
     }
   }
 
