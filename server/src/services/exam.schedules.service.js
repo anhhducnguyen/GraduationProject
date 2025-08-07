@@ -4,8 +4,6 @@ const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const timezone = require('dayjs/plugin/timezone');
 
-const { scheduleRoomStatusUpdate } = require('../queue/scheduler');
-
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -72,7 +70,7 @@ const deleteScheduleById = async (schedule_id) => {
     }
 };
 
-
+// Tạo mới lịch thi
 // const create = async ({
 //     start_time,
 //     end_time,
@@ -129,59 +127,47 @@ const create = async ({
     start_time,
     end_time,
     room_id,
-    status,
+    status, // không cần dùng biến này nữa nếu tính tự động
     name_schedule
 }) => {
     try {
-        // Chuyển từ giờ VN sang UTC trước khi lưu DB
+        // Chuyển từ giờ VN sang UTC trước khi lưu
         const startUTC = dayjs.tz(start_time, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
         const endUTC = dayjs.tz(end_time, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
 
-        const [schedule_id] = await db('examschedules').insert({
-            start_time: startUTC,
-            end_time: endUTC,
-            room_id,
-            status,
-            name_schedule
-        });
-
-        // Tính trạng thái phòng hiện tại
+        // Tính trạng thái dựa theo thời gian hiện tại (giờ Việt Nam)
         const nowVN = dayjs().tz(LOCAL_TZ);
         const startVN = dayjs.tz(start_time, LOCAL_TZ);
         const endVN = dayjs.tz(end_time, LOCAL_TZ);
 
-        let roomStatus;
+        let computedStatus;
         if (nowVN.isBefore(startVN)) {
-            roomStatus = 'scheduled';
+            computedStatus = 'scheduled';
         } else if (nowVN.isAfter(endVN)) {
-            roomStatus = 'available';
+            computedStatus = 'completed';
         } else {
-            roomStatus = 'in_use';
+            computedStatus = 'in_progress';
         }
 
-        // Cập nhật trạng thái hiện tại ngay lập tức
+        // Tạo lịch thi với trạng thái tính toán
+        const [schedule_id] = await db('examschedules').insert({
+            start_time: startUTC,
+            end_time: endUTC,
+            room_id,
+            status: computedStatus,
+            name_schedule
+        });
+
+        // Cập nhật trạng thái phòng thi
         await db("examrooms")
             .where({ room_id })
-            .update({ status: roomStatus });
+            .update({ status: computedStatus === 'in_progress' ? 'in_use' : 'available' });
 
-        // >>> Lên lịch cập nhật theo thời gian thực (dùng BullMQ hoặc tương tự)
-        await scheduleRoomStatusUpdate({
-            room_id,
-            status: 'in_use',
-            runAt: startVN.toDate(),
-        });
-
-        await scheduleRoomStatusUpdate({
-            room_id,
-            status: 'available',
-            runAt: endVN.toDate(),
-        });
-
-        // Trả về kết quả có định dạng giờ VN
         const newExamSchedule = await db('examschedules')
             .where({ schedule_id })
             .first();
 
+        // Convert lại giờ UTC sang giờ Việt Nam để trả về
         newExamSchedule.start_time = dayjs.utc(newExamSchedule.start_time).tz(LOCAL_TZ).format('YYYY-MM-DD HH:mm:ss');
         newExamSchedule.end_time = dayjs.utc(newExamSchedule.end_time).tz(LOCAL_TZ).format('YYYY-MM-DD HH:mm:ss');
 
@@ -190,6 +176,7 @@ const create = async ({
         throw new Error('Error creating exam schedule: ' + error.message);
     }
 };
+
 
 // Cập nhật lịch thi
 const update = async (id, {
