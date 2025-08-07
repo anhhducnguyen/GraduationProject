@@ -12,6 +12,8 @@ const {
     updateExamSchedule
 } = require('../controllers/exam.schedules.controller');
 const db = require('../../config/database');
+const validate = require('../middlewares/validate');
+const scheduleSchema = require('../middlewares/examSchedule.validation');
 
 // const {
 //     authenticate,
@@ -29,6 +31,7 @@ router.route('/')
         getExamSchedules)
     .post(
         // permission, 
+        validate(scheduleSchema),
         createExamSchedule);
 
 /**
