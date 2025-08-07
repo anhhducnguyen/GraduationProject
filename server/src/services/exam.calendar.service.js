@@ -162,7 +162,6 @@ const queryExamSchedule = async (filter, options) => {
 
 //   return { inserted, skipped };
 // };
-
 const importFromExcel = async (filePath) => {
   const workbook = xlsx.readFile(filePath);
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -179,25 +178,24 @@ const importFromExcel = async (filePath) => {
       continue;
     }
 
-    // Chuyển từ giờ VN sang UTC
-    const startUTC = dayjs.tz(start_time, 'YYYY-MM-DD HH:mm:ss', LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
-    const endUTC = dayjs.tz(end_time, 'YYYY-MM-DD HH:mm:ss', LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
-
-    // Tính trạng thái
-    const nowVN = dayjs().tz(LOCAL_TZ);
-    const startVN = dayjs.tz(start_time, 'YYYY-MM-DD HH:mm:ss', LOCAL_TZ);
-    const endVN = dayjs.tz(end_time, 'YYYY-MM-DD HH:mm:ss', LOCAL_TZ);
-
-    let computedStatus;
-    if (nowVN.isBefore(startVN)) {
-      computedStatus = 'scheduled';
-    } else if (nowVN.isAfter(endVN)) {
-      computedStatus = 'completed';
-    } else {
-      computedStatus = 'in_progress';
-    }
-
     try {
+      // Nếu là Excel datetime thì convert trực tiếp với dayjs
+      const startUTC = dayjs(start_time).tz(LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
+      const endUTC = dayjs(end_time).tz(LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
+
+      const nowVN = dayjs().tz(LOCAL_TZ);
+      const startVN = dayjs(start_time).tz(LOCAL_TZ);
+      const endVN = dayjs(end_time).tz(LOCAL_TZ);
+
+      let computedStatus;
+      if (nowVN.isBefore(startVN)) {
+        computedStatus = 'scheduled';
+      } else if (nowVN.isAfter(endVN)) {
+        computedStatus = 'completed';
+      } else {
+        computedStatus = 'in_progress';
+      }
+
       await db('examschedules').insert({
         start_time: startUTC,
         end_time: endUTC,
