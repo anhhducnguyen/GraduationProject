@@ -122,14 +122,6 @@ export const ExamScheduleList = () => {
           : translate("form.unknown", "Unknown");
       },
     },
-    // {
-    //   field: "start_time",
-    //   headerName: translate("schedules.fields.start_time"),
-    //   flex: 1.5,
-    //   minWidth: 180,
-    //   renderCell: ({ value }) =>
-    //     dayjs(value).locale(locale ?? "en").format("dddd, DD/MM/YYYY HH:mm"),
-    // },
     {
       field: "start_time",
       headerName: translate("schedules.fields.start_time"),
@@ -138,51 +130,6 @@ export const ExamScheduleList = () => {
       renderCell: ({ value }) =>
         dayjs.utc(value).tz("Asia/Ho_Chi_Minh").locale(locale ?? "en").format("dddd, DD/MM/YYYY HH:mm"),
     },
-
-
-    // {
-    //   field: "status",
-    //   headerName: translate("schedules.fields.status"),
-    //   flex: 1,
-    //   minWidth: 120,
-    //   renderCell: ({ value }) => {
-    //     let color: "blue" | "green" | "red" | "default" | "orange" = "default";
-    //     let label = value;
-    //     let icon = null;
-
-    //     switch (value) {
-    //       case "scheduled":
-    //         color = "blue";
-    //         label = translate("schedules.status.scheduled", "Đã lên lịch");
-    //         icon = <CalendarOutlined />;
-    //         break;
-    //       case "completed":
-    //         color = "green";
-    //         label = translate("schedules.status.completed", "Đã hoàn thành");
-    //         icon = <CheckCircleOutlined />;
-    //         break;
-    //       case "cancelled":
-    //         color = "red";
-    //         label = translate("schedules.status.cancelled", "Đã hủy");
-    //         icon = <CloseCircleOutlined />;
-    //         break;
-    //       case "in_progress":
-    //         color = "orange";
-    //         label = translate("schedules.status.in_progress", "Đang diễn ra");
-    //         icon = <LoadingOutlined />;
-    //         break;
-    //       default:
-    //         label = value;
-    //     }
-
-    //     return (
-    //       <span style={{ display: "flex", alignItems: "center", gap: 6, color }}>
-    //         {icon}
-    //         {label}
-    //       </span>
-    //     );
-    //   },
-    // },
     {
       field: "status",
       headerName: translate("schedules.fields.status"),

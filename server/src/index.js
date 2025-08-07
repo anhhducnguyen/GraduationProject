@@ -16,6 +16,10 @@ const { initSocket } = require("../config/socket");
 const server = http.createServer(app);
 const io = initSocket(server);
 
+const { startWorker } = require("../src/queue/scheduler");
+require("../config/ws-server"); // Khởi động WebSocket server
+startWorker(); // Bắt đầu xử lý job
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(cors({
