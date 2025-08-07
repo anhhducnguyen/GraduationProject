@@ -184,6 +184,63 @@ function excelDateToJSDate(serial) {
   return date_info;
 }
 
+// const importFromExcel = async (filePath) => {
+//   const workbook = xlsx.readFile(filePath);
+//   const sheet = workbook.Sheets[workbook.SheetNames[0]];
+//   const rows = xlsx.utils.sheet_to_json(sheet);
+
+//   let inserted = 0;
+//   let skipped = 0;
+
+//   for (const row of rows) {
+//     const { start_time, end_time, name_schedule, room_id } = row;
+
+//     if (!start_time || !end_time || !name_schedule || !room_id) {
+//       skipped++;
+//       continue;
+//     }
+
+//     // Chuyển serial → Date nếu là số
+//     const startJS = typeof start_time === 'number' ? excelDateToJSDate(start_time) : new Date(start_time);
+//     const endJS = typeof end_time === 'number' ? excelDateToJSDate(end_time) : new Date(end_time);
+
+//     // 🇻🇳 Chuyển giờ Việt Nam → 🌍 UTC
+//     const startUTC = dayjs.tz(startJS, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
+//     const endUTC = dayjs.tz(endJS, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
+
+//     // Tính trạng thái hiện tại
+//     const nowVN = dayjs().tz(LOCAL_TZ);
+//     const startVN = dayjs.tz(startJS, LOCAL_TZ);
+//     const endVN = dayjs.tz(endJS, LOCAL_TZ);
+
+//     let computedStatus;
+//     if (nowVN.isBefore(startVN)) {
+//       computedStatus = 'scheduled';
+//     } else if (nowVN.isAfter(endVN)) {
+//       computedStatus = 'completed';
+//     } else {
+//       computedStatus = 'in_progress';
+//     }
+
+//     try {
+//       await db('examschedules').insert({
+//         name_schedule,
+//         start_time: startUTC,
+//         end_time: endUTC,
+//         room_id,
+//         status: computedStatus,
+//       });
+
+//       inserted++;
+//     } catch (error) {
+//       skipped++;
+//       console.error(`❌ Lỗi khi chèn lịch thi '${name_schedule}': ${error.message}`);
+//     }
+//   }
+
+//   return { inserted, skipped };
+// };
+
 const importFromExcel = async (filePath) => {
   const workbook = xlsx.readFile(filePath);
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -200,15 +257,20 @@ const importFromExcel = async (filePath) => {
       continue;
     }
 
-    // Chuyển serial → Date nếu là số
-    const startJS = typeof start_time === 'number' ? excelDateToJSDate(start_time) : new Date(start_time);
-    const endJS = typeof end_time === 'number' ? excelDateToJSDate(end_time) : new Date(end_time);
+    // ✅ Phân biệt kiểu số (serial) hoặc chuỗi
+    const startJS = typeof start_time === 'number'
+      ? excelDateToJSDate(start_time)
+      : dayjs.tz(start_time, LOCAL_TZ).toDate();
 
-    // 🇻🇳 Chuyển giờ Việt Nam → 🌍 UTC
+    const endJS = typeof end_time === 'number'
+      ? excelDateToJSDate(end_time)
+      : dayjs.tz(end_time, LOCAL_TZ).toDate();
+
+    // ✅ Chuyển giờ Việt Nam → UTC trước khi lưu
     const startUTC = dayjs.tz(startJS, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
     const endUTC = dayjs.tz(endJS, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
 
-    // Tính trạng thái hiện tại
+    // ✅ Tính trạng thái
     const nowVN = dayjs().tz(LOCAL_TZ);
     const startVN = dayjs.tz(startJS, LOCAL_TZ);
     const endVN = dayjs.tz(endJS, LOCAL_TZ);
