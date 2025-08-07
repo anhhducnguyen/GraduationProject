@@ -207,9 +207,9 @@ export const ExamScheduleShow: React.FC = () => {
           <Typography variant="h6" fontWeight="bold">
             {t("Student List", "Danh sách sinh viên")}
           </Typography>
-          <Button variant="outlined" onClick={() => refetch()} disabled={isFetching}>
+          {/* <Button variant="outlined" onClick={() => refetch()} disabled={isFetching}>
             {isFetching ? t("Refreshing...", "Đang làm mới...") : t("Refresh", "Làm mới")}
-          </Button>
+          </Button> */}
         </Stack>
 
         {schedule?.students?.length ? (

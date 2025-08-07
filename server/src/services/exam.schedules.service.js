@@ -179,37 +179,107 @@ const create = async ({
 
 
 // Cập nhật lịch thi
-const update = async (id, {
-    start_time,
-    end_time,
-    room_id,
-    status,
-    name_schedule
-}) => {
+// const update = async (id, {
+//     start_time,
+//     end_time,
+//     room_id,
+//     status,
+//     name_schedule
+// }) => {
+//     try {
+//         const affectedRows = await db('examschedules')
+//             .where({ schedule_id: id })
+//             .update({
+//                 start_time,
+//                 end_time,
+//                 room_id,
+//                 status,
+//                 name_schedule
+//             });
+
+//         if (affectedRows === 0) {
+//             return null; // không tìm thấy hoặc không thay đổi gì
+//         }
+
+//         const updatedExamSchedule = await db('examschedules')
+//             .where({ schedule_id: id })
+//             .first();
+
+//         return updatedExamSchedule;
+//     } catch (error) {
+//         throw new Error('Error updating exam schedule: ' + error.message);
+//     }
+// };
+
+const update = async (
+    id,
+    {
+        start_time,
+        end_time,
+        room_id,
+        name_schedule,
+    }
+) => {
     try {
+        // Chuyển giờ Việt Nam sang UTC
+        const startUTC = dayjs.tz(start_time, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
+        const endUTC = dayjs.tz(end_time, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
+
+        // Tính lại trạng thái mới
+        const nowVN = dayjs().tz(LOCAL_TZ);
+        const startVN = dayjs.tz(start_time, LOCAL_TZ);
+        const endVN = dayjs.tz(end_time, LOCAL_TZ);
+
+        let computedStatus;
+        if (nowVN.isBefore(startVN)) {
+            computedStatus = 'scheduled';
+        } else if (nowVN.isAfter(endVN)) {
+            computedStatus = 'completed';
+        } else {
+            computedStatus = 'in_progress';
+        }
+
+        // Cập nhật lịch thi
         const affectedRows = await db('examschedules')
             .where({ schedule_id: id })
             .update({
-                start_time,
-                end_time,
+                start_time: startUTC,
+                end_time: endUTC,
                 room_id,
-                status,
-                name_schedule
+                name_schedule,
+                status: computedStatus,
             });
 
         if (affectedRows === 0) {
-            return null; // không tìm thấy hoặc không thay đổi gì
+            return null;
         }
 
+        // Cập nhật trạng thái phòng
+        await db("examrooms")
+            .where({ room_id })
+            .update({ status: computedStatus === 'in_progress' ? 'in_use' : 'available' });
+
+        // Trả về lịch thi vừa cập nhật (đổi giờ lại về VN)
         const updatedExamSchedule = await db('examschedules')
             .where({ schedule_id: id })
             .first();
+
+        updatedExamSchedule.start_time = dayjs
+            .utc(updatedExamSchedule.start_time)
+            .tz(LOCAL_TZ)
+            .format('YYYY-MM-DD HH:mm:ss');
+
+        updatedExamSchedule.end_time = dayjs
+            .utc(updatedExamSchedule.end_time)
+            .tz(LOCAL_TZ)
+            .format('YYYY-MM-DD HH:mm:ss');
 
         return updatedExamSchedule;
     } catch (error) {
         throw new Error('Error updating exam schedule: ' + error.message);
     }
 };
+
 
 
 // Lấy danh sách sinh viên trong ca thi

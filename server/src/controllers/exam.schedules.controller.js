@@ -82,47 +82,7 @@ const createExamSchedule = async (req, res) => {
     }
 };
 
-// // Cập nhật thông tin lịch thi
-// const updateExamSchedule = async (req, res) => {
-//     const { id } = req.params;
-//     const {
-//         start_time,
-//         end_time,
-//         name_schedule,
-//         status,
-//         room,
-//         // room_id
-//     } = req.body;
-//     const room_id = room?.room_id;
-
-//     if (!id) {
-//         return res.status(400).json({ message: "examSchedule id is required" });
-//     }
-
-//     if (!room_id) {
-//         return res.status(400).json({ message: "room_id is required" });
-//     }
-
-//     try {
-//         const updated = await update(id, {
-//             start_time,
-//             end_time,
-//             name_schedule,
-//             status,
-//             room_id
-//         });
-
-//         if (!updated) {
-//             return res.status(404).json({ message: "Exam schedule not found" });
-//         }
-
-//         await clearExamScheduleCache(); // xóa cache để lần get sau lấy dữ liệu mới
-
-//         return res.json({ message: "Exam schedule updated", data: updated });
-//     } catch (error) {
-//         return res.status(500).json({ message: error.message });
-//     }
-// };
+// Cập nhật thông tin lịch thi
 
 const formatDateTime = (input) => {
     const date = new Date(input);

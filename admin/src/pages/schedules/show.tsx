@@ -270,7 +270,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
 
         if (!res.ok) throw new Error('Lỗi khi gửi danh sách mã số sinh viên');
 
-        fetchStudents(); 
+        fetchStudents();
       } catch (error) {
         console.error("Lỗi khi import Excel:", error);
       }
@@ -333,6 +333,13 @@ export default function CustomEventModal({ calendarEvent }: Props) {
         <p className="text-black mb-1">
           <span className="font-semibold">{translate("attendance.class", "Môn thi")}:</span> {calendarEvent.description} <em className="text-gray-500 italic">({dayjs(calendarEvent.end).diff(dayjs(calendarEvent.start), 'minute')} {translate("attendance.minute", "phút")}) {' '}</em> - <span className="font-semibold">{translate("attendance.room", "Phòng")}:</span> {calendarEvent.room}
         </p>
+        {/* <p className="text-black mb-1">
+          <span className="font-semibold">{translate("attendance.status", "Trạng thái")}:</span> {calendarEvent.status} 
+        </p> */}
+        <p className="text-black mb-1">
+          <span className="font-semibold">{translate("attendance.status", "Trạng thái")}: </span>
+          {calendarEvent.status && calendarEvent.status.charAt(0).toUpperCase() + calendarEvent.status.slice(1)}
+        </p>
         <p className="text-black mb-1">
           <span className="font-semibold">
             {translate("attendance.time", "Thời gian")}:
@@ -342,10 +349,10 @@ export default function CustomEventModal({ calendarEvent }: Props) {
             ({dayjs(calendarEvent.start).format('dddd, DD/MM/YYYY')})
           </em>
         </p>
-        <p className="text-black mb-4">
+        {/* <p className="text-black mb-4">
           <span className="font-semibold">{translate("attendance.lecturer", "Giảng viên")}:</span>{' '}
           Nguyễn Văn Kim, Phạm Văn Huy
-        </p>
+        </p> */}
         <Flex gap="small" wrap justify="end" className="mb-4">
           <Button icon={<DownloadOutlined />} size={size} style={{ backgroundColor: '#1976d2', color: 'white' }} onClick={handleDownload}>
             {translate("attendance.download_list", "Tải danh sách")}
