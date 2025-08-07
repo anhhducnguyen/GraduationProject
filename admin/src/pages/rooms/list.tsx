@@ -245,7 +245,7 @@ export const ExamRoomList = () => {
             color="primary"
             startIcon={<ReplayIcon />}
           >
-            Tải lại
+            Tải lại dữ liệu
           </Button>
         </Box>
       )}
