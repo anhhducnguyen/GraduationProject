@@ -310,6 +310,14 @@ export default function CustomEventModal({ calendarEvent }: Props) {
     });
   };
 
+  const statusTranslations = {
+    scheduled: translate("schedules.status.scheduled", "Đã lên lịch"),
+    in_progress: translate("schedules.status.in_progress", "Đang diễn ra"),
+    completed: translate("schedules.status.completed", "Đã hoàn thành"),
+    cancelled: translate("schedules.status.cancelled", "Đã hủy"),
+  };
+
+
   return (
     <div className="mt-10 fixed top-[30px] right-0 sm:right-[30px] sm:w-4/5 w-full h-full bg-white p-6 rounded-l-lg shadow-2xl z-50 overflow-y-scroll no-scrollbar">
       <button onClick={() => setVisible(false)} className="absolute top-4 right-4 text-gray-500 hover:text-black text-xl" aria-label="Đóng">
@@ -337,14 +345,23 @@ export default function CustomEventModal({ calendarEvent }: Props) {
           <span className="font-semibold">{translate("attendance.status", "Trạng thái")}:</span> {calendarEvent.status} 
         </p> */}
         <p className="text-black mb-1">
+          <span className="font-semibold">
+            {translate("attendance.status", "Trạng thái")}:{" "}
+          </span>
+          {calendarEvent.status && (
+            statusTranslations[calendarEvent.status as keyof typeof statusTranslations] || calendarEvent.status
+          )}
+        </p>
+
+        {/* <p className="text-black mb-1">
           <span className="font-semibold">{translate("attendance.status", "Trạng thái")}: </span>
           {calendarEvent.status && calendarEvent.status.charAt(0).toUpperCase() + calendarEvent.status.slice(1)}
-        </p>
+        </p> */}
         <p className="text-black mb-1">
           <span className="font-semibold">
             {translate("attendance.time", "Thời gian")}:
           </span>{' '}
-          {dayjs(calendarEvent.start).format('HH:mm')} - {dayjs(calendarEvent.end).format('HH:mm')}{' '}
+          {dayjs(calendarEvent.duration).format('HH:mm')} - {dayjs(calendarEvent.end).format('HH:mm')}{' '}
           <em className="text-gray-500 italic">
             ({dayjs(calendarEvent.start).format('dddd, DD/MM/YYYY')})
           </em>

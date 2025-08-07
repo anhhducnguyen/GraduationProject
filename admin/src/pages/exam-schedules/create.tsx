@@ -177,7 +177,7 @@ export const ExamScheduleCreate: React.FC = () => {
                     />
 
                     {/* Trạng thái */}
-                    <Controller
+                    {/* <Controller
                         control={control}
                         name="status"
                         defaultValue="schedule"
@@ -204,7 +204,7 @@ export const ExamScheduleCreate: React.FC = () => {
 
                             </TextField>
                         )}
-                    />
+                    /> */}
                 </Box>
             </Create>
         </LocalizationProvider>

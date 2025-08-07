@@ -147,7 +147,8 @@
     "status": {
       "scheduled": "Scheduled",
       "completed": "Completed",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "in_progress": "In progress"
     }
   },
   "fake-faces": {

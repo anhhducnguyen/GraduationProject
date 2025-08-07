@@ -147,7 +147,8 @@
     "status": {
       "scheduled": "Đã lên lịch",
       "completed": "Đã hoàn thành",
-      "cancelled": "Đã hủy"
+      "cancelled": "Đã hủy",
+      "in_progress": "Đang diễn ra"
     }
   },
   "fake-faces": {
