@@ -6,6 +6,8 @@ const {
 const pick = require('../utils/pick');
 const redisClient = require('../utils/redis');
 const fs = require('fs');
+const { clearExamScheduleCache } = require('../utils/cache');
+
 
 // Lấy lịch thi theo ID
 const getExamSchedule = async (req, res) => {
@@ -58,29 +60,6 @@ const getAll = async (req, res) => {
 // };
 
 // Import lịch thi từ file Excel
-// const importSchedulesFromExcel = async (req, res) => {
-//   try {
-//     if (!req.file) {
-//       return res.status(400).json({ message: 'Không có tệp nào được tải lên' });
-//     }
-
-//     const filePath = req.file.path;
-
-//     const { inserted, skipped } = await importFromExcel(filePath);
-
-//     fs.unlinkSync(filePath);
-
-//     res.status(200).json({
-//       message: 'Tải lên lịch thi thành công',
-//       inserted,
-//       skipped,
-//     });
-//   } catch (err) {
-//     console.error('Import error:', err);
-//     res.status(500).json({ message: 'Import failed', error: err.message });
-//   }
-// };
-
 const importSchedulesFromExcel = async (req, res) => {
   try {
     if (!req.file) {
@@ -93,11 +72,7 @@ const importSchedulesFromExcel = async (req, res) => {
 
     fs.unlinkSync(filePath);
 
-    // ❗ Xoá tất cả cache lịch thi sau khi import
-    const keys = await redisClient.keys('examSchedules:*');
-    if (keys.length > 0) {
-      await redisClient.del(...keys); // Xóa hàng loạt
-    }
+    await clearExamScheduleCache();
 
     res.status(200).json({
       message: 'Tải lên lịch thi thành công',
