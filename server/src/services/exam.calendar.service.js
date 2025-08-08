@@ -86,6 +86,83 @@ const queryExamSchedule = async (filter, options) => {
 
 //   return { inserted, skipped };
 // };
+// function excelDateToJSDate(serial) {
+//   const utc_days = Math.floor(serial - 25569);
+//   const utc_value = utc_days * 86400; // seconds
+//   const date_info = new Date(utc_value * 1000);
+
+//   const fractional_day = serial - Math.floor(serial) + 0.0000001;
+//   let total_seconds = Math.floor(86400 * fractional_day);
+
+//   const seconds = total_seconds % 60;
+//   total_seconds -= seconds;
+//   const hours = Math.floor(total_seconds / (60 * 60));
+//   const minutes = Math.floor((total_seconds - hours * 3600) / 60);
+
+//   date_info.setHours(hours);
+//   date_info.setMinutes(minutes);
+//   date_info.setSeconds(seconds);
+
+//   return date_info;
+// }
+
+// const importFromExcel = async (filePath) => {
+//   const workbook = xlsx.readFile(filePath);
+//   const sheet = workbook.Sheets[workbook.SheetNames[0]];
+//   const rows = xlsx.utils.sheet_to_json(sheet);
+
+//   let inserted = 0;
+//   let skipped = 0;
+
+//   for (const row of rows) {
+//     const { start_time, end_time, name_schedule, room_id } = row;
+
+//     if (!start_time || !end_time || !name_schedule || !room_id) {
+//       skipped++;
+//       continue;
+//     }
+
+//     // Convert serial to Date if needed
+//     const startJS = typeof start_time === 'number' ? excelDateToJSDate(start_time) : new Date(start_time);
+//     const endJS = typeof end_time === 'number' ? excelDateToJSDate(end_time) : new Date(end_time);
+
+//     // Chuyển giờ Việt Nam → UTC
+//     const startUTC = dayjs.tz(startJS, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
+//     const endUTC = dayjs.tz(endJS, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
+
+//     // Tính trạng thái hiện tại
+//     const nowVN = dayjs().tz(LOCAL_TZ);
+//     const startVN = dayjs.tz(startJS, LOCAL_TZ);
+//     const endVN = dayjs.tz(endJS, LOCAL_TZ);
+
+//     let computedStatus;
+//     if (nowVN.isBefore(startVN)) {
+//       computedStatus = 'scheduled';
+//     } else if (nowVN.isAfter(endVN)) {
+//       computedStatus = 'completed';
+//     } else {
+//       computedStatus = 'in_progress';
+//     }
+
+//     try {
+//       await db('examschedules').insert({
+//         start_time: startUTC,
+//         end_time: endUTC,
+//         name_schedule,
+//         room_id,
+//         status: computedStatus,
+//       });
+
+//       inserted++;
+//     } catch (error) {
+//       skipped++;
+//       console.error(`❌ Lỗi khi chèn lịch thi '${name_schedule}': ${error.message}`);
+//     }
+//   }
+
+//   return { inserted, skipped };
+// };
+
 function excelDateToJSDate(serial) {
   const utc_days = Math.floor(serial - 25569);
   const utc_value = utc_days * 86400; // seconds
@@ -96,12 +173,12 @@ function excelDateToJSDate(serial) {
 
   const seconds = total_seconds % 60;
   total_seconds -= seconds;
-  const hours = Math.floor(total_seconds / (60 * 60));
+  const hours = Math.floor(total_seconds / 3600);
   const minutes = Math.floor((total_seconds - hours * 3600) / 60);
 
-  date_info.setHours(hours);
-  date_info.setMinutes(minutes);
-  date_info.setSeconds(seconds);
+  date_info.setUTCHours(hours);
+  date_info.setUTCMinutes(minutes);
+  date_info.setUTCSeconds(seconds);
 
   return date_info;
 }
@@ -122,15 +199,20 @@ const importFromExcel = async (filePath) => {
       continue;
     }
 
-    // Convert serial to Date if needed
-    const startJS = typeof start_time === 'number' ? excelDateToJSDate(start_time) : new Date(start_time);
-    const endJS = typeof end_time === 'number' ? excelDateToJSDate(end_time) : new Date(end_time);
+    // 1️⃣ Chuyển giá trị từ Excel thành JS Date
+    const startJS = typeof start_time === 'number'
+      ? excelDateToJSDate(start_time)
+      : new Date(start_time);
 
-    // Chuyển giờ Việt Nam → UTC
+    const endJS = typeof end_time === 'number'
+      ? excelDateToJSDate(end_time)
+      : new Date(end_time);
+
+    // 2️⃣ Ép hiểu giờ này là giờ VN, rồi chuyển sang UTC string
     const startUTC = dayjs.tz(startJS, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
     const endUTC = dayjs.tz(endJS, LOCAL_TZ).utc().format('YYYY-MM-DD HH:mm:ss');
 
-    // Tính trạng thái hiện tại
+    // 3️⃣ Tính trạng thái hiện tại (theo giờ VN)
     const nowVN = dayjs().tz(LOCAL_TZ);
     const startVN = dayjs.tz(startJS, LOCAL_TZ);
     const endVN = dayjs.tz(endJS, LOCAL_TZ);
@@ -144,6 +226,7 @@ const importFromExcel = async (filePath) => {
       computedStatus = 'in_progress';
     }
 
+    // 4️⃣ Lưu vào DB (UTC)
     try {
       await db('examschedules').insert({
         start_time: startUTC,
