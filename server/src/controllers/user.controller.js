@@ -148,9 +148,9 @@ class UserController extends BaseController {
         name,
         age,
         gender,
-        // role, 
+        role, 
         // username, 
-        // email 
+        email 
       } = req.body;
 
       const data = await Service.update({
@@ -158,9 +158,9 @@ class UserController extends BaseController {
         name,
         age,
         gender,
-        // role, 
+        role, 
         // username, 
-        // email,
+        email,
         avatar
       });
 

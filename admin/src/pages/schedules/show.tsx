@@ -391,8 +391,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
           <span className="font-semibold">
             {translate("attendance.time", "Thời gian")}:
           </span>{' '}
-          {dayjs(calendarEvent.start).tz('Asia/Ho_Chi_Minh').format('HH:mm')} -
-          {dayjs(calendarEvent.end).tz('Asia/Ho_Chi_Minh').format('HH:mm')}{' '}
+          {dayjs(calendarEvent.start).tz('Asia/Ho_Chi_Minh').format('HH:mm')} - {dayjs(calendarEvent.end).tz('Asia/Ho_Chi_Minh').format('HH:mm')}{' '}
           <em className="text-gray-500 italic">
             ({dayjs.utc(calendarEvent.start).tz('Asia/Ho_Chi_Minh').format('dddd, DD/MM/YYYY')})
           </em>
