@@ -148,27 +148,44 @@ class UserService {
     // Cập nhật thông tin người dùng
     static async update({
         id,
-        name,
+        first_name,
+        last_name,
         age,
         gender,
+        avatar,
         role,
         username,
-        email,
-        avatar
+        email
     }) {
-        return db("users")
-            .update({
-                id,
-                name,
-                age,
-                gender,
-                role,
-                username,
-                email,
-                avatar
-            })
-            .where("id", id);
+        return await db.transaction(async trx => {
+            // Bước 1: Cập nhật bảng users
+            await trx("users")
+                .update({
+                    first_name,
+                    last_name,
+                    age,
+                    gender,
+                    avatar,
+                    updated_at: new Date()
+                })
+                .where("id", id);
+
+            // Bước 2: Nếu có thông tin liên quan đến auth thì cập nhật bảng auth
+            if (role || username || email) {
+                await trx("auth")
+                    .update({
+                        ...(role && { role }),
+                        ...(username && { username }),
+                        ...(email && { email }),
+                        updated_at: new Date()
+                    })
+                    .where("id", id);
+            }
+
+            return { id };
+        });
     }
+
 
     // Xóa người dùng 
     static async delete(id) {
