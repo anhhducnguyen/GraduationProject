@@ -25,6 +25,13 @@ import {
 } from "@ant-design/icons";
 import { useNotification } from "@refinedev/core";
 
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -371,7 +378,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
           <span className="font-semibold">{translate("attendance.status", "Trạng thái")}: </span>
           {calendarEvent.status && calendarEvent.status.charAt(0).toUpperCase() + calendarEvent.status.slice(1)}
         </p> */}
-        <p className="text-black mb-1">
+        {/* <p className="text-black mb-1">
           <span className="font-semibold">
             {translate("attendance.time", "Thời gian")}:
           </span>{' '}
@@ -379,7 +386,18 @@ export default function CustomEventModal({ calendarEvent }: Props) {
           <em className="text-gray-500 italic">
             ({dayjs(calendarEvent.start).format('dddd, DD/MM/YYYY')})
           </em>
+        </p> */}
+        <p className="text-black mb-1">
+          <span className="font-semibold">
+            {translate("attendance.time", "Thời gian")}:
+          </span>{' '}
+          {dayjs.utc(calendarEvent.start).tz('Asia/Ho_Chi_Minh').format('HH:mm')} -
+          {dayjs.utc(calendarEvent.end).tz('Asia/Ho_Chi_Minh').format('HH:mm')}{' '}
+          <em className="text-gray-500 italic">
+            ({dayjs.utc(calendarEvent.start).tz('Asia/Ho_Chi_Minh').format('dddd, DD/MM/YYYY')})
+          </em>
         </p>
+
         {/* <p className="text-black mb-4">
           <span className="font-semibold">{translate("attendance.lecturer", "Giảng viên")}:</span>{' '}
           Nguyễn Văn Kim, Phạm Văn Huy
