@@ -13,6 +13,7 @@ import {
   ShowButton,
   useDataGrid,
 } from "@refinedev/mui";
+import { useNotification } from "@refinedev/core";
 
 // Define the product type with the category field
 type User = {
@@ -30,6 +31,7 @@ export const UserList = () => {
 
   const locale = useGetLocale()();
   const translate = useTranslate();
+  const { open } = useNotification();
 
   const columns = useMemo<GridColDef[]>(
     () => [
@@ -96,7 +98,19 @@ export const UserList = () => {
           <>
             <ShowButton hideText recordItemId={row.id} />
             <EditButton hideText recordItemId={row.id} />
-            <DeleteButton hideText recordItemId={row.id} />
+            {/* <DeleteButton hideText recordItemId={row.id} /> */}
+            <DeleteButton
+              hideText
+              size="small"
+              successNotification={false}
+              recordItemId={row.id}
+              onSuccess={(response) => {
+                open?.({
+                  type: "success",
+                  message: response?.data?.message || "Xóa thành công",
+                });
+              }}
+            />
           </>
         ),
         align: "center",

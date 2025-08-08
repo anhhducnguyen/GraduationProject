@@ -13,6 +13,7 @@ const {
 const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
 const { clearExamScheduleCache } = require('../utils/cache');
+const { message } = require('../middlewares/examSchedule.validation');
 
 // Lấy danh sách lịch thi 
 const getExamSchedules = async (req, res) => {
@@ -76,7 +77,8 @@ const createExamSchedule = async (req, res) => {
 
         await clearExamScheduleCache();
 
-        return res.status(201).json(newExamSchedule);
+        // return res.status(201).json(newExamSchedule);
+        return res.status(201).json({ message: "Tạo lịch thi thành công"});
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

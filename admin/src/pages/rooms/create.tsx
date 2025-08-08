@@ -14,6 +14,14 @@ export const RoomCreate: React.FC = () => {
     control,
     formState: { errors },
   } = useForm<Room, HttpError, Room>({
+    refineCoreProps: {
+      successNotification: () => {
+        return {
+          message: "Tạo phòng thi thành công",
+          type: "success",
+        };
+      },
+    },
     defaultValues: {
       status: "schedule",
     },

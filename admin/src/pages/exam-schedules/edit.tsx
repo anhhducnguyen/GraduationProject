@@ -32,6 +32,12 @@ export const ExamScheduleEdit: React.FC = () => {
     } = useForm<ExamSchedule, HttpError, ExamSchedule>({
         refineCoreProps: {
             action: "edit",
+            successNotification: () => {
+                return {
+                    message: "Cập nhật lịch thi thành công",
+                    type: "success",
+                };
+            },
         },
     });
 

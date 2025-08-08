@@ -13,7 +13,17 @@ export const RoomEdit: React.FC = () => {
     register,
     control,
     formState: { errors },
-  } = useForm<Room, HttpError, Room>();
+  } = useForm<Room, HttpError, Room>({
+    refineCoreProps: {
+      action: "edit",
+      successNotification: () => {
+        return {
+          message: "Cập nhật phòng thi thành công",
+          type: "success",
+        };
+      },
+    },
+  });
 
   const record = queryResult?.data?.data;
 

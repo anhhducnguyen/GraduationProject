@@ -25,7 +25,17 @@ export const UserEdit: React.FC = () => {
     setValue,
     control,
     formState: { errors },
-  } = useForm<User, HttpError, User>();
+  } = useForm<User, HttpError, User>({
+    refineCoreProps: {
+      action: "edit",
+      successNotification: () => {
+        return {
+          message: "Cập nhật người dùng thành công",
+          type: "success",
+        };
+      },
+    },
+  });
 
   const record: User | undefined = queryResult?.data?.data;
 

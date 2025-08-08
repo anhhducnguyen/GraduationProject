@@ -22,33 +22,16 @@ import { IoCalendarSharp } from "react-icons/io5";
 import type { ConfigProviderProps } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { DownloadOutlined } from '@ant-design/icons';
-import { useTranslate } from "@refinedev/core";
 import { RiFileExcel2Fill } from 'react-icons/ri';
 
 import { Upload, message } from 'antd';
 import type { UploadProps } from 'antd';
 import { format, parseISO } from 'date-fns';
+import { useNotification, useTranslate } from "@refinedev/core";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const token = localStorage.getItem("refine-auth");
-
-const props: UploadProps = {
-  name: 'file',
-  accept: '.xlsx,.xls',
-  showUploadList: false,
-  action: `${API_URL}/api/v1/exam-schedule/import`, 
-  headers: {
-    Authorization: `Bearer ${token}`, 
-  },
-  onChange(info) {
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} uploaded successfully`);
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} upload failed.`);
-    }
-  },
-};
 
 type SizeType = ConfigProviderProps['componentSize'];
 
@@ -58,7 +41,7 @@ function SchedulePage() {
   const [size, setSize] = useState<SizeType>('large');
   const navigate = useNavigate();
   const translate = useTranslate();
-
+  const { open } = useNotification();
 
   const calendar = useCalendarApp({
     views: [
@@ -163,11 +146,39 @@ function SchedulePage() {
     return () => clearInterval(interval);
   }, [calendar, calendarControls]);
 
+   const uploadProps: UploadProps = {
+    name: 'file',
+    accept: '.xlsx,.xls',
+    showUploadList: false,
+    action: `${API_URL}/api/v1/exam-schedule/import`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    onChange(info) {
+      // Khi tải lên thành công
+      if (info.file.status === 'done') {
+        open?.({
+          type: 'success',
+          message: translate("schedules.notifications.importSuccessTitle", `${info.file.name} đã được tải lên thành công`),
+        });
+        // Tải lại dữ liệu lịch để hiển thị các sự kiện mới
+        fetchData(); 
+      } 
+      else if (info.file.status === 'error') {
+        open?.({
+          type: 'error',
+          message: translate("schedules.notifications.importErrorTitle", "Import thất bại"),
+          description: info.file.response?.message || `Tải lên ${info.file.name} thất bại`,
+        });
+      }
+    },
+  };
+
   return (
     <div className="flex h-screen">
       <div className="flex-1">
         <Flex gap="small" wrap justify="end" className="mb-4">
-          <Upload {...props}>
+          <Upload {...uploadProps}>
             <Button icon={<RiFileExcel2Fill />} size={size} style={{ backgroundColor: '#1976d2', color: 'white', borderColor: '#1890ff' }}>
               {translate("schedules.import_excel", "Nhập lịch từ Excel")}
             </Button>

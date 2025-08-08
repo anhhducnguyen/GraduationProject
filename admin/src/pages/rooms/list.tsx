@@ -145,6 +145,8 @@ import {
 import { Tag } from 'antd';
 import { Button, Box } from "@mui/material";
 import ReplayIcon from "@mui/icons-material/Replay";
+import { useNotification } from "@refinedev/core";
+
 
 export const ExamRoomList = () => {
   const { dataGridProps, tableQueryResult } = useDataGrid<ExamRoom>();
@@ -152,6 +154,7 @@ export const ExamRoomList = () => {
 
   const locale = useGetLocale()();
   const translate = useTranslate();
+  const { open } = useNotification();
 
   const columns = useMemo<GridColDef[]>(
     () => [
@@ -222,7 +225,19 @@ export const ExamRoomList = () => {
             <>
               <ShowButton hideText recordItemId={row.room_id} />
               <EditButton hideText recordItemId={row.room_id} />
-              <DeleteButton hideText recordItemId={row.room_id} />
+              {/* <DeleteButton hideText recordItemId={row.room_id} /> */}
+              <DeleteButton
+                hideText
+                size="small"
+                successNotification={false}
+                recordItemId={row.room_id}
+                onSuccess={(response) => {
+                  open?.({
+                    type: "success",
+                    message: response?.data?.message || "Xóa thành công",
+                  });
+                }}
+              />
             </>
           );
         },

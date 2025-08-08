@@ -32,6 +32,14 @@ export const UserCreate: React.FC = () => {
     control,
     formState: { errors },
   } = useForm<User, HttpError, User>({
+     refineCoreProps: {
+      successNotification: () => {
+        return {
+          message: "Thêm mới người dùng thành công",
+          type: "success",
+        };
+      },
+    },
     defaultValues: {
       role: "student",
     },

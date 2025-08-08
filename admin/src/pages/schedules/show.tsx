@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Tag, Button, Flex, Tooltip, Input, Space } from 'antd';
+import { Table, Tag, Button, Flex, Tooltip, Input, Space, notification } from 'antd';
 import type { ColumnsType, ColumnType } from 'antd/es/table';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
 import { DownloadOutlined, ReloadOutlined, CloseOutlined } from '@ant-design/icons';
@@ -23,6 +23,8 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
+import { useNotification } from "@refinedev/core";
+
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -45,7 +47,7 @@ export default function CustomEventModal({ calendarEvent }: Props) {
   const locale = getLocale();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const token = localStorage.getItem("refine-auth");
-
+  const { open } = useNotification();
 
   dayjs.locale(locale);
 
@@ -269,9 +271,16 @@ export default function CustomEventModal({ calendarEvent }: Props) {
         });
 
         if (!res.ok) throw new Error('Lỗi khi gửi danh sách mã số sinh viên');
-
+        open?.({
+          type: "success",
+          message: translate("notification.importSuccess", `Đã thêm ${studentIds.length} sinh viên vào ca thi`),
+        });
         fetchStudents();
       } catch (error) {
+        open?.({
+          type: "error",
+          message: translate("notification.importError", "Thêm sinh viên không thành công"),
+        });
         console.error("Lỗi khi import Excel:", error);
       }
     };
@@ -297,6 +306,11 @@ export default function CustomEventModal({ calendarEvent }: Props) {
               "Authorization": `Bearer ${token}`,
             },
             body: JSON.stringify({ studentIds: selectedRowKeys }),
+          });
+
+          open?.({
+            type: "success",
+            message: translate("notification.deleteSuccess", `Đã xoá ${selectedRowKeys.length} sinh viên khỏi môn thi ${calendarEvent.description}`),
           });
 
           if (!res.ok) throw new Error("Lỗi khi xoá sinh viên");

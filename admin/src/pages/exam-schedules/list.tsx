@@ -279,6 +279,7 @@ import ReplayIcon from "@mui/icons-material/Replay";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import "dayjs/locale/vi";
+import { useNotification } from "@refinedev/core";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -294,7 +295,6 @@ type ExamSchedule = {
 };
 
 export const ExamScheduleList = () => {
-  // ✅ Tách refetch ra từ tableQueryResult
   const {
     dataGridProps,
     tableQueryResult: { refetch },
@@ -303,6 +303,8 @@ export const ExamScheduleList = () => {
   const locale = useGetLocale()();
   const translate = useTranslate();
   const theme = useTheme();
+  const { open } = useNotification();
+
 
   const roomIds = [
     ...new Set(
@@ -442,7 +444,14 @@ export const ExamScheduleList = () => {
             <DeleteButton
               hideText
               size="small"
+              successNotification={false}
               recordItemId={row.schedule_id}
+              onSuccess={(response) => {
+                open?.({
+                  type: "success",
+                  message: response?.data?.message || "Xóa thành công",
+                });
+              }}
             />
           </Box>
         ),

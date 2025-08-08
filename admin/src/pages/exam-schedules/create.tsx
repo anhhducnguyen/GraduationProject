@@ -10,7 +10,6 @@ import dayjs from "dayjs";
 import { useDataGrid } from "@refinedev/mui";
 import { useList } from "@refinedev/core";
 
-
 type ExamSchedule = {
     schedule_id: number;
     start_time: string;
@@ -32,6 +31,14 @@ export const ExamScheduleCreate: React.FC = () => {
         control,
         formState: { errors },
     } = useForm<ExamSchedule, HttpError, ExamSchedule>({
+        refineCoreProps: {
+            successNotification: () => {
+                return {
+                    message: "Tạo lịch thi thành công",
+                    type: "success",
+                };
+            },
+        },
         defaultValues: {
             status: "scheduled",
         },
