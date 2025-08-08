@@ -5,6 +5,7 @@ const pick = require('../utils/pick');
 const db = require('../../config/database');
 const redisClient = require('../utils/redis');
 const crypto = require('crypto');
+const clearUsersCache = require('../utils/clearUsersCache');
 
 class UserController extends BaseController {
   // Lấy danh sách người dùng với phân trang, lọc và sắp xếp
@@ -130,6 +131,8 @@ class UserController extends BaseController {
         avatar
       });
 
+      await clearUsersCache();
+
       return BaseController.successResponse(res, data, 'Tạo người dùng thành công', 201);
     } catch (error) {
       console.error("Error creating user:", error);
@@ -164,6 +167,8 @@ class UserController extends BaseController {
         avatar
       });
 
+      await clearUsersCache();
+
       return BaseController.successResponse(res, data, 'Cập nhật thành công');
     } catch (error) {
       return BaseController.errorResponse(res, error);
@@ -175,6 +180,8 @@ class UserController extends BaseController {
     try {
       let id = req.params.id;
       const data = await Service.delete(id);
+
+      await clearUsersCache();
 
       return BaseController.successResponse(res, data, 'Xóa người dùng thành công');
     } catch (error) {
