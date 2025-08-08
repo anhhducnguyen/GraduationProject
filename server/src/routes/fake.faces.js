@@ -1,32 +1,7 @@
-// const express = require('express');
-// const router = express.Router();
-// const cloudinary = require('cloudinary').v2;
-
-// // API: Lấy danh sách ảnh từ folder "fake_faces_fullframe"
-// router.get('/', async (req, res) => {
-//   try {
-//     const result = await cloudinary.search
-//       .expression('folder:fake_faces_fullframe')
-//       .sort_by('created_at', 'desc')
-//       .max_results(30)
-//       .execute();
-
-//     const urls = result.resources.map((file) => file.secure_url);
-//     res.json({ count: urls.length, urls });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: 'Không thể lấy danh sách ảnh từ Cloudinary.' });
-//   }
-// });
-
-// module.exports = router;
-
-
 const express = require('express');
 const router = express.Router();
 const cloudinary = require('../../config/cloudinary'); // nên dùng config riêng
 
-// GET /api/v1/fake-faces?page=1&limit=10
 router.get('/', async (req, res) => {
   try {
     // Lấy query params hoặc mặc định

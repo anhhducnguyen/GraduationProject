@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { 
-    getAll,  
-    getById,
     create,
-    update,
     deleteExamAttendanceController,
-    updateE,
     getByScheduleId,
     assignStudentToExam,
     getExamAttendances
@@ -17,8 +13,6 @@ router.get(
     '/', 
     getExamAttendances
 );
-
-// router.put("/", updateE);
 
 // Lấy điểm danh thi theo ID
 router.get(
@@ -38,10 +32,6 @@ router.post(
     create
 );
 
-// router.put(
-//     '/:id',
-//     updateE
-// );
 
 router.delete(
     '/:id',

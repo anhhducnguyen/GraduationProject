@@ -13,7 +13,6 @@ const {
 const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
 const { clearExamScheduleCache } = require('../utils/cache');
-const { message } = require('../middlewares/examSchedule.validation');
 
 // Lấy danh sách lịch thi 
 const getExamSchedules = async (req, res) => {
@@ -60,7 +59,6 @@ const createExamSchedule = async (req, res) => {
         room,
         // room_id 
     } = req.body;
-    // console.log(req.body);
     const room_id = room?.room_id;
 
     if (!room_id) {
@@ -85,7 +83,6 @@ const createExamSchedule = async (req, res) => {
 };
 
 // Cập nhật thông tin lịch thi
-
 const formatDateTime = (input) => {
     const date = new Date(input);
     if (isNaN(date)) return null;
@@ -132,7 +129,7 @@ const updateExamSchedule = async (req, res) => {
             return res.status(404).json({ message: "Lịch thi không tồn tại" });
         }
 
-        await clearExamScheduleCache(); // xóa cache để lần get sau lấy dữ liệu mới
+        await clearExamScheduleCache(); 
 
         return res.json({ message: "Lịch thi đã được cập nhật", data: updated });
     } catch (error) {

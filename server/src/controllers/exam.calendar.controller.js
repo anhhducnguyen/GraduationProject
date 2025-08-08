@@ -46,19 +46,6 @@ const getAll = async (req, res) => {
   }
 };
 
-// const getAll = async (req, res) => {
-//   try {
-//     const filter = pick(req.query, ['status']);
-//     const options = pick(req.query, ['sortBy', 'limit', 'page', '_start', '_end']);
-
-//     const result = await queryExamSchedule(filter, options);
-
-//     res.send(result);
-//   } catch (err) {
-//     res.status(err.statusCode || 500).send({ message: err.message });
-//   }
-// };
-
 // Import lịch thi từ file Excel
 const importSchedulesFromExcel = async (req, res) => {
   try {

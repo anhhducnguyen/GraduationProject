@@ -8,11 +8,8 @@ const {
   getAll,
   importSchedulesFromExcel
 } = require('../controllers/exam.calendar.controller');
-const multer = require('multer');
 const db = require('../../config/database');
-// const upload = multer({ dest: 'uploads/' });
 const upload = require('../middlewares/upload.xlsx.middleware');
-
 
 // const {
 //   authenticate,

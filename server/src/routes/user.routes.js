@@ -11,7 +11,6 @@ const {
 } = require("../../src/utils/auth/index");
 router.use(authenticate);
 const permission = require("../../src/constants/permission");
-
 const db = require('../../config/database');
 
 /** 
@@ -59,24 +58,20 @@ router.get(
 router.route('/:id')
     .get(
         permission,
-        // checkUserExistById, 
         Controller.getUser
     )
     .put(
         permission,
         upload.single("avatar"),
-        // checkUserExistById, 
         Controller.updateUser
     )
     .patch(
         permission,
         upload.single("avatar"),
-        // checkUserExistById, 
         Controller.updateUser
     )
     .delete(
         permission,
-        // checkUserExistById, 
         Controller.deleteUser
     );
 

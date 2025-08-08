@@ -59,14 +59,6 @@ class UserService {
             .countDistinct('id as count');
     }
 
-    // Lấy người dùng theo ID
-    // static async getById(id) {
-    //     return db("users")
-    //         .join("auth", "users.id", "auth.id")
-    //         .where("id", id)
-    //         .select("*");
-    // }
-
     static async getById(id) {
         return db("users")
             .join("auth", "users.id", "auth.id") // Nối theo khóa chính
@@ -78,30 +70,6 @@ class UserService {
                 "auth.role as role"
             )
     }
-
-    // static async create({
-    //     first_name,
-    //     last_name,
-    //     age,
-    //     gender,
-    //     // role, 
-    //     // username, 
-    //     // email, 
-    //     // hashedPassword, 
-    //     avatar
-    // }) {
-    //     return db("users").insert({
-    //         // username,
-    //         // email,
-    //         // password: hashedPassword, 
-    //         avatar,
-    //         first_name,
-    //         last_name,
-    //         age,
-    //         gender,
-    //         // role,
-    //     })
-    // }
 
     // Thêm mới người dùng
     static async create({

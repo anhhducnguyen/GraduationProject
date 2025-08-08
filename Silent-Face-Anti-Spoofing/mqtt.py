@@ -132,6 +132,21 @@ def fake_face_uploader():
 threading.Thread(target=fake_face_uploader, daemon=True).start()
 
 # ====== Anti-spoofing ======
+# def is_real_face(frame, bbox):
+#     image_bbox = [bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1]]
+#     param = {
+#         "org_img": frame,
+#         "bbox": image_bbox,
+#         "scale": scale,
+#         "out_w": w_input,
+#         "out_h": h_input,
+#         "crop": True if scale is not None else False,
+#     }
+#     spoof_input = image_cropper.crop(**param)
+#     prediction = model_test.predict(spoof_input, os.path.join(MODEL_DIR, MODEL_NAME))
+#     label = np.argmax(prediction)
+#     confidence = prediction[0][label] / 2
+#     return label == 1, confidence
 def is_real_face(frame, bbox):
     image_bbox = [bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1]]
     param = {
@@ -144,9 +159,14 @@ def is_real_face(frame, bbox):
     }
     spoof_input = image_cropper.crop(**param)
     prediction = model_test.predict(spoof_input, os.path.join(MODEL_DIR, MODEL_NAME))
+
+    prob_fake = float(prediction[0][0])
+    prob_real = float(prediction[0][1])
+    spoof_percentage = prob_fake / (prob_fake + prob_real) * 100
+
     label = np.argmax(prediction)
-    confidence = prediction[0][label] / 2
-    return label == 1, confidence
+    return label == 1, spoof_percentage
+
 
 # ====== Face recognition ======
 def recognize_face(face_embedding):
@@ -220,7 +240,8 @@ while True:
                 mqtt_client.publish(MQTT_TOPIC, json.dumps(payload))
                 print(f"Send: {payload}")
         else:
-            label_text = f"Fake Face ({confidence:.2f})"
+            # label_text = f"Fake Face ({confidence:.2f})"
+            label_text = f"Fake Face ({confidence:.1f}%)"
             color = (0, 0, 255)
 
             # 🧵 Gửi ảnh fake vào queue xử lý upload riêng

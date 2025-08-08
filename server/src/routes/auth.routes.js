@@ -1,7 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
-const { 
+const {
   register,
   logout,
   resetPassword,
@@ -19,19 +19,17 @@ require("dotenv").config();
 
 router.post(
   "/register",
-//   validateRequest(registerUserSchema),  
-  checkEmailExist,  
-  register  
+  checkEmailExist,
+  register
 );
 
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, data, info) => {
-    // if (err || !data) return res.status(401).json({ message: info.message });
     if (err || !data) {
-  const message = info?.message || "Authentication failed";
-  return res.status(401).json({ message });
-}
-    return res.json({ 
+      const message = info?.message || "Authentication failed";
+      return res.status(401).json({ message });
+    }
+    return res.json({
       token: data.token,
       user: data.user
     });
@@ -41,22 +39,22 @@ router.post("/login", (req, res, next) => {
 
 router.post(
   "/login",
-  passportLocalLogin  
+  passportLocalLogin
 );
 
 router.post(
   "/logout",
-  logout  
+  logout
 );
 
 router.post(
   "/reset-password",
-  resetPassword  
+  resetPassword
 );
 
 router.post(
   "/reset-password/confirm",
-  confirmResetPassword  
+  confirmResetPassword
 );
 
 router.get(
@@ -81,9 +79,9 @@ router.get("/fail", (req, res) => {
 });
 
 router.get(
-    "/profile", 
-    verifyJWT, 
-    getProfile
-);  
+  "/profile",
+  verifyJWT,
+  getProfile
+);
 
 module.exports = router;
