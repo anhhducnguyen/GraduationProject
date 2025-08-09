@@ -130,7 +130,7 @@ const create = async (req, res) => {
         // Kiểm tra sinh viên có tồn tại không
         const studentExists = await checkStudentExists(name);
         if (!studentExists) {
-            console.log(`❌ Sinh viên ${name} không tồn tại.`);
+            console.log(`Sinh viên ${name} không tồn tại.`);
             return res.status(404).json({ message: "Sinh viên không tồn tại" });
         }
 

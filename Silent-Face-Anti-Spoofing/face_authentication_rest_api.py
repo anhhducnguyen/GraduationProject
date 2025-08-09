@@ -34,7 +34,7 @@ DEVICE_ID = 0
 FAISS_PATH = "faiss_index/face_index.faiss"
 IDS_PATH = "faiss_index/student_ids.pkl"
 FAISS_THRESHOLD = 1.2
-API_URL = "http://localhost:5000/api/v1/exam-attendance/"
+API_URL = "https://graduationproject-nx7m.onrender.com/api/v1/exam-attendance/"
 
 
 # ====== Init models ======

@@ -17,10 +17,17 @@ from insightface.app import FaceAnalysis
 from src.anti_spoof_predict import AntiSpoofPredict
 from src.generate_patches import CropImage
 from src.utility import parse_model_name
+from dotenv import load_dotenv
 
 warnings.filterwarnings('ignore')
 
 class FaceRecognitionService:
+    """
+    Khởi tạo dịch vụ nhận diện khuôn mặt:
+        - Cấu hình model, FAISS, MQTT, API.
+        - Kết nối Cloudinary.
+        - Khởi tạo hàng đợi và MQTT client.
+    """
     def __init__(self, model_path, model_name, faiss_path, ids_path,
                  threshold, mqtt_broker, mqtt_port, mqtt_topic, api_url,
                  cloud_name, api_key, api_secret):
@@ -50,6 +57,13 @@ class FaceRecognitionService:
         self.mqtt_client = mqtt.Client()
         self.mqtt_client.connect(self.mqtt_broker, self.mqtt_port, 60)
 
+    """
+    Nạp mô hình và dữ liệu:
+        - Load model chống giả mạo (anti-spoof).
+        - Load FAISS index và danh sách student_ids.
+        - Load model nhận diện khuôn mặt InsightFace.
+        - Khởi chạy luồng gửi dữ liệu và tải ảnh giả.
+    """
     def loadModel(self):
         # Load anti-spoofing model
         self.anti_spoof_model = AntiSpoofPredict(0)
@@ -71,10 +85,20 @@ class FaceRecognitionService:
         threading.Thread(target=self.send_data_batch, daemon=True).start()
         threading.Thread(target=self.fake_face_uploader, daemon=True).start()
 
+    """
+    Trích xuất embedding khuôn mặt từ frame bằng InsightFace.
+    Trả về danh sách các đối tượng khuôn mặt.
+    """
     def extractEmbedding(self, frame):
         faces = self.face_app.get(frame)
         return faces
-
+    
+    """
+    So khớp embedding khuôn mặt với FAISS index.
+        - Chuẩn hóa embedding.
+        - Tìm khoảng cách nhỏ nhất.
+        - Trả về student_id và khoảng cách hoặc 'Unknown'.
+    """
     def isMatch(self, face_embedding):
         embedding = face_embedding.astype(np.float32).reshape(1, -1)
         embedding /= np.linalg.norm(embedding)
@@ -85,6 +109,11 @@ class FaceRecognitionService:
             return self.student_ids[idx], distance
         return "Unknown", distance
 
+    """
+    Đăng ký khuôn mặt mới vào FAISS:
+        - Thêm embedding và student_id.
+        - Lưu lại index và danh sách ID.
+    """
     def registerFace(self, student_id, embedding):
         self.student_ids.append(student_id)
         self.index.add(embedding)
@@ -92,6 +121,12 @@ class FaceRecognitionService:
         with open(self.ids_path, "wb") as f:
             pickle.dump(self.student_ids, f)
 
+    """
+    Xác minh thật/giả của khuôn mặt:
+        - Cắt vùng khuôn mặt theo bbox.
+        - Dự đoán bằng model chống giả mạo.
+        - Trả về kết quả (True/False) và tỉ lệ % giả.
+    """
     def verifyFace(self, frame, bbox):
         image_bbox = [bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1]]
         param = {
@@ -112,6 +147,11 @@ class FaceRecognitionService:
         label = np.argmax(prediction)
         return label == 1, spoof_percentage
 
+    """
+    Luồng nền gửi dữ liệu nhận diện theo batch:
+        - Lặp định kỳ theo self.send_interval.
+        - Gửi POST tới API cho mỗi bản ghi trong buffer.
+    """
     def send_data_batch(self):
         while True:
             time.sleep(self.send_interval)
@@ -128,7 +168,7 @@ class FaceRecognitionService:
                         print(f"❌ Lỗi gửi: {response.status_code} - {response.text}")
                 except Exception as e:
                     print(f"Gửi lỗi: {e}")
-
+    
     def fake_face_uploader(self):
         while True:
             frame, bbox = self.fake_face_queue.get()
@@ -139,6 +179,10 @@ class FaceRecognitionService:
             except Exception as e:
                 print("Error when uploading fake photo:", e)
 
+    """
+    Upload ảnh full frame chứa khuôn mặt giả lên Cloudinary.
+        - Trả về URL ảnh trên Cloudinary.
+    """
     def upload_fake_face_to_cloudinary(self, frame):
         _, img_encoded = cv2.imencode('.jpg', frame)
         response = cloudinary.uploader.upload(
@@ -213,23 +257,26 @@ class FaceRecognitionService:
         cv2.destroyAllWindows()
         self.fake_face_queue.put((None, None))
 
-
 # ====== Run service ======
 if __name__ == "__main__":
+    load_dotenv()  
+
     service = FaceRecognitionService(
-        model_path="./resources/anti_spoof_models",
-        model_name="2.7_80x80_MiniFASNetV2.pth",
-        faiss_path="faiss_index/face_index.faiss",
-        ids_path="faiss_index/student_ids.pkl",
-        threshold=1.2,
-        mqtt_broker="broker.hivemq.com",
-        mqtt_port=1883,
-        mqtt_topic="exam/attendance",
-        api_url="http://localhost:5000/api/v1/exam-attendance/",
-        cloud_name="dvc80qdie",
-        api_key="221435714784277",
-        api_secret="Zar2Kh6w0VBWp0rpQ5VYE-sbREI"
+        model_path=os.getenv("MODEL_PATH"),
+        model_name=os.getenv("MODEL_NAME"),
+        faiss_path=os.getenv("FAISS_PATH"),
+        ids_path=os.getenv("IDS_PATH"),
+        threshold=float(os.getenv("THRESHOLD", 1.2)),
+        mqtt_broker=os.getenv("MQTT_BROKER"),
+        mqtt_port=int(os.getenv("MQTT_PORT", 1883)),
+        mqtt_topic=os.getenv("MQTT_TOPIC"),
+        api_url=os.getenv("API_URL"),
+        cloud_name=os.getenv("CLOUD_NAME"),
+        api_key=os.getenv("API_KEY"),
+        api_secret=os.getenv("API_SECRET")
     )
 
     service.loadModel()
     service.run()
+
+
