@@ -2,7 +2,7 @@ const cron = require('node-cron');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const timezone = require('dayjs/plugin/timezone');
-const db = require('../../config/database'); 
+const db = require('../../config/database');
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -11,6 +11,7 @@ const LOCAL_TZ = 'Asia/Ho_Chi_Minh';
 
 const updateScheduleStatuses = async () => {
     const nowVN = dayjs().tz(LOCAL_TZ);
+    console.log('Now VN:', nowVN.format(), 'Now UTC:', dayjs().utc().format());
 
     try {
         const schedules = await db('examschedules')
@@ -20,8 +21,14 @@ const updateScheduleStatuses = async () => {
             // Bỏ qua lịch đã huỷ
             if (schedule.status === 'cancelled') continue;
 
-            const start = dayjs.utc(schedule.start_time).tz(LOCAL_TZ);
-            const end = dayjs.utc(schedule.end_time).tz(LOCAL_TZ);
+            // const start = dayjs.utc(schedule.start_time).tz(LOCAL_TZ);
+            // const end = dayjs.utc(schedule.end_time).tz(LOCAL_TZ);
+            const start = dayjs(schedule.start_time).tz(LOCAL_TZ, true);
+            const end = dayjs(schedule.end_time).tz(LOCAL_TZ, true);
+
+
+            // console.log(start);
+            // console.log(end);
 
             let newStatus;
 
