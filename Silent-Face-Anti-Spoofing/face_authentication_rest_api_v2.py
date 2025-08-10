@@ -72,7 +72,7 @@ class FaceRecognitionService:
         self.index = faiss.read_index(self.faiss_path)
         with open(self.ids_path, "rb") as f:
             self.student_ids = pickle.load(f)
-        print(f"Đã load FAISS index ({self.index.ntotal} vectors)")
+        print(f"Loaded FAISS index ({self.index.ntotal} vectors)")
 
     def extractEmbedding(self, frame):
         """
@@ -107,7 +107,7 @@ class FaceRecognitionService:
         faiss.write_index(self.index, self.faiss_path)
         with open(self.ids_path, "wb") as f:
             pickle.dump(self.student_ids, f)
-        print(f"Đã thêm sinh viên {studentId} vào database.")
+        print(f"Added student {studentId} to database.")
 
     def verifyFace(self, frame, bbox):
         """
@@ -158,11 +158,11 @@ class FaceRecognitionService:
                     try:
                         response = requests.post(self.api_url, json=record)
                         if response.status_code in [200, 201]:
-                            print(f"Gửi thành công: {record['name']} lúc {record['timestamp']}")
+                            print(f"Successfully sent: {record['name']} at {record['timestamp']}")
                         else:
-                            print(f"❌ Lỗi gửi: {response.status_code} - {response.text}")
+                            print(f"Error sending: {response.status_code} - {response.text}")
                     except Exception as e:
-                        print(f"Gửi lỗi: {e}")
+                        print(f"Send error: {e}")
 
         threading.Thread(target=send_data_batch, daemon=True).start()
 
@@ -175,16 +175,16 @@ class FaceRecognitionService:
                 try:
                     self.uploadFakeFace(frame)
                 except Exception as e:
-                    print("Lỗi upload fake face:", e)
+                    print("Error uploading fake face:", e)
 
         threading.Thread(target=fake_face_uploader, daemon=True).start()
 
         cap = cv2.VideoCapture(0)
         if not cap.isOpened():
-            print("Không mở được webcam.")
+            print("Cannot open webcam.")
             return
 
-        print("Nhận diện realtime (ấn 'q' để thoát)")
+        print("Realtime detection (press 'q' to exit)")
 
         last_spoof_check = 0
         spoof_result = None

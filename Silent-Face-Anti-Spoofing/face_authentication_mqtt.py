@@ -83,7 +83,7 @@ def send_data_batch():
                 if response.status_code in [200, 201]:
                     print(f"Gửi thành công: {record['name']} lúc {record['timestamp']}")
                 else:
-                    print(f"❌ Lỗi gửi: {response.status_code} - {response.text}")
+                    print(f"Lỗi gửi: {response.status_code} - {response.text}")
             except Exception as e:
                 print(f"Gửi lỗi: {e}")
 
