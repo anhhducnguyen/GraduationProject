@@ -2,7 +2,7 @@ import cv2
 import os
 
 # Function to capture and save an image with a filename based on the entered name
-def capture_image(name):
+def registerFace(name):
     # Create "K15-CNTT4" folder if it doesn't exist
     if not os.path.exists('K15-CNTT4'):
         os.makedirs('K15-CNTT4')
@@ -56,4 +56,4 @@ def capture_image(name):
 
 # Prompt the user to enter a name
 name_input = input("Enter a name for the image set: ")
-capture_image(name_input)
+registerFace(name_input)
