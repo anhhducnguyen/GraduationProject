@@ -21,10 +21,10 @@ const updateScheduleStatuses = async () => {
             // Bỏ qua lịch đã huỷ
             if (schedule.status === 'cancelled') continue;
 
-            // const start = dayjs.utc(schedule.start_time).tz(LOCAL_TZ);
-            // const end = dayjs.utc(schedule.end_time).tz(LOCAL_TZ);
-            const start = dayjs(schedule.start_time).tz(LOCAL_TZ, true);
-            const end = dayjs(schedule.end_time).tz(LOCAL_TZ, true);
+            const start = dayjs.utc(schedule.start_time).tz(LOCAL_TZ);
+            const end = dayjs.utc(schedule.end_time).tz(LOCAL_TZ);
+            // const start = dayjs(schedule.start_time).tz(LOCAL_TZ, true);
+            // const end = dayjs(schedule.end_time).tz(LOCAL_TZ, true);
 
 
             // console.log(start);
