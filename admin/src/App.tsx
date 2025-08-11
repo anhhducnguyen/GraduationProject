@@ -80,13 +80,13 @@ function App() {
             authProvider={authProvider}
             i18nProvider={i18nProvider}
             resources={[
-              {
-                name: "home",
-                list: "/home",
-                meta: { 
-                  icon: <MdDashboardCustomize />,
-                },
-              },
+              // {
+              //   name: "home",
+              //   list: "/home",
+              //   meta: { 
+              //     icon: <MdDashboardCustomize />,
+              //   },
+              // },
               {
                 name: "users",
                 list: "/users",
