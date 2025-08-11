@@ -31,7 +31,7 @@ const queryExamSchedules = async (filters = {}, options = {}) => {
                 'examschedules.status',
                 'examrooms.room_id as room_id',
             )
-        // .orderBy('examschedules.start_time', 'desc');
+        .orderBy('examschedules.start_time', 'desc');
 
         const results = await query;
 
