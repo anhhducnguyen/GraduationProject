@@ -20,7 +20,7 @@ ssl_context.check_hostname = False
 ssl_context.verify_mode = ssl.CERT_NONE
 
 # Tạo thư mục gốc
-ROOT_FOLDER = "know_face"
+ROOT_FOLDER = "images/know_face"
 os.makedirs(ROOT_FOLDER, exist_ok=True)
 
 # Hàm lấy danh sách các thư mục sinh viên
