@@ -15,6 +15,18 @@ from dotenv import load_dotenv
 """
 load_dotenv()
 
+# PostgreSQL (ưu điểm)
+
+# Có pgvector – lưu trữ và tìm kiếm vector native.
+# Có index vector (IVFFlat, HNSW) → truy vấn top-k nhanh.
+# Tích hợp tốt với AI/ML – được cộng đồng AI khuyến nghị.
+
+# MySQL (nhược điểm)
+
+# Không có kiểu dữ liệu vector → phải lưu JSON/BLOB.
+# Không có index vector → tìm kiếm chậm khi dữ liệu lớn.
+# Không hỗ trợ phép đo khoảng cách vector → phải xử lý ở ứng dụng.
+
 conn = psycopg2.connect(
     dbname=os.getenv("DB_NAME"),
     user=os.getenv("DB_USER"),

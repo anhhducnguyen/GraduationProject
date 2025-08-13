@@ -149,8 +149,8 @@ function App() {
                   </Authenticated>
                 }
               >
-                <Route index element={<NavigateToResource resource="home" />} />
-                <Route path="/home" element={<Home />} />
+                <Route index element={<NavigateToResource resource="schedules" />} />
+                <Route path="/schedules" element={<SchedulePage />} />
                 <Route path="/users">
                   <Route index element={<UserList />} />
                   <Route path=":id" element={<UserShow />} />

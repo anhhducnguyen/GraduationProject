@@ -91,6 +91,7 @@ def send_data_batch_worker(api_url, send_interval=3):
             except Exception as e:
                 print(f"Lỗi khi gửi dữ liệu lên server: {e}")
 
+# scale chính là tỉ lệ phóng to hoặc thu nhỏ vùng khuôn mặt khi crop từ ảnh gốc
 def is_real_face(frame, bbox, image_cropper, model_test, model_dir, model_name, scale, w_input, h_input):
     """
     Hàm kiểm tra một face có phải là "thật" hay "giả" (spoofing).
@@ -123,8 +124,7 @@ def is_real_face(frame, bbox, image_cropper, model_test, model_dir, model_name, 
     # Chạy anti-spoof model, input là ảnh crop + resize.
     prediction = model_test.predict(spoof_input, os.path.join(model_dir, model_name))
     label = np.argmax(prediction)
-    # confidence = prediction[0][label] / 2 # Nếu sử dụng 2 mô hình
-    confidence = prediction[0][label]
+    confidence = prediction[0][label] / 2 # Làm ngưỡng anti-spoof nghiêm ngặt hơn → model phải cực kỳ chắc chắn mới được coi là thật.
     return label == 1, confidence
 
 def recognize_face(face_embedding, embeddings, student_ids, cosine_threshold):
@@ -163,29 +163,6 @@ def recognize_face(face_embedding, embeddings, student_ids, cosine_threshold):
 
     # Ngược lại trả về Unknown và điểm giống cao nhất
     return "Unknown", sim
-
-# def send_data_batch(send_buffer, send_lock, api_url, send_interval):
-#     """
-#     Hàm gửi dữ liệu batch lên server tương tự send_data_batch_worker, có thể dùng cho thread hoặc gọi trực tiếp.
-#     - Cơ chế tương tự: chờ send_interval rồi gửi từng record trong send_buffer.
-#     - Đồng bộ truy cập với send_lock.
-#     - In log gửi thành công hoặc lỗi.
-#     """
-#     while True:
-#         time.sleep(send_interval)
-#         with send_lock:
-#             buffer_copy = send_buffer.copy()
-#             send_buffer.clear()
-
-#         for record in buffer_copy:
-#             try:
-#                 response = requests.post(api_url, json=record)
-#                 if response.status_code in [200, 201]:
-#                     print(f"Gửi thành công: {record['name']} lúc {record['timestamp']}")
-#                 else:
-#                     print(f"Lỗi gửi: {response.status_code} - {response.text}")
-#             except Exception as e:
-#                 print(f"Lỗi khi gửi dữ liệu lên server: {e}")
 
 def draw_label(frame, bbox, label_text, color):
     """
