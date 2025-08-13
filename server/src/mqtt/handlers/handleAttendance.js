@@ -6,6 +6,7 @@ const {
 } = require('../../../src/services/exam.attendance.service');
 require('dotenv').config();
 
+// Ngưỡng độ tin cậy tối thiểu để chấp nhận kết quả nhận diện khuôn mặt.
 const MIN_CONFIDENCE = parseFloat(process.env.MIN_CONFIDENCE) || 0.65;
 
 async function handleAttendanceMessage(message) {
@@ -33,14 +34,18 @@ async function handleAttendanceMessage(message) {
     return;
   }
 
-  let matchedSchedule = null;
-  let attendanceExists = null;
+  let matchedSchedule = null; //Ca thi mà sinh viên thuộc về (nếu tìm thấy).
+  let attendanceExists = null; //Thông tin điểm danh của sinh viên trong ca thi đó (nếu có).
 
   for (const schedule of schedules) {
+    // Kiểm tra trong ca thi này (schedule) sinh viên có bản ghi điểm danh không
     const attendance = await checkAttendance(student_id, schedule.schedule_id);
     if (attendance) {
+      // Nếu có => lưu lại ca thi này vào matchedSchedule
       matchedSchedule = schedule;
+      // Lưu thông tin điểm danh để sau biết đã điểm danh hay chưa
       attendanceExists = attendance;
+      // Dừng vòng lặp ngay khi tìm thấy ca phù hợp
       break;
     }
   }

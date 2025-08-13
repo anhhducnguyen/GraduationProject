@@ -8,7 +8,8 @@ const {
     getExamAttendanceByScheduleId,
     checkStudentExists,
     countExamAttendance,
-    getCurrentExamSchedules
+    getCurrentExamSchedules,
+    updateAttendance
 } = require('../services/exam.attendance.service');
 const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
@@ -170,16 +171,17 @@ const create = async (req, res) => {
         }
 
         // Tiến hành cập nhật điểm danh
-        await db('exam_attendance')
-            .where({ student_id: name, schedule_id: matchedSchedule.schedule_id })
-            .update({
-                is_present: real_face ? 1 : 0,
-                confidence: confidence,
-                real_face: real_face,
-                updated_at: new Date(),
-                violation_id: null,
-                reported_by: 3
-            });
+        await updateAttendance(name, matchedSchedule.schedule_id, real_face, confidence);
+        // await db('exam_attendance')
+        //     .where({ student_id: name, schedule_id: matchedSchedule.schedule_id })
+        //     .update({
+        //         is_present: real_face ? 1 : 0,
+        //         confidence: confidence,
+        //         real_face: real_face,
+        //         updated_at: new Date(),
+        //         violation_id: null,
+        //         reported_by: 3
+        //     });
 
         const attendanceData = await checkAttendance(name, matchedSchedule.schedule_id);
 
