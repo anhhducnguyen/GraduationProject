@@ -173,8 +173,8 @@
     },
     "status": {
       "available": "Available",
-      "occupied": "Occupied",
-      "unavailable": "Unavailable"
+      "scheduled": "Scheduled",
+      "in_use": "In progress"
     },
     "buttons": {
     "reload": "Reload Data"
@@ -187,6 +187,9 @@
       "edit": "Edit Exam Schedule Information",
       "list": "Exam Schedules",
       "show": "Exam Schedule Details"
+    },
+    "buttons": {
+    "reload": "Reload Data"
     }
   },
   "table": {

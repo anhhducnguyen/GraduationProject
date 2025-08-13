@@ -170,6 +170,9 @@
       "edit": "Chỉnh sửa thông tin lịch thi",
       "list": "Lịch thi",
       "show": "Thông tin lịch thi"
+    },
+    "buttons": {
+    "reload": "Tải lại dữ liệu"
     }
   },
   "rooms": {
@@ -182,8 +185,8 @@
     },
     "status": {
       "available": "Phòng trống",
-      "occupied": "Đang sử dụng",
-      "unavailable": "Không sử dụng"
+      "scheduled": "Đã đặt lịch",
+      "in_use": "Đang thi"
     },
     "buttons": {
     "reload": "Tải lại dữ liệu"

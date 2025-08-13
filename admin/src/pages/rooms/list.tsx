@@ -138,7 +138,6 @@ export const ExamRoomList = () => {
             color="primary"
             startIcon={<ReplayIcon />}
           >
-            {/* Tải lại dữ liệu */}
             {translate("rooms.buttons.reload", "Tải lại dữ liệu")}
           </Button>
         </Box>
