@@ -75,7 +75,7 @@ export const ExamScheduleShow: React.FC = () => {
         break;
       case "in_progress":
         color = "orange";
-        label = t("schedules.status.in_progress", "Đang diễn ra");
+        label = t("status.in_progress", "Đang diễn ra");
         icon = <HourglassOutlined />;
         break;
       default:

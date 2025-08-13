@@ -184,6 +184,9 @@
       "available": "Phòng trống",
       "occupied": "Đang sử dụng",
       "unavailable": "Không sử dụng"
+    },
+    "buttons": {
+    "reload": "Tải lại dữ liệu"
     }
   },
   "table": {

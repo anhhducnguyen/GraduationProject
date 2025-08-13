@@ -13,7 +13,7 @@ from src.generate_patches import CropImage
 from src.utility import parse_model_name
 import requests
 
-
+    
 import utils 
 
 # --- Load configs từ biến môi trường hoặc file config ---
