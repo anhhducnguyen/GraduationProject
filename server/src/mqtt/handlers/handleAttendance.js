@@ -8,7 +8,7 @@ const {
 require('dotenv').config();
 
 // Ngưỡng độ tin cậy tối thiểu để chấp nhận kết quả nhận diện khuôn mặt.
-const MIN_CONFIDENCE = parseFloat(process.env.MIN_CONFIDENCE) || 0.65;
+const MIN_CONFIDENCE = parseFloat(process.env.MIN_CONFIDENCE) || 0.6;
 
 async function handleAttendanceMessage(message) {
   const { student_id, confidence, real_face, timestamp } = message;
@@ -60,7 +60,7 @@ async function handleAttendanceMessage(message) {
     console.log(`Sinh viên ${student_id} đã điểm danh trước đó.`);
     return;
   }
-  
+
   await updateAttendance(student_id, matchedSchedule.schedule_id, real_face, confidence);
   // await db('exam_attendance')
   //   .where({ student_id: student_id, schedule_id: matchedSchedule.schedule_id })

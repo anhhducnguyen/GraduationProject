@@ -13,7 +13,6 @@ const {
 } = require('../services/exam.attendance.service');
 const pick = require('../utils/pick');
 const { parseQueryOptions } = require("../utils/queryParser");
-const db = require("../../config/database");
 
 // const { checkStudentExists, checkExamScheduleExists, getCurrentExamSchedule } = require('../clients/checkStudentExists');
 const getExamAttendances = async (req, res) => {
@@ -123,7 +122,7 @@ const create = async (req, res) => {
             return res.status(400).json({ message: "Thiếu dữ liệu" });
         }
 
-        const MIN_CONFIDENCE = 0.67;
+        const MIN_CONFIDENCE = 0.6;
         if (confidence < MIN_CONFIDENCE) {
             return res.status(400).json({ message: `Xác thực không đủ độ tin cậy (confidence phải >= ${MIN_CONFIDENCE})` });
         }
