@@ -52,7 +52,7 @@ import {
 import { FaList } from "react-icons/fa";
 import { FakeFacesList } from "@/pages/fake-faces";
 import SchedulePage from "@/pages/schedules/list";
-import Home from "@/pages/home/home";
+// import Home from "@/pages/home/home";
 import { CustomTitle } from "@/components/CustomTitle";
 import { AuthPage } from "@/pages/auth/index";
 
