@@ -49,7 +49,8 @@ const resetPassword = async (req, res) => {
     }
 
     const resetToken = await generateResetToken(email);  
-    const resetLink = `http://localhost:5173/update-password?token=${resetToken}`;
+    // const resetLink = `http://localhost:5173/update-password?token=${resetToken}`;
+    const resetLink = `https://graduation-project-psi-black.vercel.app/update-password?token=${resetToken}`;
     await sendResetEmail(email, resetLink); 
 
     res.json({ message: "Link đặt lại mật khẩu đã được gửi qua email" });

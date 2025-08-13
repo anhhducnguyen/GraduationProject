@@ -174,7 +174,7 @@
     "status": {
       "available": "Available",
       "scheduled": "Scheduled",
-      "in_use": "In progress"
+      "in_use": "In use"
     },
     "buttons": {
     "reload": "Reload Data"
