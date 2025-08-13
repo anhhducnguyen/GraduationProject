@@ -97,16 +97,16 @@ const checkAttendance = async (student_id, schedule_id) => {
     }
 };
 
-const updateAttendance = async (studentId, scheduleId, realFace, confidence, reportedBy = 3) => {
-    return db("exam_attendance")
-        .where({ student_id: studentId, schedule_id: scheduleId })
+const updateAttendance = async (student_id, scheduleId, real_face, confidence, reportedBy = 3) => {
+    await db('exam_attendance')
+        .where({ student_id: student_id, schedule_id: scheduleId })
         .update({
-            is_present: realFace ? 1 : 0,
+            is_present: real_face ? 1 : 0,
             confidence: confidence,
-            real_face: realFace,
+            real_face: real_face,
             updated_at: new Date(),
             violation_id: null,
-            reported_by: reportedBy
+            reported_by: 3
         });
 }
 
