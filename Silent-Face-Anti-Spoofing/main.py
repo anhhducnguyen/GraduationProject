@@ -90,7 +90,7 @@ while True:
 
             if identity != "Unknown":
                 payload = {
-                    "name": identity,
+                    "student_id": identity,
                     "confidence": float(round(similarity, 2)),
                     "real_face": 1.0,
                     "timestamp": datetime.now().isoformat()

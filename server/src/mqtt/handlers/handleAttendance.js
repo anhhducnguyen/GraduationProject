@@ -3,6 +3,7 @@ const {
   checkStudentExists,
   getCurrentExamSchedules,
   checkAttendance,
+  updateAttendance
 } = require('../../../src/services/exam.attendance.service');
 require('dotenv').config();
 
@@ -59,17 +60,18 @@ async function handleAttendanceMessage(message) {
     console.log(`Sinh viên ${student_id} đã điểm danh trước đó.`);
     return;
   }
-
-  await db('exam_attendance')
-    .where({ student_id: student_id, schedule_id: matchedSchedule.schedule_id })
-    .update({
-      is_present: real_face ? 1 : 0,
-      confidence,
-      real_face,
-      updated_at: new Date(),
-      violation_id: null,
-      reported_by: 3,
-    });
+  
+  await updateAttendance(student_id, matchedSchedule.schedule_id, real_face, confidence);
+  // await db('exam_attendance')
+  //   .where({ student_id: student_id, schedule_id: matchedSchedule.schedule_id })
+  //   .update({
+  //     is_present: real_face ? 1 : 0,
+  //     confidence,
+  //     real_face,
+  //     updated_at: new Date(),
+  //     violation_id: null,
+  //     reported_by: 3,
+  //   });
 
   console.log(`Điểm danh thành công cho ${student_id}`);
 }
