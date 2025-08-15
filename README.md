@@ -14,6 +14,8 @@ The topic is to build a student identity authentication system based on facial r
 
 - [Video demo RestfulAPT]()
 
+- [Presentation]()
+
 <img width="863" height="1080" alt="image" src="https://github.com/user-attachments/assets/7106414b-7ec9-42ad-b6c8-2a3e42f2d099" />
 
 
