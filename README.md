@@ -6,7 +6,7 @@ The topic is to build a student identity authentication system based on facial r
 
 ### Demo, Report and Slide:
 
-- [Report end](https://drive.google.com/drive/folders/1McMyjsh_j6sM73bt2YO14lyoNT0qciUn?usp=sharing)
+- [Report end](https://drive.google.com/file/d/1-bP90zc_bQZHl4FUsAy8LnrN_AadYbuH/view?usp=drive_link)
 
 - [Demo](https://graduation-project-g77v.vercel.app/)
 
