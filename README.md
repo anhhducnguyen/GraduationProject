@@ -105,6 +105,7 @@ Before you start, make sure you have the following prerequisites installed on yo
 - [Python](https://www.python.org/) _(version 3.12.0 or higher)_
 - [opencv_python](https://opencv.org/) _(version 4.10.0.84 or higher)_
 - [dlib](https://github.com/davisking/dlib) _(here I got an error when trying `pip install dlib`, if you get an access error [Dlib_Windows_Python3.x](https://github.com/z-mahmud22/Dlib_Windows_Python3.x) to install manually following the instructions)_
+- [insightface](https://github.com/deepinsight/insightface) _(used as the primary face recognition library)_
 - [face-recognition](https://github.com/ageitgey/face_recognition) _(version 1.3.0 or higher)_
 - [Silent-Face-Anti-Spoofing](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing) _(author: minivision-ai)_
 
